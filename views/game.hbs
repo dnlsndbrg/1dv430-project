@@ -2,12 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CLIENT</title>
+    <title>game</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Client</h1>
-    <hr>
-    serverID: <b><span id="gameID">{{{gameID}}}</span></b>
+    <h1>Game</h1>
+    <hr />
+    {{> canvas }}
+    <hr />
+    clients:
+    <ul id="clients"></ul>
+    gameID: <b><span id="gameID">{{{gameID}}}</span></b>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
     <script src="/js/bundle.js"></script>

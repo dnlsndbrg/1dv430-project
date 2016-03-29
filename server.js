@@ -15,7 +15,7 @@ let
 let app     = express(),
     port    = process.env.PORT || 8000;
 
-var servers = {};
+var games = {};
 
 // Launch Application ----------------------------------------------------------
 
@@ -39,21 +39,25 @@ app.set("view engine", "hbs");
 
 // Routes ----------------------------------------------------------------------
 //
-app.get("/host/:serverID", (req, res) => {
+app.get("/play/:gameID", (req, res) => {
     //TODO: verify input
 
-    res.render("server", {serverID: req.params.serverID});
-});
-
-app.get("/:serverID", (req, res) => {
-    //TODO: verify input
-
-    if (!servers[req.params.serverID]) {
-        return res.send("server doesn't exist");
+    // if this game name doesn't exist, host it. else join as a client
+    if (!games[req.params.gameID]) {
+        return res.render("game", {gameID: req.params.gameID});
     }
-
-    res.render("client", {serverID: req.params.serverID});
+    res.render("game", {gameID: req.params.gameID});
 });
+
+// app.get("/:serverID", (req, res) => {
+//     //TODO: verify input
+//
+//     if (!servers[req.params.serverID]) {
+//         return res.send("server doesn't exist");
+//     }
+//
+//     res.render("client", {serverID: req.params.serverID});
+// });
 
 
 // Socket.io -------------------------------------------------------------------
@@ -61,17 +65,27 @@ app.get("/:serverID", (req, res) => {
 io.on("connection", (socket) => {
     console.log("socket connection");
 
-    socket.on("serverStart", (data) => {
-        console.log("server started", data);
-        // a server has started
+    socket.on("hostStart", (data) => {
         //TODO: validate input
-        servers[data.serverID] = socket;
+         // a server has started
+        games[data.gameID] = {
+            host: socket,
+            peers: []
+        };
+        //hosts[data.hostID].host = socket;
+        //hosts[data.hostID].peers = [];
+        socket.join(data.gameID);
+        games[data.gameID].peers.push(socket);
+        socket.gameID = data.gameID;
     });
 
     socket.on("join", (data) => {
-        // a client wants to join data.serverID
-        // emit the clients peerID to the server so that it can start a webRTC connection
-        servers[data.serverID].emit("join", {peerID: data.peerID});
+        // a client wants to join data.hostID
+        // emit the clients peerID to the host so that it can start a webRTC connection
+        games[data.gameID].host.emit("join", {peerID: data.peerID});
+        games[data.gameID].peers.push(socket);
+        socket.join(data.hostID);
+        socket.gameID = data.gameID;
     });
 
 });
