@@ -1,4 +1,4 @@
-module.exports = function(game){
+module.exports = function Ui(game){
     this.clientList = document.querySelector("#clients");
     this.game = game;
 

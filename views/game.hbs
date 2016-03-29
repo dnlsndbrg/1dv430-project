@@ -8,6 +8,12 @@
 <body>
     <h1>Game</h1>
     <hr />
+    {{# if host}}
+        <div id="host">
+            <input type="button" id="sendTest" value="send">
+        </div>
+        <hr />
+    {{/if}}
     {{> canvas }}
     <hr />
     clients:

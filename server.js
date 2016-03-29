@@ -43,10 +43,12 @@ app.get("/play/:gameID", (req, res) => {
     //TODO: verify input
 
     // if this game name doesn't exist, host it. else join as a client
-    if (!games[req.params.gameID]) {
-        return res.render("game", {gameID: req.params.gameID});
-    }
-    res.render("game", {gameID: req.params.gameID});
+    // if (!games[req.params.gameID]) {
+    //     return res.render("game", {gameID: req.params.gameID, host: true});
+    // }
+
+    var host = (!games[req.params.gameID]) ? true : false;
+    res.render("game", {gameID: req.params.gameID, host: host});
 });
 
 // app.get("/:serverID", (req, res) => {
