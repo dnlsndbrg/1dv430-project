@@ -17,10 +17,15 @@ module.exports = function Host(network){
             this.peers[id] = peer;
             this.conns[data.peerID] = conn;
 
-            this.send({event: "userJoined"});
+            var newPlayer = window.game.addPlayer({id: id});
+            this.broadcast({ event: "playerJoined", playerData: JSON.stringify(newPlayer) });
+
+
+
 
             //receiving data from a client
             conn.on("data", function(data) {
+                //console.log("=====\nHOST - data from client\n", data,"\n=====");
                 if (data.event === "ping"){ // answer the ping
                     conn.send({ event: "pong", timestamp: data.timestamp });
                 }
@@ -44,11 +49,16 @@ module.exports = function Host(network){
 
     }.bind(this));
 
-    this.send = function(data) {
+    this.broadcast = function(data) {
         console.log("Send", data);
         for (var conn in this.conns){
             this.conns[conn].send(data);
         }
+    };
+
+    // just send data to a specific client
+    this.emit = function(data) {
+        this.conns[data.clientID].send(data);
     };
 
 

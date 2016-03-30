@@ -1,3 +1,5 @@
+var Player = require("./../Player");
+
 module.exports = function Client(network){
     this.game = network.game;
     this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
@@ -11,6 +13,10 @@ module.exports = function Client(network){
         // the host has started the connection
         window.game.network.client.conn = conn;
         console.log("connection from server", conn);
+
+        //create the player
+        //window.game.player = window.game.addPlayer(conn.peer);
+
 
         //Listen for data events from the host
         conn.on("data", function(data) {
@@ -30,7 +36,6 @@ module.exports = function Client(network){
 
         // ping test
         window.game.network.client.pingInterval = setInterval(function(){
-            console.log(window.game);
             window.game.network.client.conn.send({
                 event: "ping",
                 timestamp: Date.now()

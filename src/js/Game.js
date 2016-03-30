@@ -1,6 +1,7 @@
 var Ui = require("./Ui");
 var Network = require("./webRTC/WebRTC");
-var Player = require("./Player"); // test entity
+var Player = require("./Player");
+var Controls = require("./Controls");
 
 function Game() {
     this.width = 480;
@@ -14,8 +15,9 @@ function Game() {
 
     this.ui = new Ui(this);
     this.network = new Network(this);
+    this.controls = new Controls();
 
-    this.entitites = []; // game entities
+    this.entities = []; // game entities
 
     var last = 0; // time variable
     var dt; //delta time
@@ -31,6 +33,7 @@ function Game() {
         requestAnimationFrame(this.loop.bind(this)); // queue up next loop
         dt = timestamp - last; // time elapsed in ms since last loop
         last = timestamp;
+        //this.controls.handleInput();
         this.update(dt);
         this.render();
     };
@@ -43,7 +46,7 @@ function Game() {
         this.fps = Math.round(1000 / dt);
 
         // Update entities
-        this.entitites.forEach(function(entity) {
+        this.entities.forEach(function(entity) {
             entity.update(dt);
         });
     };
@@ -56,14 +59,22 @@ function Game() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         // render all entities
-        this.entitites.forEach(function(entity) {
+        this.entities.forEach(function(entity) {
             entity.render(this.canvas, this.ctx);
         }.bind(this));
 
         // render fps and ping
+        this.ctx.fillStyle = "black";
         this.ctx.fillText("FPS:  " + this.fps, 10, 20);
         this.ctx.fillText("PING: " + this.network.ping, 10, 42);
     };
 }
+
+Game.prototype.addPlayer = function(id){
+    console.log(this);
+    var newPlayer = new Player(id);
+    this.entities.push(newPlayer);
+    return newPlayer;
+};
 
 module.exports = Game;
