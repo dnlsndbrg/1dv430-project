@@ -1,10 +1,14 @@
 var Ui = require("./Ui");
-var Network = require("./WebRTC");
-var Circle = require("./Circle"); // test entity
+var Network = require("./webRTC/WebRTC");
+var Player = require("./Player"); // test entity
 
 function Game() {
+    this.width = 480;
+    this.height = 640;
+
     this.canvas = document.querySelector("#canvas");
     this.ctx = this.canvas.getContext("2d");
+    this.ctx.font = "16px serif";
 
     this.gameID = document.querySelector("#gameID").textContent;
 
@@ -17,7 +21,6 @@ function Game() {
     var dt; //delta time
 
     this.start = function(){
-        this.entitites.push(new Circle());
         this.loop();
     };
 
@@ -33,9 +36,13 @@ function Game() {
     };
 
     /**
-     * Update entities
+     * Update
      */
     this.update = function(dt){
+        // calculate fps
+        this.fps = Math.round(1000 / dt);
+
+        // Update entities
         this.entitites.forEach(function(entity) {
             entity.update(dt);
         });
@@ -45,9 +52,17 @@ function Game() {
      * Rendering
      */
     this.render = function(){
+        // clear screen
+        this.ctx.clearRect(0, 0, this.width, this.height);
+
+        // render all entities
         this.entitites.forEach(function(entity) {
             entity.render(this.canvas, this.ctx);
         }.bind(this));
+
+        // render fps and ping
+        this.ctx.fillText("FPS:  " + this.fps, 10, 20);
+        this.ctx.fillText("PING: " + this.network.ping, 10, 42);
     };
 }
 

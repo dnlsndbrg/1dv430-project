@@ -5,7 +5,7 @@ module.exports = function WebRTC(game){
     this.game = game;
     this.socket = io();
 
-    //if im the host
+    //im the host
     if (document.querySelector("#host") !== null) this.host = new Host(this);
 
     setTimeout(function(){ //TODO: better implementation (promise?)
