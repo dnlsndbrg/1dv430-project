@@ -1,4 +1,6 @@
 var helpers = require("./helpers");
+var KeyboardControls = require("./KeyboardControls");
+var NetworkControls = require("./NetworkControls");
 
 function Player(playerData) {
     this.id = playerData.id;
@@ -8,6 +10,7 @@ function Player(playerData) {
     this.direction = playerData.direction || Math.floor(Math.random() * 360) + 1;
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 10;
+    this.controls = (playerData.id === window.game.network.client.peer.id) ? new KeyboardControls("./KeyboardControls") : new NetworkControls("./NetworkControls") ;
 }
 
 Player.prototype.update = function(dt){

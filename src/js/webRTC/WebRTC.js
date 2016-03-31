@@ -1,16 +1,19 @@
 var Client = require("./Client");
 var Host = require("./Host");
 
-module.exports = function WebRTC(game){
-    this.game = game;
+module.exports = function WebRTC(){
     this.socket = io();
+    this.client = new Client();
 
-    //im the host
-    if (document.querySelector("#host") !== null) this.host = new Host(this);
+    this.socket.on("youAreHost", function(data) {
+        console.log("im the host", data);
+        window.game.network.host = new Host();
+        window.game.network.host.connect(data.peers);
+    });
 
-    setTimeout(function(){ //TODO: better implementation (promise?)
-        this.client = new Client(this);
-    }.bind(this), 2000);
+    this.socket.on("playerJoined", function(data) {
+        window.game.network.host.connect([data.peerID]);
+    });
 
     //
     // this.peers = {};

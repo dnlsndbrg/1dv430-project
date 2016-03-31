@@ -1,7 +1,7 @@
 var Ui = require("./Ui");
 var Network = require("./webRTC/WebRTC");
 var Player = require("./Player");
-var Controls = require("./Controls");
+var KeyboardControls = require("./KeyboardControls");
 
 function Game() {
     this.width = 480;
@@ -11,11 +11,11 @@ function Game() {
     this.ctx = this.canvas.getContext("2d");
     this.ctx.font = "16px serif";
 
-    this.gameID = document.querySelector("#gameID").textContent;
+    this.gameID = window.location.pathname.split("/")[2];
 
     this.ui = new Ui(this);
-    this.network = new Network(this);
-    this.controls = new Controls();
+    this.network = new Network();
+    //this.controls = new KeyboardControls();
 
     this.entities = []; // game entities
 
@@ -71,7 +71,6 @@ function Game() {
 }
 
 Game.prototype.addPlayer = function(id){
-    console.log(this);
     var newPlayer = new Player(id);
     this.entities.push(newPlayer);
     return newPlayer;

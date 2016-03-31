@@ -8,17 +8,10 @@
 <body>
     <h1>Game</h1>
     <hr />
-    {{# if host}}
-        <div id="host">
-            <input type="button" id="sendTest" value="send">
-        </div>
-        <hr />
-    {{/if}}
     {{> canvas }}
     <hr />
-    clients:
-    <ul id="clients"></ul>
-    gameID: <b><span id="gameID">{{{gameID}}}</span></b>
+    players:
+    <ul id="players"></ul>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
     <script src="/js/bundle.js"></script>
