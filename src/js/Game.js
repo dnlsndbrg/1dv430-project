@@ -67,6 +67,7 @@ function Game() {
         this.ctx.fillStyle = "black";
         this.ctx.fillText("FPS:  " + this.fps, 10, 20);
         this.ctx.fillText("PING: " + this.network.ping, 10, 42);
+        this.ctx.fillText("STRESS TEST: " + this.network.client.testsReceived, 10, 64);
     };
 }
 

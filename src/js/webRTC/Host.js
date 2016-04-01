@@ -9,13 +9,38 @@ module.exports = function Host(){
             var peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
             // and once it's opened, connect with the remote peer
             peer.on("open", function() {
-                console.log("connect with", peerID);
                 var conn =  peer.connect(peerID);
+                console.log("connect with", peerID);
                 window.game.network.host.peers[peerID] = peer;
                 window.game.network.host.conns[peerID] = conn;
             });
         });
     };
+
+    this.broadcast = function(data) {
+        for (var conn in this.conns){
+            console.log("SEND!");
+            this.conns[conn].send(data);
+        }
+    };
+
+    // just send data to a specific client
+    this.emit = function(data) {
+        this.conns[data.clientID].send(data);
+    };
+
+
+    document.querySelector("#btnTest").addEventListener("click", function(){
+        window.game.network.host.broadcast("asdasdas");
+    });
+
+    // stress test
+    setInterval(function(){
+        window.game.network.host.broadcast({
+            type: "test",
+            data: "asdasdas dasdsadas dasasdasd asdasd asdadsdqw23qwklp gklp"
+        });
+    },16);
 };
 
     //

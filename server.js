@@ -39,42 +39,17 @@ app.set("view engine", "hbs");
 
 // Routes ----------------------------------------------------------------------
 //
-app.get("/play/:gameID", (req, res) => {
-    //TODO: verify input
+app.get("/play/:gameID", (req, res) => { //TODO: verify input
     res.render("game");
 });
-
-// app.get("/:serverID", (req, res) => {
-//     //TODO: verify input
-//
-//     if (!servers[req.params.serverID]) {
-//         return res.send("server doesn't exist");
-//     }
-//
-//     res.render("client", {serverID: req.params.serverID});
-// });
 
 
 // Socket.io -------------------------------------------------------------------
 
 io.on("connection", (socket) => {
     console.log("socket connection");
-    //
-    // socket.on("hostStart", (data) => {
-    //     //TODO: validate input
-    //      // a server has started
-    //     games[data.gameID] = {
-    //         host: socket,
-    //         peers: []
-    //     };
-    //     //hosts[data.hostID].host = socket;
-    //     //hosts[data.hostID].peers = [];
-    //     socket.join(data.gameID);
-    //     games[data.gameID].peers.push(socket);
-    //     socket.gameID = data.gameID;
-    // });
 
-    socket.on("join", (data) => {
+    socket.on("join", (data) => { //TODO: validate data
         // a client wants to join the game data.gameID
 
         //store the gameID and peerID on the socket object
@@ -97,7 +72,10 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
+
         var game = games[socket.gameID];
+        if (!game) return;
+
         if (socket.peerID === game.host.peerID) { // check if the socket that disconnected was a host
             if (game.peers.length === 0) { // if there's no one left in the game, delete it
 
