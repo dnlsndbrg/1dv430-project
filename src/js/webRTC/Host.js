@@ -20,6 +20,9 @@ module.exports = function Host(){
                 conn.on("open", function() {
                     // send new player data to everyone
                     if (newPlayer) window.game.network.host.broadcast({ event: "playerJoined", playerData: JSON.stringify(newPlayer) });
+
+                    // send the new player the full game state
+                    window.game.network.host.emit( {clientID: conn.peer, event: "gameState", gameState: window.game.getGameState()} );
                 });
 
                 conn.on("close", function() {

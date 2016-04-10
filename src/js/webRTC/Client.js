@@ -28,7 +28,6 @@ module.exports = function Client(){
         window.game.network.client.conn = conn;
 
         conn.on("data", function(data) {
-            console.log("receivingasdasdas", data);
             switch(data.event){
                 case "playerJoined":
                     console.log("player joined", data);
@@ -40,13 +39,17 @@ module.exports = function Client(){
                     //window.game.network.client.testsReceived += 1;
                     break;
 
+                case "gameState": // stress testing
+                        console.log("receiving game state", JSON.parse(data.gameState.entities), JSON.parse(data.gameState.players));
+                        break;
+
                 case "ping": // host sent a ping, answer it
                    conn.send({ type: "pong", timestamp: data.timestamp });
                    break;
 
                case "pong": // we've received a pong from the host, calucate pingtime
                    var ping = Date.now() - data.timestamp;
-                   window.game.network.ping = ping; 
+                   window.game.network.ping = ping;
                    break;
             }
         });

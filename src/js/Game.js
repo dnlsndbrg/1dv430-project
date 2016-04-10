@@ -92,13 +92,19 @@ Game.prototype.removePlayer = function(data) {
 
     // remove from entitites array
     for (var i = 0; i <= this.entities.length; i += 1) {
-        console.log("AAAAAAAAAAAAAA", i, this.entities);
         if (this.entities[i].id === data.id) {
             console.log("found him , removing");
             this.entities.splice(i, 1);
             break;
         }
     }
+};
+
+Game.prototype.getGameState = function() {
+    return {
+        entities: this.entities.map(function(entity) { return JSON.stringify(entity); }),
+        players: Object.keys(this.players).map(function(key){ return JSON.stringify(window.game.players[key]); })
+    };
 };
 
 module.exports = Game;
