@@ -24,18 +24,20 @@ module.exports = function Client(){
                 }
             }
         }
-        console.log("this.connections: ", this.connections);
-
         // store it
         window.game.network.client.conn = conn;
 
         conn.on("data", function(data) {
-            console.log("data");
-            switch(data.type){
+            console.log("receivingasdasdas", data);
+            switch(data.event){
+                case "playerJoined":
+                    console.log("player joined", data);
+                    window.game.addPlayer(JSON.parse(data.playerData));
+                    break;
 
                 case "test": // stress testing
-                    //console.log("test");
-                    window.game.network.client.testsReceived += 1;
+                    console.log("test!");
+                    //window.game.network.client.testsReceived += 1;
                     break;
 
                 case "ping": // host sent a ping, answer it
@@ -44,7 +46,7 @@ module.exports = function Client(){
 
                case "pong": // we've received a pong from the host, calucate pingtime
                    var ping = Date.now() - data.timestamp;
-                   window.game.network.ping = ping;
+                   window.game.network.ping = ping; 
                    break;
             }
         });

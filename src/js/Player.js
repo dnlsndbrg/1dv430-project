@@ -1,8 +1,9 @@
 var helpers = require("./helpers");
-var KeyboardControls = require("./KeyboardControls");
+var Mouse = require("./Mouse");
 var NetworkControls = require("./NetworkControls");
 
 function Player(playerData) {
+    //console.log("create player ", JSON.parse(playerData));
     this.id = playerData.id;
     this.x = playerData.x || Math.floor(Math.random() * window.game.width) + 1;
     this.y = playerData.y || Math.floor(Math.random() * window.game.height) + 1;
@@ -10,7 +11,9 @@ function Player(playerData) {
     this.direction = playerData.direction || Math.floor(Math.random() * 360) + 1;
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 10;
-    this.controls = (playerData.id === window.game.network.client.peer.id) ? new KeyboardControls("./KeyboardControls") : new NetworkControls("./NetworkControls") ;
+
+    //is this me or another player
+    this.controls = (playerData.id === window.game.network.client.peer.id) ? new Mouse("./KeyboardControls") : new NetworkControls("./NetworkControls") ;
 }
 
 Player.prototype.update = function(dt){

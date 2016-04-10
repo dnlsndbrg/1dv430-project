@@ -18,6 +18,7 @@ function Game() {
     //this.controls = new KeyboardControls();
 
     this.entities = []; // game entities
+    this.players = {};
 
     var last = 0; // time variable
     var dt; //delta time
@@ -71,10 +72,33 @@ function Game() {
     };
 }
 
-Game.prototype.addPlayer = function(id){
-    var newPlayer = new Player(id);
+Game.prototype.addPlayer = function(data){
+
+    // check if player already exists.
+    if(data.id in this.players) return;
+
+    var newPlayer = new Player(data);
     this.entities.push(newPlayer);
+    this.players[data.id] = newPlayer;
+
     return newPlayer;
+};
+
+Game.prototype.removePlayer = function(data) {
+    console.log("game removing player", data);
+
+    // remove from players object
+    delete this.players[data.id];
+
+    // remove from entitites array
+    for (var i = 0; i <= this.entities.length; i += 1) {
+        console.log("AAAAAAAAAAAAAA", i, this.entities);
+        if (this.entities[i].id === data.id) {
+            console.log("found him , removing");
+            this.entities.splice(i, 1);
+            break;
+        }
+    }
 };
 
 module.exports = Game;

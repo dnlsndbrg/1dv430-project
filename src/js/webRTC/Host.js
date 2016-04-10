@@ -13,15 +13,27 @@ module.exports = function Host(){
                 console.log("hostID:", window.game.network.host.peer.id, " connect with", peerID);
                 //window.game.network.host.peers[peerID] = peer;
                 window.game.network.host.conns[peerID] = conn;
+
+                // crete the player
+                var newPlayer = window.game.addPlayer({id: conn.peer});
+
+                conn.on("open", function() {
+                    // send new player data to everyone
+                    if (newPlayer) window.game.network.host.broadcast({ event: "playerJoined", playerData: JSON.stringify(newPlayer) });
+                });
+
+                conn.on("close", function() {
+                    delete window.game.network.host.conns[conn.peer];
+                    window.game.network.host.broadcast({ event: "playerLeft", id: conn.peer});
+                    window.game.removePlayer({id: conn.peer});
+                });
             });
-
         });
-
     };
 
     this.broadcast = function(data) {
         for (var conn in this.conns){
-            console.log("SEND!");
+            console.log("SEND!", conn, data);
             this.conns[conn].send(data);
         }
     };
@@ -33,7 +45,7 @@ module.exports = function Host(){
 
 
     document.querySelector("#btnTest").addEventListener("click", function(){
-        window.game.network.host.broadcast("asdasdas");
+        window.game.network.host.broadcast({event: "test", message: "asdasdas"});
     });
 
     // // stress test
