@@ -4,17 +4,19 @@ module.exports = function Host(){
 
     this.connect = function(peers){
         console.log("connect", peers);
-        peers.forEach(function(peerID) {
-            // create a new peer
-            var peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
-            // and once it's opened, connect with the remote peer
-            peer.on("open", function() {
-                var conn =  peer.connect(peerID);
-                console.log("connect with", peerID);
-                window.game.network.host.peers[peerID] = peer;
+        this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
+
+        this.peer.on("open", function() {
+            peers.forEach(function(peerID) {
+                //connect with each remote peer
+                var conn =  window.game.network.host.peer.connect(peerID);
+                console.log("hostID:", window.game.network.host.peer.id, " connect with", peerID);
+                //window.game.network.host.peers[peerID] = peer;
                 window.game.network.host.conns[peerID] = conn;
             });
+
         });
+
     };
 
     this.broadcast = function(data) {
@@ -34,13 +36,13 @@ module.exports = function Host(){
         window.game.network.host.broadcast("asdasdas");
     });
 
-    // stress test
-    setInterval(function(){
-        window.game.network.host.broadcast({
-            type: "test",
-            data: "asdasdas dasdsadas dasasdasd asdasd asdadsdqw23qwklp gklp"
-        });
-    },16);
+    // // stress test
+    // setInterval(function(){
+    //     window.game.network.host.broadcast({
+    //         type: "test",
+    //         data: "asdasdas dasdsadas dasasdasd asdasd asdadsdqw23qwklp gklp"
+    //     });
+    // },16);
 };
 
     //

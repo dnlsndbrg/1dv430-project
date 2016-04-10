@@ -13,7 +13,20 @@ module.exports = function Client(){
     });
 
     this.peer.on("connection", function(conn) {
-    //     // the host has started the connection
+        // the host has started the connection
+
+        // close out any old connections
+        if(Object.keys(this.connections).length > 1) {
+            for (var connPeer in this.connections){
+                if (connPeer !== conn.peer) {
+                    this.connections[connPeer][0].close();
+                    delete this.connections[connPeer];
+                }
+            }
+        }
+        console.log("this.connections: ", this.connections);
+
+        // store it
         window.game.network.client.conn = conn;
 
         conn.on("data", function(data) {
