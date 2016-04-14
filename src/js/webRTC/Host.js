@@ -1,12 +1,19 @@
 module.exports = function Host(){
-    this.peers = {};
     this.conns = {};
+    this.actions = {}; // here we will store all the actions received from clients
 
     this.connect = function(peers){
         console.log("connect", peers);
         this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
 
+
         this.peer.on("open", function() {
+
+            // send a ping every 2 seconds, to track ping time
+            setInterval(function(){
+                window.game.network.host.broadcast({event: "ping", timestamp: Date.now()});
+            },2000);
+
             peers.forEach(function(peerID) {
                 //connect with each remote peer
                 var conn =  window.game.network.host.peer.connect(peerID);
@@ -14,15 +21,16 @@ module.exports = function Host(){
                 //window.game.network.host.peers[peerID] = peer;
                 window.game.network.host.conns[peerID] = conn;
 
-                // crete the player
+                // create the player
                 var newPlayer = window.game.addPlayer({id: conn.peer});
 
                 conn.on("open", function() {
                     // send new player data to everyone
-                    if (newPlayer) window.game.network.host.broadcast({ event: "playerJoined", playerData: JSON.stringify(newPlayer) });
-
-                    // send the new player the full game state
-                    window.game.network.host.emit( {clientID: conn.peer, event: "gameState", gameState: window.game.getGameState()} );
+                    if (newPlayer) {
+                        window.game.network.host.broadcast({ event: "playerJoined", playerData: JSON.stringify(newPlayer) });
+                        // send the new player the full game state
+                        window.game.network.host.emit( {clientID: conn.peer, event: "gameState", gameState: window.game.getGameState()} );
+                    }
                 });
 
                 conn.on("close", function() {
@@ -30,19 +38,42 @@ module.exports = function Host(){
                     window.game.network.host.broadcast({ event: "playerLeft", id: conn.peer});
                     window.game.removePlayer({id: conn.peer});
                 });
+
+                conn.on("error", function(err) {
+                    console.log("ERROR EVENT", err);
+                });
+
+                conn.on("data", function(data) {
+                    switch(data.event){
+                        case "ping":
+                           conn.send({ event: "pong", timestamp: data.timestamp }); // answer the ping
+                           break;
+
+                       case "pong": // we've received a pong from the client, calucate pingtime
+                           var ping = Date.now() - data.timestamp;
+                           window.game.players[conn.peer].ping = ping;
+                           break;
+
+                       case "actions": // receiving actions from a player
+                           console.log("actions received from", conn.peer, data);
+                           window.game.players[conn.peer].actions.push(data);
+                           break;
+                    }
+                });
             });
         });
     };
 
     this.broadcast = function(data) {
         for (var conn in this.conns){
-            console.log("SEND!", conn, data);
+            //console.log("SEND!", conn, data);
             this.conns[conn].send(data);
         }
     };
 
     // just send data to a specific client
     this.emit = function(data) {
+        console.log("EMIT!", data);
         this.conns[data.clientID].send(data);
     };
 
@@ -51,15 +82,33 @@ module.exports = function Host(){
         window.game.network.host.broadcast({event: "test", message: "asdasdas"});
     });
 
-    // // stress test
-    // setInterval(function(){
-    //     window.game.network.host.broadcast({
-    //         type: "test",
-    //         data: "asdasdas dasdsadas dasasdasd asdasd asdadsdqw23qwklp gklp"
-    //     });
-    // },16);
+    this.update = function(dt)
+    {
+        // test to send snapshot every tick
+    };
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // stress test
+// setInterval(function(){
+//     window.game.network.host.broadcast({
+//         type: "test",
+//         data: "asdasdas dasdsadas dasasdasd asdasd asdadsdqw23qwklp gklp"
+//     });
+// },16);
     //
     // network.socket.emit("hostStart", {gameID: this.game.gameID});
     //

@@ -1,10 +1,12 @@
 var Player = require("./../Player");
 
-module.exports = function Client(){
+function Client(){
     this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
 
     // Stress test
     this.testsReceived = 0;
+
+    this.actions = []; //here we will store client actions before we send them to the host
 
     this.peer.on("open", function(id) {
         // ive got my peerID and gameID, lets send it to the server to join the host
@@ -39,12 +41,12 @@ module.exports = function Client(){
                     //window.game.network.client.testsReceived += 1;
                     break;
 
-                case "gameState": // stress testing
+                case "gameState":
                         console.log("receiving game state", JSON.parse(data.gameState.entities), JSON.parse(data.gameState.players));
                         break;
 
                 case "ping": // host sent a ping, answer it
-                   conn.send({ type: "pong", timestamp: data.timestamp });
+                   conn.send({ event: "pong", timestamp: data.timestamp });
                    break;
 
                case "pong": // we've received a pong from the host, calucate pingtime
@@ -56,7 +58,22 @@ module.exports = function Client(){
 
 
     });
+}
 
+Client.prototype.update = function()
+{
+    if (this.actions.length > 0) {
+        //console.log(this);
+        // send all performed actions to the host
+        this.conn.send({
+            event: "actions",
+            data: this.actions
+        });
+
+        this.actions = []; // clear actions queue
+    }
+
+};
 
     //
     // this.peer.on("connection", function(conn) {
@@ -94,7 +111,4 @@ module.exports = function Client(){
     //
     // });
 
-
-
-
-};
+module.exports = Client;

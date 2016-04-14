@@ -4,8 +4,10 @@ var Player = require("./Player");
 var KeyboardControls = require("./KeyboardControls");
 
 function Game() {
-    this.width = 480;
-    this.height = 640;
+    this.started = false;
+
+    this.width = 240;
+    this.height = 320;
 
     this.canvas = document.querySelector("#canvas");
     this.ctx = this.canvas.getContext("2d");
@@ -15,7 +17,6 @@ function Game() {
 
     this.ui = new Ui(this);
     this.network = new Network();
-    //this.controls = new KeyboardControls();
 
     this.entities = []; // game entities
     this.players = {};
@@ -32,11 +33,20 @@ function Game() {
      */
     this.loop = function(timestamp){
         requestAnimationFrame(this.loop.bind(this)); // queue up next loop
+
         dt = timestamp - last; // time elapsed in ms since last loop
         last = timestamp;
-        //this.controls.handleInput();
+
+        // update and render game
         this.update(dt);
         this.render();
+
+        // networking update
+        if (this.network.host) {
+            this.network.host.update(dt); // if im the host do host stuff
+        } else {
+            this.network.client.update(dt); // else update client stuff
+        }
     };
 
     /**
@@ -68,7 +78,6 @@ function Game() {
         this.ctx.fillStyle = "black";
         this.ctx.fillText("FPS:  " + this.fps, 10, 20);
         this.ctx.fillText("PING: " + this.network.ping, 10, 42);
-        this.ctx.fillText("STRESS TEST: " + this.network.client.testsReceived, 10, 64);
     };
 }
 
@@ -80,6 +89,8 @@ Game.prototype.addPlayer = function(data){
     var newPlayer = new Player(data);
     this.entities.push(newPlayer);
     this.players[data.id] = newPlayer;
+
+    this.ui.updateClientList(this.players);
 
     return newPlayer;
 };
@@ -98,6 +109,8 @@ Game.prototype.removePlayer = function(data) {
             break;
         }
     }
+
+    this.ui.updateClientList(this.players);
 };
 
 Game.prototype.getGameState = function() {

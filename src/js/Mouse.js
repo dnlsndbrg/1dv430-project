@@ -1,6 +1,15 @@
-function Mouse(){
-    this.click = function(){
-        console.log("clickieclick");
+function Mouse(player){
+    this.player = player;
+    this.click = function(e){
+        this.player.turnTowards(e.offsetX, e.offsetY);
+
+        window.game.network.client.actions.push({
+            action: "turnTowards",
+            data: {
+                x: e.offsetX,
+                y: e.offsetY
+            }
+        });
     };
     //
     // this.keyUpHandler = function(e){

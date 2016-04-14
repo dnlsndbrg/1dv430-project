@@ -3,21 +3,39 @@ var Mouse = require("./Mouse");
 var NetworkControls = require("./NetworkControls");
 
 function Player(playerData) {
-    //console.log("create player ", JSON.parse(playerData));
     this.id = playerData.id;
     this.x = playerData.x || Math.floor(Math.random() * window.game.width) + 1;
     this.y = playerData.y || Math.floor(Math.random() * window.game.height) + 1;
-    this.radius = playerData.radius || 20;
+    this.radius = playerData.radius || 20; // circle radius
     this.direction = playerData.direction || Math.floor(Math.random() * 360) + 1;
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 10;
 
+    this.actions = [];
+
     //is this me or another player
-    this.controls = (playerData.id === window.game.network.client.peer.id) ? new Mouse("./KeyboardControls") : new NetworkControls("./NetworkControls") ;
+    this.controls = (playerData.id === window.game.network.client.peer.id) ? new Mouse(this) : new NetworkControls("./NetworkControls") ;
 }
 
 Player.prototype.update = function(dt){
 
+    // go through all the queued up actions and perform them
+    for (var i = 0; i < this.actions.length; i += 1){
+        for (var j = 0; j < this.actions[i].data.length; j += 1){
+                    var action = this.actions[i].data[j];
+                    this.performAction(action);
+        }
+    }
+
+    this.actions = [];
+};
+
+Player.prototype.performAction = function(action){
+    switch(action.action){
+        case "turnTowards":
+            this.turnTowards(action.data.x, action.data.y);
+            break;
+    }
 };
 
 Player.prototype.render = function(canvas, ctx){
@@ -36,6 +54,17 @@ Player.prototype.render = function(canvas, ctx){
     ctx.closePath();
     ctx.fillStyle = "red";
     ctx.fill();
+};
+
+Player.prototype.turnTowards = function(x,y) {
+    console.log("turn towards",x,y);
+    console.log("im at", this.x, this.y, "and looking in direction", this.direction);
+
+    var xDiff = x - this.x;
+    var yDiff = y - this.y;
+    this.direction = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
+
+    console.log(xDiff, yDiff, this.direction);
 };
 
 module.exports = Player;

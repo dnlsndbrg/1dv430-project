@@ -2,6 +2,7 @@ var Client = require("./Client");
 var Host = require("./Host");
 
 module.exports = function WebRTC(){
+    this.ping = 0;
     this.socket = io();
     this.client = new Client();
 
