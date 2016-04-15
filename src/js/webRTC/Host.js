@@ -1,13 +1,20 @@
 module.exports = function Host(){
     this.conns = {};
     this.actions = {}; // here we will store all the actions received from clients
+    this.lastPlayersState = [];
+
+    this.diff = null;
 
     this.connect = function(peers){
         console.log("connect", peers);
         this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
 
-
         this.peer.on("open", function() {
+
+            // create the hosts player object if it doesnt already exists
+            if (!(window.game.network.client.peer.id in window.game.players)) {
+                window.game.addPlayer({id: window.game.network.client.peer.id});
+            }
 
             // send a ping every 2 seconds, to track ping time
             setInterval(function(){
@@ -27,7 +34,7 @@ module.exports = function Host(){
                 conn.on("open", function() {
                     // send new player data to everyone
                     if (newPlayer) {
-                        window.game.network.host.broadcast({ event: "playerJoined", playerData: JSON.stringify(newPlayer) });
+                        window.game.network.host.broadcast({ event: "playerJoined", playerData: newPlayer.getState() });
                         // send the new player the full game state
                         window.game.network.host.emit( {clientID: conn.peer, event: "gameState", gameState: window.game.getGameState()} );
                     }
@@ -82,9 +89,59 @@ module.exports = function Host(){
         window.game.network.host.broadcast({event: "test", message: "asdasdas"});
     });
 
-    this.update = function(dt)
+    this.update = function()
     {
-        // test to send snapshot every tick
+
+        // get the difference since last time
+
+        var currentPlayersState = [];
+        var changes = [];
+
+        for(var i = 0; i < this.lastPlayersState.length; i += 1){
+
+            // get the players last and new state
+            var id = this.lastPlayersState[i].id;
+            var lastState = this.lastPlayersState[i];
+            var newState = window.game.players[id].getState();
+
+            // compare this players new state with it's last state
+            var change = _.omit(newState, function(v,k) { return lastState[k] === v; });
+            if (!_.isEmpty(change)) {
+                // there's been changes
+                change.playerID = id;
+                changes.push(change);
+            }
+
+            currentPlayersState.push(newState);
+        }
+
+        this.lastPlayersState = currentPlayersState;
+        if (this.lastPlayersState.length === 0) this.lastPlayersState = window.game.getPlayersState(); // if newly started game..
+
+        if (changes.length > 0){
+             console.log("changes!", changes);
+            // there are changes
+            this.broadcast({
+                event: "changes",
+                changes: changes
+            });
+        }
+
+        //console.log(currentPlayersState);
+        //
+        // compare current state to earlier getGameState
+        // send difference to players
+
+        // window.game.players.forEach(function(player) {
+        //
+        // });
+
+        // send actions to all clients
+        // this.broadcast({
+        //     event: "actions",
+        //     actions:
+        // })
+
     };
 };
 

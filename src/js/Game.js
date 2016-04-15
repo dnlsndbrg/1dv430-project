@@ -115,9 +115,18 @@ Game.prototype.removePlayer = function(data) {
 
 Game.prototype.getGameState = function() {
     return {
-        entities: this.entities.map(function(entity) { return JSON.stringify(entity); }),
-        players: Object.keys(this.players).map(function(key){ return JSON.stringify(window.game.players[key]); })
+        // entities: this.entities.map(function(entity) {
+        //     console.log("entity:", entity);
+        //     return JSON.stringify(entity);
+        // }),
+        entities: this.entities.map(function(entity) { return entity.getState(); }),
+        //players: Object.keys(this.players).map(function(key){ return JSON.stringify(window.game.players[key]); })
+        players: this.getPlayersState()
     };
+};
+
+Game.prototype.getPlayersState = function() {
+    return Object.keys(this.players).map(function(key){ return window.game.players[key].getState(); });
 };
 
 module.exports = Game;

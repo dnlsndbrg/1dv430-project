@@ -1,4 +1,4 @@
-var Player = require("./../Player");
+// var Player = require("./../Player");
 
 function Client(){
     this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
@@ -7,6 +7,7 @@ function Client(){
     this.testsReceived = 0;
 
     this.actions = []; //here we will store client actions before we send them to the host
+    this.changes = []; // here we will store received changes from the host
 
     this.peer.on("open", function(id) {
         // ive got my peerID and gameID, lets send it to the server to join the host
@@ -33,7 +34,7 @@ function Client(){
             switch(data.event){
                 case "playerJoined":
                     console.log("player joined", data);
-                    window.game.addPlayer(JSON.parse(data.playerData));
+                    window.game.addPlayer(data.playerData);
                     break;
 
                 case "test": // stress testing
@@ -42,8 +43,16 @@ function Client(){
                     break;
 
                 case "gameState":
-                        console.log("receiving game state", JSON.parse(data.gameState.entities), JSON.parse(data.gameState.players));
-                        break;
+                    console.log("receiving game state", data.gameState.entities, data.gameState.players);
+                    data.gameState.players.forEach(function(player){
+                        window.game.addPlayer(player);
+                    });
+                    break;
+
+                case "changes":
+                    console.log("Hey there has been changes!", data);
+                    window.game.network.client.changes.push(data.changes);
+                    break;
 
                 case "ping": // host sent a ping, answer it
                    conn.send({ event: "pong", timestamp: data.timestamp });
@@ -63,15 +72,22 @@ function Client(){
 Client.prototype.update = function()
 {
     if (this.actions.length > 0) {
-        //console.log(this);
         // send all performed actions to the host
         this.conn.send({
             event: "actions",
             data: this.actions
         });
-
         this.actions = []; // clear actions queue
     }
+
+    for (var i = 0; i < this.changes.length; i += 1) {
+        for (var j = 0; j < this.changes[i].length; j += 1)  {
+            var change = this.changes[i][j];
+            window.game.players[change.playerID].change(change);
+        }
+    }
+
+    this.changes = [];
 
 };
 

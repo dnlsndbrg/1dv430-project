@@ -14,7 +14,7 @@ function Player(playerData) {
     this.actions = [];
 
     //is this me or another player
-    this.controls = (playerData.id === window.game.network.client.peer.id) ? new Mouse(this) : new NetworkControls("./NetworkControls") ;
+    this.controls = (playerData.id === window.game.network.client.peer.id) ? new Mouse(this) : new NetworkControls();
 }
 
 Player.prototype.update = function(dt){
@@ -28,6 +28,16 @@ Player.prototype.update = function(dt){
     }
 
     this.actions = [];
+};
+
+Player.prototype.change = function(change){
+    // changes from the host
+    console.log("update", this, "with ", change);
+
+    delete change.playerID;
+    for (var key in change) {
+        this[key] = change[key];
+    }
 };
 
 Player.prototype.performAction = function(action){
@@ -65,6 +75,18 @@ Player.prototype.turnTowards = function(x,y) {
     this.direction = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
 
     console.log(xDiff, yDiff, this.direction);
+};
+
+Player.prototype.getState = function() {
+    return {
+        x: this.x,
+        y: this.y,
+        id: this.id,
+        radius: this.radius,
+        direction: this.direction,
+        viewingAngle: this.viewingAngle,
+        speed: this.speed
+    };
 };
 
 module.exports = Player;
