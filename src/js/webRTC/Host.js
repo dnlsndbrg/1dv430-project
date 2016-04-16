@@ -2,7 +2,7 @@ module.exports = function Host(){
     this.conns = {};
     this.actions = {}; // here we will store all the actions received from clients
     this.lastPlayersState = [];
-
+    this.bajs = 0;
     this.diff = null;
 
     this.connect = function(peers){
@@ -91,32 +91,53 @@ module.exports = function Host(){
 
     this.update = function()
     {
-
         // get the difference since last time
 
         var currentPlayersState = [];
         var changes = [];
 
-        for(var i = 0; i < this.lastPlayersState.length; i += 1){
-
-            // get the players last and new state
-            var id = this.lastPlayersState[i].id;
-            var lastState = this.lastPlayersState[i];
-            var newState = window.game.players[id].getState();
+        for (var key in window.game.players) {
+            var lastState = window.game.players[key].lastState;
+            var newState = window.game.players[key].getState();
 
             // compare this players new state with it's last state
             var change = _.omit(newState, function(v,k) { return lastState[k] === v; });
             if (!_.isEmpty(change)) {
                 // there's been changes
-                change.playerID = id;
+                console.log("changes!!!!!!!!!!!!!!!!!!");
+                change.playerID = window.game.players[key].id;
                 changes.push(change);
             }
 
-            currentPlayersState.push(newState);
+            window.game.players[key].lastState = newState;
         }
 
-        this.lastPlayersState = currentPlayersState;
-        if (this.lastPlayersState.length === 0) this.lastPlayersState = window.game.getPlayersState(); // if newly started game..
+
+        //
+        // for(var i = 0; i < this.lastPlayersState.length; i += 1){
+        //
+        //     // get the players last and new state
+        //     var id = this.lastPlayersState[i].id;
+        //     var lastState = this.lastPlayersState[i];
+        //     var newState = window.game.players[id].getState();
+        //
+        //
+        //
+        //     // compare this players new state with it's last state
+        //     var change = _.omit(newState, function(v,k) { return lastState[k] === v; });
+        //     if (!_.isEmpty(change)) {
+        //         // there's been changes
+        //         console.log("changes!!!!!!!!!!!!!!!!!!");
+        //         change.playerID = id;
+        //         changes.push(change);
+        //     }
+        //
+        //     currentPlayersState.push(newState);
+        // }
+        //
+        // this.lastPlayersState = currentPlayersState;
+        // if (this.lastPlayersState.length === 0) this.lastPlayersState = window.game.getPlayersState(); // if newly started game..
+
 
         if (changes.length > 0){
              console.log("changes!", changes);

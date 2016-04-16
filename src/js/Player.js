@@ -4,17 +4,20 @@ var NetworkControls = require("./NetworkControls");
 
 function Player(playerData) {
     this.id = playerData.id;
-    this.x = playerData.x || Math.floor(Math.random() * window.game.width) + 1;
-    this.y = playerData.y || Math.floor(Math.random() * window.game.height) + 1;
     this.radius = playerData.radius || 20; // circle radius
+    this.x = playerData.x || (Math.floor(Math.random() * (window.game.width - this.radius)) + this.radius / 2);
+    this.y = playerData.y || (Math.floor(Math.random() * (window.game.height - this.radius)) + this.radius / 2);
     this.direction = playerData.direction || Math.floor(Math.random() * 360) + 1;
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 10;
 
     this.actions = [];
+    this.lastState = this.getState();
 
     //is this me or another player
     this.controls = (playerData.id === window.game.network.client.peer.id) ? new Mouse(this) : new NetworkControls();
+
+    console.log("Spawning player at", this.x, this.y);
 }
 
 Player.prototype.update = function(dt){
