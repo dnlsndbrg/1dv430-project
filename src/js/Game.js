@@ -1,7 +1,6 @@
 var Ui = require("./Ui");
 var Network = require("./webRTC/WebRTC");
 var Player = require("./Player");
-var KeyboardControls = require("./KeyboardControls");
 
 function Game() {
     this.started = false;
@@ -119,7 +118,7 @@ Game.prototype.getGameState = function() {
         //     console.log("entity:", entity);
         //     return JSON.stringify(entity);
         // }),
-        entities: this.entities.map(function(entity) { return entity.getState(); }),
+        entities: this.entities.map(function(entity) { return entity.getState();        }),
         //players: Object.keys(this.players).map(function(key){ return JSON.stringify(window.game.players[key]); })
         players: this.getPlayersState()
     };

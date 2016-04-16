@@ -1,3 +1,4 @@
+"use strict";
 // var Player = require("./../Player");
 
 function Client(){
@@ -71,6 +72,16 @@ function Client(){
 
 Client.prototype.update = function()
 {
+    // check if my keystate has changed
+    var myPlayer = window.game.players[this.peer.id];
+
+     if (!_.isEqual(myPlayer.controls.keyboard.keys, myPlayer.controls.keyboard.lastState)) {
+        // send keystate to host
+     }
+
+    myPlayer.controls.keyboard.lastState = _.clone(myPlayer.controls.keyboard.keys);
+
+
     if (this.actions.length > 0) {
         // send all performed actions to the host
         this.conn.send({
@@ -80,6 +91,7 @@ Client.prototype.update = function()
         this.actions = []; // clear actions queue
     }
 
+    // update with changes received from host
     for (var i = 0; i < this.changes.length; i += 1) {
         for (var j = 0; j < this.changes[i].length; j += 1)  {
             var change = this.changes[i][j];

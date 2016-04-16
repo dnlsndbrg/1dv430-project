@@ -1,5 +1,6 @@
 var helpers = require("./helpers");
 var Mouse = require("./Mouse");
+var Keyboard = require("./Keyboard");
 var NetworkControls = require("./NetworkControls");
 
 function Player(playerData) {
@@ -11,11 +12,13 @@ function Player(playerData) {
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 10;
 
+    this.keys = null;
+
     this.actions = [];
     this.lastState = this.getState();
 
     //is this me or another player
-    this.controls = (playerData.id === window.game.network.client.peer.id) ? new Mouse(this) : new NetworkControls();
+    this.controls = (playerData.id === window.game.network.client.peer.id) ? {mouse: new Mouse(this), keyboard: new Keyboard(this)} : new NetworkControls();
 
     console.log("Spawning player at", this.x, this.y);
 }
