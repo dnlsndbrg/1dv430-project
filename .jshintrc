@@ -31,5 +31,9 @@
     "latedef": true,
     "nonbsp": true,
     "quotmark": "double",
-    "esversion": 6
+    "esversion": 6,
+    "globals": {
+        "_": true,
+        "Peer": true
+     }
 }
