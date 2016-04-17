@@ -38,6 +38,12 @@ function Client(){
                     window.game.addPlayer(data.playerData);
                     break;
 
+                    case "playerLeft":
+                        console.log("player LEFT", data);
+                        //window.game.addPlayer(data.playerData);
+                        window.game.removePlayer({id: data.id});
+                        break;
+
                 case "test": // stress testing
                     console.log("test!");
                     //window.game.network.client.testsReceived += 1;
@@ -98,7 +104,9 @@ Client.prototype.update = function()
     for (var i = 0; i < this.changes.length; i += 1) {
         for (var j = 0; j < this.changes[i].length; j += 1)  {
             var change = this.changes[i][j];
-            window.game.players[change.playerID].change(change);
+
+            // for now, ignore my own changes
+            if (change.playerID !== window.game.network.client.peer.id) window.game.players[change.playerID].change(change);
         }
     }
 

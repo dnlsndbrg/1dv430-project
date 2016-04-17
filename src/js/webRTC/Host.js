@@ -78,7 +78,6 @@ module.exports = function Host(){
 
     this.broadcast = function(data) {
         for (var conn in this.conns){
-            //console.log("SEND!", conn, data);
             this.conns[conn].send(data);
         }
     };

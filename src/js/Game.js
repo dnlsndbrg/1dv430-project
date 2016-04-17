@@ -5,8 +5,8 @@ var Player = require("./Player");
 function Game() {
     this.started = false;
 
-    this.width = 240;
-    this.height = 320;
+    this.width = 320;
+    this.height = 240;
 
     this.canvas = document.querySelector("#canvas");
     this.ctx = this.canvas.getContext("2d");
