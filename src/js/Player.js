@@ -10,9 +10,14 @@ function Player(playerData) {
     this.y = playerData.y || (Math.floor(Math.random() * (window.game.height - this.radius)) + this.radius / 2);
     this.direction = playerData.direction || Math.floor(Math.random() * 360) + 1;
     this.viewingAngle = playerData.viewingAngle || 45;
-    this.speed = playerData.speed || 10;
+    this.speed = playerData.speed || 100; //pixels per second
 
-    this.keys = null;
+    this.keys = {
+        w: false,
+        s: false,
+        a: false,
+        d: false
+    };
 
     this.actions = [];
     this.lastState = this.getState();
@@ -32,8 +37,26 @@ Player.prototype.update = function(dt){
                     this.performAction(action);
         }
     }
-
     this.actions = [];
+
+    var distance = this.speed * dt;
+
+    if (this.keys.w) {
+        this.y -= distance;
+    }
+    if (this.keys.s) {
+        this.y += distance;
+    }
+
+    if (this.keys.a) {
+        this.x -= distance;
+    }
+    if (this.keys.d) {
+        this.x += distance;
+    }
+
+
+
 };
 
 Player.prototype.change = function(change){

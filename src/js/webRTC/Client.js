@@ -75,11 +75,14 @@ Client.prototype.update = function()
     // check if my keystate has changed
     var myPlayer = window.game.players[this.peer.id];
 
-     if (!_.isEqual(myPlayer.controls.keyboard.keys, myPlayer.controls.keyboard.lastState)) {
+     if (!_.isEqual(myPlayer.keys, myPlayer.controls.keyboard.lastState)) {
         // send keystate to host
+        this.conn.send({
+            event: "keys",
+            keys: myPlayer.keys
+        });
      }
-
-    myPlayer.controls.keyboard.lastState = _.clone(myPlayer.controls.keyboard.keys);
+    myPlayer.controls.keyboard.lastState = _.clone(myPlayer.keys);
 
 
     if (this.actions.length > 0) {

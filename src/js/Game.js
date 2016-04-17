@@ -57,7 +57,7 @@ function Game() {
 
         // Update entities
         this.entities.forEach(function(entity) {
-            entity.update(dt);
+            entity.update(dt / 1000); //deltatime in seconds
         });
     };
 

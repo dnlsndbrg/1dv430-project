@@ -65,6 +65,11 @@ module.exports = function Host(){
                            console.log("actions received from", conn.peer, data);
                            window.game.players[conn.peer].actions.push(data);
                            break;
+
+                       case "keys": // receiving actions from a player
+                               console.log("keys received from", conn.peer, data);
+                               window.game.players[conn.peer].keys = data.keys; //TODO: verify input (check that it is the key object with true/false values)
+                               break;
                     }
                 });
             });
@@ -104,7 +109,6 @@ module.exports = function Host(){
             var change = _.omit(newState, function(v,k) { return lastState[k] === v; });
             if (!_.isEmpty(change)) {
                 // there's been changes
-                console.log("changes!!!!!!!!!!!!!!!!!!");
                 change.playerID = window.game.players[key].id;
                 changes.push(change);
             }
@@ -139,9 +143,8 @@ module.exports = function Host(){
         // if (this.lastPlayersState.length === 0) this.lastPlayersState = window.game.getPlayersState(); // if newly started game..
 
 
+        // if there are changes
         if (changes.length > 0){
-             console.log("changes!", changes);
-            // there are changes
             this.broadcast({
                 event: "changes",
                 changes: changes
