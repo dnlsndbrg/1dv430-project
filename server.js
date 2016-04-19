@@ -14,7 +14,6 @@ let
 
 let app     = express(),
     port    = process.env.PORT || 8000;
-    port = 80;
 var games = {};
 
 // Launch Application ----------------------------------------------------------
