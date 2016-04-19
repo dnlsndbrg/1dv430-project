@@ -12,6 +12,13 @@ function Player(playerData) {
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 100; //pixels per second
 
+    this.sx = 0;
+    this.sy = 0;
+    this.sw = 47;
+    this.sh = 47;
+    this.dw = 47;
+    this.dh = 47;
+
     this.keys = {
         w: false,
         s: false,
@@ -55,8 +62,6 @@ Player.prototype.update = function(dt){
         this.x += distance;
     }
 
-
-
 };
 
 Player.prototype.change = function(change){
@@ -79,20 +84,22 @@ Player.prototype.performAction = function(action){
 
 Player.prototype.render = function(canvas, ctx){
     //draw circle
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, helpers.toRadians(360), false);
-    ctx.closePath();
-    ctx.fillStyle = "black";
-    ctx.fill();
-
-    // draw viewing direction
-    ctx.beginPath();
-    ctx.moveTo(this.x, this.y);
-    ctx.arc(this.x, this.y,this.radius, helpers.toRadians(this.direction - this.viewingAngle), helpers.toRadians(this.direction + this.viewingAngle));
-    ctx.lineTo(this.x, this.y);
-    ctx.closePath();
-    ctx.fillStyle = "red";
-    ctx.fill();
+    // ctx.beginPath();
+    // ctx.arc(this.x, this.y, this.radius, 0, helpers.toRadians(360), false);
+    // ctx.closePath();
+    // ctx.fillStyle = "black";
+    // ctx.fill();
+    //
+    // // draw viewing direction
+    // ctx.beginPath();
+    // ctx.moveTo(this.x, this.y);
+    // ctx.arc(this.x, this.y,this.radius, helpers.toRadians(this.direction - this.viewingAngle), helpers.toRadians(this.direction + this.viewingAngle));
+    // ctx.lineTo(this.x, this.y);
+    // ctx.closePath();
+    // ctx.fillStyle = "red";
+    // ctx.fill();
+    //console.log(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, this.x, this.y, this.dw, this.dh)
+    ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, this.x, this.y, this.dw, this.dh);
 };
 
 Player.prototype.turnTowards = function(x,y) {

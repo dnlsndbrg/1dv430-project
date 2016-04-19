@@ -2,7 +2,6 @@ module.exports = function Host(){
     this.conns = {};
     this.actions = {}; // here we will store all the actions received from clients
     this.lastPlayersState = [];
-    this.bajs = 0;
     this.diff = null;
 
     this.connect = function(peers){

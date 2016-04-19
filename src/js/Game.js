@@ -8,6 +8,9 @@ function Game() {
     this.width = 320;
     this.height = 240;
 
+    this.spritesheet = new Image();
+    this.spritesheet.src = "../img/spritesheet.png";
+
     this.canvas = document.querySelector("#canvas");
     this.ctx = this.canvas.getContext("2d");
     this.ctx.font = "16px serif";
