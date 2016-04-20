@@ -14,10 +14,10 @@ function Player(playerData) {
 
     this.sx = 0;
     this.sy = 0;
-    this.sw = 47;
-    this.sh = 47;
-    this.dw = 47;
-    this.dh = 47;
+    this.sw = 60;
+    this.sh = 60;
+    this.dw = 60;
+    this.dh = 60;
 
     this.keys = {
         w: false,
@@ -99,7 +99,21 @@ Player.prototype.render = function(canvas, ctx){
     // ctx.fillStyle = "red";
     // ctx.fill();
     //console.log(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, this.x, this.y, this.dw, this.dh)
-    ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, this.x, this.y, this.dw, this.dh);
+
+
+
+
+    ctx.save(); // save current state
+    ctx.translate(this.x, this.y); // change origin
+    ctx.rotate(helpers.toRadians(this.direction)); // rotate
+    ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
+    ctx.restore(); // restore original states (no rotation etc)
+
+
+
+
+
+
 };
 
 Player.prototype.turnTowards = function(x,y) {
