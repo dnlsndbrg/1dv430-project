@@ -1,8 +1,8 @@
 function Mouse(player){
     this.player = player;
+
     this.click = function(e){
         this.player.turnTowards(e.offsetX, e.offsetY);
-
         window.game.network.client.actions.push({
             action: "turnTowards",
             data: {
@@ -10,6 +10,10 @@ function Mouse(player){
                 y: e.offsetY
             }
         });
+    };
+
+    this.mousemove = function(e) {
+        this.player.turnTowards(e.offsetX, e.offsetY);
     };
     //
     // this.keyUpHandler = function(e){
@@ -25,6 +29,7 @@ function Mouse(player){
     //     }
     // };
 
+    window.game.canvas.addEventListener("mousemove", this.mousemove.bind(this));
     window.game.canvas.addEventListener("click",this.click.bind(this));
     //window.game.canvas.addEventListener("keyup",this.keyUpHandler.bind(this), false);
 }

@@ -117,14 +117,9 @@ Player.prototype.render = function(canvas, ctx){
 };
 
 Player.prototype.turnTowards = function(x,y) {
-    console.log("turn towards",x,y);
-    console.log("im at", this.x, this.y, "and looking in direction", this.direction);
-
     var xDiff = x - this.x;
     var yDiff = y - this.y;
     this.direction = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
-
-    console.log(xDiff, yDiff, this.direction);
 };
 
 Player.prototype.getState = function() {
