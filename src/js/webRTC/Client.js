@@ -66,8 +66,7 @@ function Client(){
                    data.pings.forEach(function(ping) {
                        window.game.players[ping.id].ping = ping.ping;
                    });
-
-                   console.log(window.game.players);
+                   window.game.ui.updateClientList(window.game.players);
                    break;
 
                case "pong": // we've received a pong from the host, calucate pingtime

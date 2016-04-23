@@ -10,9 +10,10 @@ module.exports = function Ui(game){
 
         //TODO: use handlebars
         this.clientList.innerHTML = "";
+
         for (var id in players){
             var li = document.createElement("li");
-            var content = document.createTextNode(id);
+            var content = document.createTextNode(id + " " + players[id].ping);
 
             if (id === myID) {
                 li.classList.add("me");
