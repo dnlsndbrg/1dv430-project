@@ -28,6 +28,8 @@ function Player(playerData) {
     this.lastClientState = this.getClientState();
     this.lastFullState = this.getFullState();
 
+    this.ping = "-";
+
     //is this me or another player
     this.controls = (playerData.id === window.game.network.client.peer.id) ? {mouse: new Mouse(this), keyboard: new Keyboard(this)} : new NetworkControls();
 }

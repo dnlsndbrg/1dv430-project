@@ -62,6 +62,12 @@ function Client(){
 
                 case "ping": // host sent a ping, answer it
                    conn.send({ event: "pong", timestamp: data.timestamp });
+                   console.log("player pings:", data.pings);
+                   data.pings.forEach(function(ping) {
+                       window.game.players[ping.id].ping = ping.ping;
+                   });
+
+                   console.log(window.game.players);
                    break;
 
                case "pong": // we've received a pong from the host, calucate pingtime

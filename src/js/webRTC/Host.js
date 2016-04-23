@@ -17,7 +17,11 @@ module.exports = function Host(){
 
             // send a ping every 2 seconds, to track ping time
             setInterval(function(){
-                window.game.network.host.broadcast({event: "ping", timestamp: Date.now()});
+                window.game.network.host.broadcast({
+                    event: "ping",
+                    timestamp: Date.now(),
+                    pings: window.game.network.host.getPings()
+                });
             },2000);
 
             peers.forEach(function(peerID) {
@@ -195,6 +199,18 @@ module.exports = function Host(){
         //     actions:
         // })
 
+    };
+
+
+
+    this.getPings = function() {
+        var pings = [];
+        for (var key in window.game.players) {
+            var player = window.game.players[key];
+            pings.push({id: player.id, ping: player.ping || "host"});
+        }
+
+        return pings;
     };
 };
 
