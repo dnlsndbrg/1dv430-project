@@ -14,7 +14,9 @@ function Mouse(player){
     };
 
     this.mousemove = function(e) {
-        this.player.turnTowards(e.offsetX, e.offsetY);
+        this.player.mouseX = e.offsetX;
+        this.player.mouseY = e.offsetY;
+        //this.player.turnTowards(e.offsetX, e.offsetY);
     };
     //
     // this.keyUpHandler = function(e){

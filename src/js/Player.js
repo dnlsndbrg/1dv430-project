@@ -25,6 +25,9 @@ function Player(playerData) {
     this.kLeft = false;
     this.kRight = false;
 
+    this.mouseX = this.x;
+    this.mouseY = this.y;
+
     this.lastClientState = this.getClientState();
     this.lastFullState = this.getFullState();
 
@@ -60,6 +63,7 @@ Player.prototype.update = function(dt){
         this.x += distance;
     }
 
+    this.turnTowards(this.mouseX, this.mouseY);
 };
 
 Player.prototype.networkUpdate = function(update){
@@ -125,6 +129,8 @@ Player.prototype.getFullState = function() {
         kDown: this.kDown,
         kLeft: this.kLeft,
         kRight: this.kRight,
+        mouseX: this.mouseX,
+        mouseY: this.mouseY
     };
 };
 
@@ -137,6 +143,8 @@ Player.prototype.getClientState = function() {
         kDown: this.kDown,
         kLeft: this.kLeft,
         kRight: this.kRight,
+        mouseX: this.mouseX,
+        mouseY: this.mouseY
     };
 };
 
