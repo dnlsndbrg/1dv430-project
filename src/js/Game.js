@@ -121,14 +121,14 @@ Game.prototype.getGameState = function() {
         //     console.log("entity:", entity);
         //     return JSON.stringify(entity);
         // }),
-        entities: this.entities.map(function(entity) { return entity.getState();        }),
+        entities: this.entities.map(function(entity) { return entity.getFullState();        }),
         //players: Object.keys(this.players).map(function(key){ return JSON.stringify(window.game.players[key]); })
         players: this.getPlayersState()
     };
 };
 
 Game.prototype.getPlayersState = function() {
-    return Object.keys(this.players).map(function(key){ return window.game.players[key].getState(); });
+    return Object.keys(this.players).map(function(key){ return window.game.players[key].getFullState(); });
 };
 
 module.exports = Game;

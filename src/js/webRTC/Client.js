@@ -57,8 +57,7 @@ function Client(){
                     break;
 
                 case "changes":
-                    console.log("Hey there has been changes!", data);
-                    window.game.network.client.changes.push(data.changes);
+                    window.game.network.client.changes = window.game.network.client.changes.concat(data.changes);
                     break;
 
                 case "ping": // host sent a ping, answer it
@@ -79,38 +78,104 @@ function Client(){
 Client.prototype.update = function()
 {
     // check if my keystate has changed
-    var myPlayer = window.game.players[this.peer.id];
+    var player = window.game.players[this.peer.id];
+    if (!player) return;
 
-     if (!_.isEqual(myPlayer.keys, myPlayer.controls.keyboard.lastState)) {
-        // send keystate to host
+    var currentState = player.getClientState();
+    var lastClientState = player.lastClientState;
+    var change = _.omit(currentState, function(v,k) { return lastClientState[k] === v; }); // compare new and old state and get the difference
+
+    // add any performed actions to change package
+    // if (this.actions.length > 0) {
+    //     change.actions = this.actions;
+    //     this.actions = [];
+    // }
+
+    if (!_.isEmpty(change)) {
+        // there's been changes, send em to host
         this.conn.send({
-            event: "keys",
-            keys: myPlayer.keys
+            event: "networkUpdate",
+            updates: change
         });
-     }
-    myPlayer.controls.keyboard.lastState = _.clone(myPlayer.keys);
-
-
-    if (this.actions.length > 0) {
-        // send all performed actions to the host
-        this.conn.send({
-            event: "actions",
-            data: this.actions
-        });
-        this.actions = []; // clear actions queue
     }
+    player.lastClientState = currentState;
+
+
+
 
     // update with changes received from host
     for (var i = 0; i < this.changes.length; i += 1) {
-        for (var j = 0; j < this.changes[i].length; j += 1)  {
-            var change = this.changes[i][j];
-
-            // for now, ignore my own changes
-            if (change.playerID !== window.game.network.client.peer.id) window.game.players[change.playerID].change(change);
+        change = this.changes[i];
+        // for now, ignore my own changes
+        if (change.id !== window.game.network.client.peer.id) {
+            console.log("update player", change);
+            window.game.players[change.id].networkUpdate(change);
         }
     }
 
     this.changes = [];
+
+
+
+
+    // // check if my keystate has changed
+    // var myPlayer = window.game.players[this.peer.id];
+    // if (!myPlayer) return;
+    //
+    //  if (!_.isEqual(myPlayer.keys, myPlayer.controls.keyboard.lastState)) {
+    //     // send keystate to host
+    //     this.conn.send({
+    //         event: "keys",
+    //         keys: myPlayer.keys
+    //     });
+    //  }
+    // myPlayer.controls.keyboard.lastState = _.clone(myPlayer.keys);
+    //
+    //
+    // // get the difference since last time
+    //
+    // var currentPlayersState = [];
+    // var changes = [];
+    // var lastState = myPlayer.lastState;
+    // var newState = myPlayer.getState();
+    //
+    // // compare players new state with it's last state
+    // var change = _.omit(newState, function(v,k) { return lastState[k] === v; });
+    // if (!_.isEmpty(change)) {
+    //     // there's been changes
+    //     change.playerID = myPlayer.id;
+    //     changes.push(change);
+    // }
+    //
+    // myPlayer.lastState = newState;
+    // // if there are changes
+    // if (changes.length > 0){
+    //     this.conn.send({
+    //         event: "changes",
+    //         changes: changes
+    //     });
+    // }
+    //
+    // if (this.actions.length > 0) {
+    //     // send all performed actions to the host
+    //     this.conn.send({
+    //         event: "actions",
+    //         data: this.actions
+    //     });
+    //     this.actions = []; // clear actions queue
+    // }
+    //
+    // // update with changes received from host
+    // for (var i = 0; i < this.changes.length; i += 1) {
+    //     for (var j = 0; j < this.changes[i].length; j += 1)  {
+    //         change = this.changes[i][j];
+    //
+    //         // for now, ignore my own changes
+    //         if (change.playerID !== window.game.network.client.peer.id) window.game.players[change.playerID].change(change);
+    //     }
+    // }
+    //
+    // this.changes = [];
 
 };
 

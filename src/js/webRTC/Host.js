@@ -33,7 +33,7 @@ module.exports = function Host(){
                 conn.on("open", function() {
                     // send new player data to everyone
                     if (newPlayer) {
-                        window.game.network.host.broadcast({ event: "playerJoined", playerData: newPlayer.getState() });
+                        window.game.network.host.broadcast({ event: "playerJoined", playerData: newPlayer.getFullState() });
                         // send the new player the full game state
                         window.game.network.host.emit( {clientID: conn.peer, event: "gameState", gameState: window.game.getGameState()} );
                     }
@@ -60,15 +60,26 @@ module.exports = function Host(){
                            window.game.players[conn.peer].ping = ping;
                            break;
 
-                       case "actions": // receiving actions from a player
-                           console.log("actions received from", conn.peer, data);
-                           window.game.players[conn.peer].actions.push(data);
-                           break;
+                        case "networkUpdate":
+                            // update from a client
+                            window.game.players[conn.peer].networkUpdate(data.updates); // TODO verify
+                            break;
+                       //
+                    //    case "actions": // receiving actions from a player
+                    //        console.log("actions received from", conn.peer, data);
+                    //        window.game.players[conn.peer].actions.push(data);
+                    //        break;
 
-                       case "keys": // receiving actions from a player
-                               console.log("keys received from", conn.peer, data);
-                               window.game.players[conn.peer].keys = data.keys; //TODO: verify input (check that it is the key object with true/false values)
-                               break;
+                    //    case "changes":
+                    //        console.log("Hey there has been changes!", data);
+                    //        window.game.players[conn.peer].change(data.changes);
+                    //        break;
+                       //
+                    //    case "keys": // receiving actions from a player
+                    //        console.log("keys received from", conn.peer, data.keys,  window.game.players[conn.peer]);
+                    //        window.game.players[conn.peer].keys = _.clone(data.keys); //TODO: verify input (check that it is the key object with true/false values)
+                    //        console.log(window.game.players[conn.peer].keys);
+                    //        break;
                     }
                 });
             });
@@ -96,24 +107,44 @@ module.exports = function Host(){
     {
         // get the difference since last time
 
-        var currentPlayersState = [];
         var changes = [];
 
         for (var key in window.game.players) {
-            var lastState = window.game.players[key].lastState;
-            var newState = window.game.players[key].getState();
-
-            // compare this players new state with it's last state
-            var change = _.omit(newState, function(v,k) { return lastState[k] === v; });
-            if (!_.isEmpty(change)) {
-                // there's been changes
-                change.playerID = window.game.players[key].id;
+            var player = window.game.players[key];
+            var currentFullState = player.getFullState();
+            var change = _.omit(currentFullState, function(v,k) { return player.lastFullState[k] === v; }); // compare new and old state and get the difference
+            if (!_.isEmpty(change)) { //there's been changes
+                change.id = player.id;
                 changes.push(change);
+                player.lastFullState = currentFullState;
             }
-
-            window.game.players[key].lastState = newState;
         }
 
+        if (changes.length > 0){
+            this.broadcast({
+                event: "changes",
+                changes: changes
+            });
+        }
+
+        // var currentPlayersState = [];
+        // var changes = [];
+        //
+        // for (var key in window.game.players) {
+        //     var lastState = window.game.players[key].lastState;
+        //     var newState = window.game.players[key].getState();
+        //
+        //     // compare this players new state with it's last state
+        //     var change = _.omit(newState, function(v,k) { return lastState[k] === v; });
+        //     if (!_.isEmpty(change)) {
+        //         // there's been changes
+        //         change.playerID = window.game.players[key].id;
+        //         changes.push(change);
+        //     }
+        //
+        //     window.game.players[key].lastState = newState;
+        // }
+        //
 
         //
         // for(var i = 0; i < this.lastPlayersState.length; i += 1){
@@ -142,12 +173,12 @@ module.exports = function Host(){
 
 
         // if there are changes
-        if (changes.length > 0){
-            this.broadcast({
-                event: "changes",
-                changes: changes
-            });
-        }
+        // if (changes.length > 0){
+        //     this.broadcast({
+        //         event: "changes",
+        //         changes: changes
+        //     });
+        // }
 
         //console.log(currentPlayersState);
         //

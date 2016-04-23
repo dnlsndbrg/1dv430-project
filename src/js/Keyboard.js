@@ -1,40 +1,36 @@
 function Keyboard(player){
     this.player = player;
-
-    this.lastState = _.clone(player.keys);
-
+    //this.lastState = _.clone(player.keys);
     this.keyDownHandler = function(e){
-        console.log(e.keyCode);
         switch(e.keyCode) {
             case 87: // W
-                if (player.keys.w !== true)  player.keys.w = true;
+                if (player.kUp !== true)  player.kUp= true;
                 break;
             case 83: // S
-            if (player.keys.s !== true)  player.keys.s = true;
+            if (player.kDown !== true)  player.kDown = true;
             break;
             case 65: // A
-            if (player.keys.a !== true)  player.keys.a = true;
+            if (player.kLeft !== true)  player.kLeft = true;
             break;
             case 68: // A
-            if (player.keys.d !== true)  player.keys.d = true;
+            if (player.kRight !== true)  player.kRight = true;
             break;
         }
     };
 
     this.keyUpHandler = function(e){
-
         switch(e.keyCode) {
             case 87: // W
-                if (player.keys.w === true) player.keys.w = false;
+                if (player.kUp === true) player.kUp = false;
                 break;
             case 83: // S
-            if (player.keys.s === true) player.keys.s = false;
+            if (player.kDown === true) player.kDown = false;
             break;
             case 65: // A
-            if (player.keys.a === true)  player.keys.a = false;
+            if (player.kLeft === true)  player.kLeft = false;
             break;
             case 68: // A
-            if (player.keys.d === true)  player.keys.d = false;
+            if (player.kRight === true)  player.kRight = false;
             break;
         }
     };

@@ -19,59 +19,56 @@ function Player(playerData) {
     this.dw = 60;
     this.dh = 60;
 
-    this.keys = {
-        w: false,
-        s: false,
-        a: false,
-        d: false
-    };
+    // keys
+    this.kUp = false;
+    this.kDown = false;
+    this.kLeft = false;
+    this.kRight = false;
 
-    this.actions = [];
-    this.lastState = this.getState();
+    this.lastClientState = this.getClientState();
+    this.lastFullState = this.getFullState();
 
     //is this me or another player
     this.controls = (playerData.id === window.game.network.client.peer.id) ? {mouse: new Mouse(this), keyboard: new Keyboard(this)} : new NetworkControls();
-
-    console.log("Spawning player at", this.x, this.y);
 }
 
 Player.prototype.update = function(dt){
 
     // go through all the queued up actions and perform them
-    for (var i = 0; i < this.actions.length; i += 1){
-        for (var j = 0; j < this.actions[i].data.length; j += 1){
-                    var action = this.actions[i].data[j];
-                    this.performAction(action);
-        }
-    }
-    this.actions = [];
+    // for (var i = 0; i < this.actions.length; i += 1){
+    //     for (var j = 0; j < this.actions[i].data.length; j += 1){
+    //                 var action = this.actions[i].data[j];
+    //                 this.performAction(action);
+    //     }
+    // }
+    // this.actions = [];
 
     var distance = this.speed * dt;
-
-    if (this.keys.w) {
+    if (this.kUp) {
         this.y -= distance;
     }
-    if (this.keys.s) {
+    if (this.kDown) {
         this.y += distance;
     }
 
-    if (this.keys.a) {
+    if (this.kLeft) {
         this.x -= distance;
     }
-    if (this.keys.d) {
+    if (this.kRight) {
         this.x += distance;
     }
 
 };
 
-Player.prototype.change = function(change){
-    // changes from the host
-    console.log("update", this, "with ", change);
-
-    delete change.playerID;
-    for (var key in change) {
-        this[key] = change[key];
+Player.prototype.networkUpdate = function(update){
+    // networkUpdate
+    for (var key in update) {
+        this[key] = update[key];
     }
+    // delete change.playerID;
+    // for (var key in change) {
+    //     this[key] = change[key];
+    // }
 };
 
 Player.prototype.performAction = function(action){
@@ -100,20 +97,11 @@ Player.prototype.render = function(canvas, ctx){
     // ctx.fill();
     //console.log(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, this.x, this.y, this.dw, this.dh)
 
-
-
-
     ctx.save(); // save current state
     ctx.translate(this.x, this.y); // change origin
     ctx.rotate(helpers.toRadians(this.direction)); // rotate
     ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
     ctx.restore(); // restore original states (no rotation etc)
-
-
-
-
-
-
 };
 
 Player.prototype.turnTowards = function(x,y) {
@@ -122,7 +110,7 @@ Player.prototype.turnTowards = function(x,y) {
     this.direction = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
 };
 
-Player.prototype.getState = function() {
+Player.prototype.getFullState = function() {
     return {
         x: this.x,
         y: this.y,
@@ -130,8 +118,29 @@ Player.prototype.getState = function() {
         radius: this.radius,
         direction: this.direction,
         viewingAngle: this.viewingAngle,
-        speed: this.speed
+        speed: this.speed,
+        kUp: this.kUp,
+        kDown: this.kDown,
+        kLeft: this.kLeft,
+        kRight: this.kRight,
     };
+};
+
+// The state the client sends to the host
+Player.prototype.getClientState = function() {
+    return {
+        id: this.id,
+        direction: this.direction,
+        kUp: this.kUp,
+        kDown: this.kDown,
+        kLeft: this.kLeft,
+        kRight: this.kRight,
+    };
+};
+
+Player.prototype.shoot = function() {
+    console.log(this.id, "Shoot!");
+
 };
 
 module.exports = Player;

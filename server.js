@@ -42,6 +42,9 @@ app.get("/play/:gameID", (req, res) => { //TODO: verify input
     res.render("game");
 });
 
+app.get("/", (req, res) => {
+    res.render("lobby");
+});
 
 // Socket.io -------------------------------------------------------------------
 

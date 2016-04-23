@@ -1,15 +1,16 @@
 function Mouse(player){
     this.player = player;
 
-    this.click = function(e){
-        this.player.turnTowards(e.offsetX, e.offsetY);
-        window.game.network.client.actions.push({
-            action: "turnTowards",
-            data: {
-                x: e.offsetX,
-                y: e.offsetY
-            }
-        });
+    this.click = function(){
+        //this.player.turnTowards(e.offsetX, e.offsetY);
+        this.player.shoot();
+        // window.game.network.client.actions.push({
+        //     action: "turnTowards",
+        //     data: {
+        //         x: e.offsetX,
+        //         y: e.offsetY
+        //     }
+        // });
     };
 
     this.mousemove = function(e) {
