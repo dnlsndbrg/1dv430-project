@@ -102,11 +102,6 @@ module.exports = function Host(){
         this.conns[data.clientID].send(data);
     };
 
-
-    document.querySelector("#btnTest").addEventListener("click", function(){
-        window.game.network.host.broadcast({event: "test", message: "asdasdas"});
-    });
-
     this.update = function()
     {
         // get the difference since last time

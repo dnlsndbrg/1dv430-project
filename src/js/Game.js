@@ -79,9 +79,7 @@ function Game() {
         // render fps and ping
         this.ctx.fillStyle = "black";
         this.ctx.fillText("FPS:  " + this.fps, 10, 20);
-
-        var ping = (this.network.client.peer.open) ? this.players[this.network.client.peer.id].ping : "-";
-        this.ctx.fillText("PING: " + ping, 10, 42);
+        this.ctx.fillText("PING: " + this.network.ping, 10, 42);
     };
 }
 

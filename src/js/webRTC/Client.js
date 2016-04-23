@@ -66,6 +66,7 @@ function Client(){
                    data.pings.forEach(function(ping) {
                        window.game.players[ping.id].ping = ping.ping;
                    });
+                   window.game.network.ping = window.game.players[window.game.network.client.peer.id].ping;
                    window.game.ui.updateClientList(window.game.players);
                    break;
 
