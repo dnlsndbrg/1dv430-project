@@ -5,7 +5,7 @@ function Bullet(data) {
     this.y = data.y;
     this.length = 10; // trail length
     this.direction = data.direction;
-    this.speed = 100;
+    this.speed = 400;
 }
 
 Bullet.prototype.update = function(dt, index) {

@@ -7,6 +7,7 @@ function toDegrees(rad) {
     return rad * (180 / Math.PI);
 }
 
+
 module.exports = {
     toRadians: toRadians,
     toDegrees: toDegrees
