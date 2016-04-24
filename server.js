@@ -84,13 +84,20 @@ io.on("connection", (socket) => {
                 delete games[socket.gameID];
                 return;
             }
+
+            // find and remove the old host
+            game.peers.forEach(function(peer, index) {
+                if(socket.peerID === peer.peerID){
+                    game.peers.splice(index,1);
+                }
+            });
+
             // make the next guy the host
             game.host = game.peers[0];
             // remove him from the list of peers
             game.peers.splice(0,1);
             // send the new host the list of peers so he can setup connections
             var test = game.peers.map((peer) => { return peer.peerID; });
-            console.log(test);
             game.host.emit("youAreHost", {peers: test});
 
         } else {

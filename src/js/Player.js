@@ -32,6 +32,8 @@ function Player(playerData) {
     this.lastFullState = this.getFullState();
 
     this.ping = "-";
+    this.actions = []; // actions to be performed
+    this.performedActions = []; // succesfully performed actions
 
     //is this me or another player
     this.controls = (playerData.id === window.game.network.client.peer.id) ? {mouse: new Mouse(this), keyboard: new Keyboard(this)} : new NetworkControls();
@@ -40,13 +42,14 @@ function Player(playerData) {
 Player.prototype.update = function(dt){
 
     // go through all the queued up actions and perform them
-    // for (var i = 0; i < this.actions.length; i += 1){
-    //     for (var j = 0; j < this.actions[i].data.length; j += 1){
-    //                 var action = this.actions[i].data[j];
-    //                 this.performAction(action);
+    for (var i = 0; i < this.actions.length; i += 1){
+        var success = this.performAction(this.actions[i]);
+        if (success) {
+            this.performedActions.push(this.actions[i]);
+        }
     //     }
-    // }
-    // this.actions = [];
+    }
+    this.actions = [];
 
     var distance = this.speed * dt;
     if (this.kUp) {
@@ -67,14 +70,12 @@ Player.prototype.update = function(dt){
 };
 
 Player.prototype.networkUpdate = function(update){
+    delete update.id;
     // networkUpdate
     for (var key in update) {
-        this[key] = update[key];
+        if (key === "actions") this[key] = this[key].concat(update[key]);
+        else this[key] = update[key];
     }
-    // delete change.playerID;
-    // for (var key in change) {
-    //     this[key] = change[key];
-    // }
 };
 
 Player.prototype.performAction = function(action){
@@ -82,6 +83,8 @@ Player.prototype.performAction = function(action){
         case "turnTowards":
             this.turnTowards(action.data.x, action.data.y);
             break;
+        case "shoot":
+            return this.shoot(action);
     }
 };
 
@@ -148,9 +151,9 @@ Player.prototype.getClientState = function() {
     };
 };
 
-Player.prototype.shoot = function() {
-    console.log(this.id, "Shoot!");
-
+Player.prototype.shoot = function(action) {
+    console.log(this.id, "Shoot!", action.data.x, action.data.y);
+    return action; // every shoot is valid right now
 };
 
 module.exports = Player;

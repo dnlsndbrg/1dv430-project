@@ -67,6 +67,7 @@ module.exports = function Host(){
                         case "networkUpdate":
                             // update from a client
                             window.game.players[conn.peer].networkUpdate(data.updates); // TODO verify
+                            //window.game.players[conn.peer].actions.push(data.actions); // TODO verify
                             break;
                        //
                     //    case "actions": // receiving actions from a player
@@ -112,10 +113,12 @@ module.exports = function Host(){
             var player = window.game.players[key];
             var currentFullState = player.getFullState();
             var change = _.omit(currentFullState, function(v,k) { return player.lastFullState[k] === v; }); // compare new and old state and get the difference
-            if (!_.isEmpty(change)) { //there's been changes
+            if (!_.isEmpty(change) || player.performedActions.length > 0) { //there's been changes or actions
                 change.id = player.id;
+                change.actions = player.performedActions;
                 changes.push(change);
                 player.lastFullState = currentFullState;
+                player.performedActions = [];
             }
         }
 
@@ -125,75 +128,6 @@ module.exports = function Host(){
                 changes: changes
             });
         }
-
-        // var currentPlayersState = [];
-        // var changes = [];
-        //
-        // for (var key in window.game.players) {
-        //     var lastState = window.game.players[key].lastState;
-        //     var newState = window.game.players[key].getState();
-        //
-        //     // compare this players new state with it's last state
-        //     var change = _.omit(newState, function(v,k) { return lastState[k] === v; });
-        //     if (!_.isEmpty(change)) {
-        //         // there's been changes
-        //         change.playerID = window.game.players[key].id;
-        //         changes.push(change);
-        //     }
-        //
-        //     window.game.players[key].lastState = newState;
-        // }
-        //
-
-        //
-        // for(var i = 0; i < this.lastPlayersState.length; i += 1){
-        //
-        //     // get the players last and new state
-        //     var id = this.lastPlayersState[i].id;
-        //     var lastState = this.lastPlayersState[i];
-        //     var newState = window.game.players[id].getState();
-        //
-        //
-        //
-        //     // compare this players new state with it's last state
-        //     var change = _.omit(newState, function(v,k) { return lastState[k] === v; });
-        //     if (!_.isEmpty(change)) {
-        //         // there's been changes
-        //         console.log("changes!!!!!!!!!!!!!!!!!!");
-        //         change.playerID = id;
-        //         changes.push(change);
-        //     }
-        //
-        //     currentPlayersState.push(newState);
-        // }
-        //
-        // this.lastPlayersState = currentPlayersState;
-        // if (this.lastPlayersState.length === 0) this.lastPlayersState = window.game.getPlayersState(); // if newly started game..
-
-
-        // if there are changes
-        // if (changes.length > 0){
-        //     this.broadcast({
-        //         event: "changes",
-        //         changes: changes
-        //     });
-        // }
-
-        //console.log(currentPlayersState);
-        //
-        // compare current state to earlier getGameState
-        // send difference to players
-
-        // window.game.players.forEach(function(player) {
-        //
-        // });
-
-        // send actions to all clients
-        // this.broadcast({
-        //     event: "actions",
-        //     actions:
-        // })
-
     };
 
 
@@ -208,108 +142,3 @@ module.exports = function Host(){
         return pings;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // stress test
-// setInterval(function(){
-//     window.game.network.host.broadcast({
-//         type: "test",
-//         data: "asdasdas dasdsadas dasasdasd asdasd asdadsdqw23qwklp gklp"
-//     });
-// },16);
-    //
-    // network.socket.emit("hostStart", {gameID: this.game.gameID});
-    //
-    // /**
-    //  * A user has joined. establish a new peer connection with it
-    // */
-    // network.socket.on("join", function(data) {
-    //     // a peer wants to join. Create a new Peer and connect them
-    //     var peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
-    //
-    //     peer.on("open", function(id) {
-    //         var conn =  peer.connect(data.peerID);
-    //         this.peers[id] = peer;
-    //         this.conns[data.peerID] = conn;
-    //
-    //         console.log("SADLASDASDAS", id, peer, conn);
-    //         var newPlayer = window.game.addPlayer({id: conn.peer});
-    //         this.broadcast({ event: "playerJoined", playerData: JSON.stringify(newPlayer) });
-    //
-    //
-    //
-    //
-    //         //receiving data from a client
-    //         conn.on("data", function(data) {
-    //             console.log("=====\nHOST - data from client\n", data,"\n=====");
-    //             if (data.event === "ping"){ // answer the ping
-    //                 conn.send({ event: "pong", timestamp: data.timestamp });
-    //             }
-    //             if(data.event === "pong") {
-    //                 var ping = Date.now() - data.timestamp;
-    //                 window.game.network.host.peers[conn.peer].ping = ping;
-    //             }
-    //
-    //         });
-    //
-    //         //this.game.ui.updateClientList(this.peers);
-    //         // conn.on("close", function() {
-    //         //     // a peer has disconnected
-    //         //     console.log("disconnected!", conn, "PEER", peer);
-    //         //     delete this.peers[conn.peer];
-    //         //     delete this.conns[conn.peer];
-    //         //     this.game.ui.updateClientList(this.peers);
-    //         // }.bind(this));
-    //         //
-    //     }.bind(this));
-    //
-    // }.bind(this));
-    //
-    // this.broadcast = function(data) {
-    //     console.log("Send", data);
-    //     for (var conn in this.conns){
-    //         this.conns[conn].send(data);
-    //     }
-    // };
-    //
-    // // just send data to a specific client
-    // this.emit = function(data) {
-    //     this.conns[data.clientID].send(data);
-    // };
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    // document.querySelector("#sendTest").addEventListener("click", function() {
-    //     this.send("asdasdasdasdas");
-    // }.bind(this));

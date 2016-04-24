@@ -7,7 +7,7 @@ function Client(){
     // Stress test
     this.testsReceived = 0;
 
-    this.actions = []; //here we will store client actions before we send them to the host
+    this.actions = [];// here we will store received actions from the host
     this.changes = []; // here we will store received changes from the host
 
     this.peer.on("open", function(id) {
@@ -34,35 +34,27 @@ function Client(){
         conn.on("data", function(data) {
             switch(data.event){
                 case "playerJoined":
-                    console.log("player joined", data);
                     window.game.addPlayer(data.playerData);
                     break;
 
                     case "playerLeft":
-                        console.log("player LEFT", data);
                         //window.game.addPlayer(data.playerData);
                         window.game.removePlayer({id: data.id});
                         break;
 
-                case "test": // stress testing
-                    console.log("test!");
-                    //window.game.network.client.testsReceived += 1;
-                    break;
-
                 case "gameState":
-                    console.log("receiving game state", data.gameState.entities, data.gameState.players);
                     data.gameState.players.forEach(function(player){
                         window.game.addPlayer(player);
                     });
                     break;
 
-                case "changes":
+                case "changes": // changes and actions received from host
                     window.game.network.client.changes = window.game.network.client.changes.concat(data.changes);
+                    //window.game.network.client.actions = window.game.network.client.actions.concat(data.actions);
                     break;
 
                 case "ping": // host sent a ping, answer it
                    conn.send({ event: "pong", timestamp: data.timestamp });
-                   console.log("player pings:", data.pings);
                    data.pings.forEach(function(ping) {
                        window.game.players[ping.id].ping = ping.ping;
                    });
@@ -92,10 +84,9 @@ Client.prototype.update = function()
     var change = _.omit(currentState, function(v,k) { return lastClientState[k] === v; }); // compare new and old state and get the difference
 
     // add any performed actions to change package
-    // if (this.actions.length > 0) {
-    //     change.actions = this.actions;
-    //     this.actions = [];
-    // }
+    if (player.performedActions.length > 0) {
+         change.actions = player.performedActions;
+    }
 
     if (!_.isEmpty(change)) {
         // there's been changes, send em to host
@@ -112,15 +103,15 @@ Client.prototype.update = function()
     // update with changes received from host
     for (var i = 0; i < this.changes.length; i += 1) {
         change = this.changes[i];
+
         // for now, ignore my own changes
         if (change.id !== window.game.network.client.peer.id) {
-            console.log("update player", change);
             window.game.players[change.id].networkUpdate(change);
         }
     }
 
     this.changes = [];
-
+    player.performedActions = [];
 
 
 
