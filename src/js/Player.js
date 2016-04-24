@@ -2,6 +2,7 @@ var helpers = require("./helpers");
 var Mouse = require("./Mouse");
 var Keyboard = require("./Keyboard");
 var NetworkControls = require("./NetworkControls");
+var Bullet = require("./Bullet");
 
 function Player(playerData) {
     this.id = playerData.id;
@@ -153,6 +154,12 @@ Player.prototype.getClientState = function() {
 
 Player.prototype.shoot = function(action) {
     console.log(this.id, "Shoot!", action.data.x, action.data.y);
+
+    window.game.entities.push(new Bullet({
+        x: this.x,
+        y: this.y,
+        direction: this.direction
+    }));
     return action; // every shoot is valid right now
 };
 

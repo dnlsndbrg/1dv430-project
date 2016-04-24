@@ -59,8 +59,8 @@ function Game() {
         this.fps = Math.round(1000 / dt);
 
         // Update entities
-        this.entities.forEach(function(entity) {
-            entity.update(dt / 1000); //deltatime in seconds
+        this.entities.forEach(function(entity, index) {
+            entity.update(dt / 1000, index); //deltatime in seconds
         });
     };
 
