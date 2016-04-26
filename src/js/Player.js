@@ -129,24 +129,24 @@ Player.prototype.performAction = function(action){
 Player.prototype.render = function(canvas, ctx){
     ctx.save(); // save current state
     ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
-    ctx.rotate(helpers.toRadians(this.direction)); // rotate
+    ctx.rotate(this.direction); // rotate
     ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
     ctx.restore(); // restore original states (no rotation etc)
 
 
-    ctx.save(); // save current state
-    ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
-    ctx.beginPath();
-    ctx.rect(-2, -2, 4, 4);
-    ctx.fillStyle = "red";
-    ctx.fill();
-     ctx.restore(); // restore original states (no rotation etc)
+    // ctx.save(); // save current state
+    // ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
+    // ctx.beginPath();
+    // ctx.rect(-2, -2, 4, 4);
+    // ctx.fillStyle = "red";
+    // ctx.fill();
+    //  ctx.restore(); // restore original states (no rotation etc)
 };
 
 Player.prototype.turnTowards = function(x,y) {
     var xDiff = x - this.x;
     var yDiff = y - this.y;
-    this.direction = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
+    this.direction = Math.atan2(yDiff, xDiff);// * (180 / Math.PI);
 };
 
 Player.prototype.getFullState = function() {

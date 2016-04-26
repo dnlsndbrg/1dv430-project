@@ -7,8 +7,8 @@ var Level = require("./Level");
 function Game() {
     this.started = false;
 
-    this.width = 320;
-    this.height = 240;
+    this.width = 640;
+    this.height = 480;
 
     this.level = new Level();
 
@@ -16,8 +16,8 @@ function Game() {
     this.spritesheet.src = "../img/spritesheet.png";
 
     this.canvas = document.createElement("canvas");
-    this.canvas.width = 320;
-    this.canvas.height = 240;
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
     //document.body.appendChild(this.canvas);
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     this.ctx = this.canvas.getContext("2d");
@@ -109,13 +109,9 @@ function Game() {
             entity.render(this.canvas, this.ctx);
         }.bind(this));
 
+        this.ui.renderDebug();
         // render fps and ping
-        this.ctx.fillStyle = "black";
-        this.ctx.fillText("FPS:  " + this.fps, 10, 20);
-        this.ctx.fillText("PING: " + this.network.ping, 10, 42);
-        this.ctx.fillText("PLAYER:  " + Math.floor(this.players[this.network.client.peer.id].x) + ", " + Math.floor(this.players[this.network.client.peer.id].y), 10, 64);
-        this.ctx.fillText("CAMERA: " + Math.floor(this.camera.x) + ", " + Math.floor(this.camera.y), 10, 86);
-        this.ctx.fillText("MOUSE: " + Math.floor(this.players[this.network.client.peer.id].mouseX) + ", " + Math.floor(this.players[this.network.client.peer.id].mouseY), 10, 108);
+
                 // console.log("------------------------");
                 // console.log("CAMERA: X:" + this.camera.x, "\nY:" + this.camera.y);
                 // console.log(this.players[this.network.client.peer.id]);
