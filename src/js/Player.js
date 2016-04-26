@@ -37,7 +37,13 @@ function Player(playerData) {
     this.performedActions = []; // succesfully performed actions
 
     //is this me or another player
-    this.controls = (playerData.id === window.game.network.client.peer.id) ? {mouse: new Mouse(this), keyboard: new Keyboard(this)} : new NetworkControls();
+    if (playerData.id === window.game.network.client.peer.id) {
+        this.controls = {mouse: new Mouse(this), keyboard: new Keyboard(this)};
+        window.game.camera.follow(this);
+    } else {
+        this.controls = new NetworkControls();
+    }
+    //this.controls = (playerData.id === window.game.network.client.peer.id) ? : new NetworkControls();
 }
 
 Player.prototype.update = function(dt){
@@ -67,6 +73,11 @@ Player.prototype.update = function(dt){
         this.x += distance;
     }
 
+    if (this.x > window.game.level.width) this.x = window.game.level.width;
+    if (this.x < 0) this.x = 0;
+    if (this.y > window.game.level.height) this.y = window.game.level.height;
+    if (this.y < 0) this.y = 0;
+
     this.turnTowards(this.mouseX, this.mouseY);
 };
 
@@ -90,28 +101,20 @@ Player.prototype.performAction = function(action){
 };
 
 Player.prototype.render = function(canvas, ctx){
-    //draw circle
-    // ctx.beginPath();
-    // ctx.arc(this.x, this.y, this.radius, 0, helpers.toRadians(360), false);
-    // ctx.closePath();
-    // ctx.fillStyle = "black";
-    // ctx.fill();
-    //
-    // // draw viewing direction
-    // ctx.beginPath();
-    // ctx.moveTo(this.x, this.y);
-    // ctx.arc(this.x, this.y,this.radius, helpers.toRadians(this.direction - this.viewingAngle), helpers.toRadians(this.direction + this.viewingAngle));
-    // ctx.lineTo(this.x, this.y);
-    // ctx.closePath();
-    // ctx.fillStyle = "red";
-    // ctx.fill();
-    //console.log(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, this.x, this.y, this.dw, this.dh)
-
     ctx.save(); // save current state
-    ctx.translate(this.x, this.y); // change origin
+    ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
     ctx.rotate(helpers.toRadians(this.direction)); // rotate
     ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
     ctx.restore(); // restore original states (no rotation etc)
+
+
+    ctx.save(); // save current state
+    ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
+    ctx.beginPath();
+    ctx.rect(-2, -2, 4, 4);
+    ctx.fillStyle = "red";
+    ctx.fill();
+     ctx.restore(); // restore original states (no rotation etc)
 };
 
 Player.prototype.turnTowards = function(x,y) {

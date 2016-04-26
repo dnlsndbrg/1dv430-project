@@ -13,8 +13,8 @@ function Mouse(player){
     };
 
     this.mousemove = function(e) {
-        this.player.mouseX = e.offsetX;
-        this.player.mouseY = e.offsetY;
+        this.player.mouseX = e.offsetX - window.game.camera.x;
+        this.player.mouseY = e.offsetY - window.game.camera.y;
     };
 
     window.game.canvas.addEventListener("mousemove", this.mousemove.bind(this));

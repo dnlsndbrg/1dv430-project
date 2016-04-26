@@ -1,6 +1,8 @@
 var Ui = require("./Ui");
 var Network = require("./webRTC/WebRTC");
 var Player = require("./Player");
+var Camera = require("./Camera");
+var Level = require("./Level");
 
 function Game() {
     this.started = false;
@@ -22,6 +24,9 @@ function Game() {
 
     this.entities = []; // game entities
     this.players = {};
+
+    this.camera = new Camera();
+    this.level = new Level();
 
     var last = 0; // time variable
     var dt; //delta time
@@ -49,6 +54,8 @@ function Game() {
         } else {
             this.network.client.update(dt); // else update client stuff
         }
+
+
     };
 
     /**
@@ -62,6 +69,9 @@ function Game() {
         this.entities.forEach(function(entity, index) {
             entity.update(dt / 1000, index); //deltatime in seconds
         });
+        this.camera.update();
+        // Update camera
+        //this.camera.update();
     };
 
     /**
@@ -70,6 +80,23 @@ function Game() {
     this.render = function(){
         // clear screen
         this.ctx.clearRect(0, 0, this.width, this.height);
+
+        // draw test grid
+        // var spacing = 10;
+        // for (var y = 0; y <= this.height; y += spacing) {
+        //     for(var x = 0; x <= this.width; x += spacing) {
+        //         this.ctx.beginPath();
+        //         this.ctx.moveTo(x - this.camera.x, y - this.camera.y);
+        //         this.ctx.lineTo(this.width, y - this.camera.y);
+        //         this.ctx.stroke();
+        //     }
+        // }
+        //
+        this.ctx.beginPath();
+        this.ctx.rect(0 - this.camera.x, 0 - this.camera.y, this.level.width, this.level.height);
+
+        this.ctx.fillStyle = "gray";
+        this.ctx.fill();
 
         // render all entities
         this.entities.forEach(function(entity) {
@@ -80,6 +107,11 @@ function Game() {
         this.ctx.fillStyle = "black";
         this.ctx.fillText("FPS:  " + this.fps, 10, 20);
         this.ctx.fillText("PING: " + this.network.ping, 10, 42);
+        this.ctx.fillText("PLAYER:  " + Math.floor(this.players[this.network.client.peer.id].x) + ", " + Math.floor(this.players[this.network.client.peer.id].y), 10, 64);
+        this.ctx.fillText("CAMERA: " + Math.floor(this.camera.x) + ", " + Math.floor(this.camera.y), 10, 86);
+                // console.log("------------------------");
+                // console.log("CAMERA: X:" + this.camera.x, "\nY:" + this.camera.y);
+                // console.log(this.players[this.network.client.peer.id]);
     };
 }
 
