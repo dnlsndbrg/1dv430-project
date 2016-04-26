@@ -7,8 +7,8 @@ var Bullet = require("./Bullet");
 function Player(playerData) {
     this.id = playerData.id;
     this.radius = playerData.radius || 20; // circle radius
-    this.x = playerData.x || (Math.floor(Math.random() * (window.game.width - this.radius)) + this.radius / 2);
-    this.y = playerData.y || (Math.floor(Math.random() * (window.game.height - this.radius)) + this.radius / 2);
+    this.x = playerData.x || (Math.floor(Math.random() * (window.game.level.width - this.radius)) + this.radius / 2);
+    this.y = playerData.y || (Math.floor(Math.random() * (window.game.level.height - this.radius)) + this.radius / 2);
     this.direction = playerData.direction || Math.floor(Math.random() * 360) + 1;
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 100; //pixels per second
@@ -59,20 +59,46 @@ Player.prototype.update = function(dt){
     this.actions = [];
 
     var distance = this.speed * dt;
-    if (this.kUp) {
+
+    if (this.kUp && this.kLeft) {
+        distance = distance * 0.71;
         this.y -= distance;
-    }
-    if (this.kDown) {
-        this.y += distance;
-    }
-
-    if (this.kLeft) {
+        this.mouseY -= distance;
         this.x -= distance;
-    }
-    if (this.kRight) {
+        this.mouseX -= distance;
+    } else if (this.kUp && this.kRight) {
+        distance = distance * 0.71;
+        this.y -= distance;
+        this.mouseY -= distance;
         this.x += distance;
+        this.mouseX += distance;
+    } else if (this.kDown && this.kLeft) {
+        distance = distance * 0.71;
+        this.y += distance;
+        this.mouseY += distance;
+        this.x -= distance;
+        this.mouseX -= distance;
+    } else if (this.kDown && this.kRight) {
+        distance = distance * 0.71;
+        this.y += distance;
+        this.mouseY += distance;
+        this.x += distance;
+        this.mouseX += distance;
+    } else if (this.kUp) {
+        this.y -= distance;
+        this.mouseY -= distance;
+    } else if (this.kDown) {
+        this.y += distance;
+        this.mouseY += distance;
+    } else if (this.kLeft) {
+        this.x -= distance;
+        this.mouseX -= distance;
+    } else if (this.kRight) {
+        this.x += distance;
+        this.mouseX += distance;
     }
 
+    //check if off screen
     if (this.x > window.game.level.width) this.x = window.game.level.width;
     if (this.x < 0) this.x = 0;
     if (this.y > window.game.level.height) this.y = window.game.level.height;

@@ -5,16 +5,16 @@ function Mouse(player){
         this.player.actions.push({ // add to the actions queue
             action: "shoot",
             data: {
-                x: e.offsetX,
-                y: e.offsetY
+                x: window.game.camera.x + e.offsetX,
+                y: window.game.camera.y + e.offsetY
             }
         });
         //window.game.network.client.actions.push(action); // tell the host of the action
     };
 
     this.mousemove = function(e) {
-        this.player.mouseX = e.offsetX - window.game.camera.x;
-        this.player.mouseY = e.offsetY - window.game.camera.y;
+        this.player.mouseX = window.game.camera.x + e.offsetX;
+        this.player.mouseY = window.game.camera.y + e.offsetY;
     };
 
     window.game.canvas.addEventListener("mousemove", this.mousemove.bind(this));

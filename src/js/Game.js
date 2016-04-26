@@ -10,10 +10,16 @@ function Game() {
     this.width = 320;
     this.height = 240;
 
+    this.level = new Level();
+
     this.spritesheet = new Image();
     this.spritesheet.src = "../img/spritesheet.png";
 
-    this.canvas = document.querySelector("#canvas");
+    this.canvas = document.createElement("canvas");
+    this.canvas.width = 320;
+    this.canvas.height = 240;
+    //document.body.appendChild(this.canvas);
+    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     this.ctx = this.canvas.getContext("2d");
     this.ctx.font = "16px serif";
 
@@ -26,7 +32,7 @@ function Game() {
     this.players = {};
 
     this.camera = new Camera();
-    this.level = new Level();
+
 
     var last = 0; // time variable
     var dt; //delta time
@@ -109,6 +115,7 @@ function Game() {
         this.ctx.fillText("PING: " + this.network.ping, 10, 42);
         this.ctx.fillText("PLAYER:  " + Math.floor(this.players[this.network.client.peer.id].x) + ", " + Math.floor(this.players[this.network.client.peer.id].y), 10, 64);
         this.ctx.fillText("CAMERA: " + Math.floor(this.camera.x) + ", " + Math.floor(this.camera.y), 10, 86);
+        this.ctx.fillText("MOUSE: " + Math.floor(this.players[this.network.client.peer.id].mouseX) + ", " + Math.floor(this.players[this.network.client.peer.id].mouseY), 10, 108);
                 // console.log("------------------------");
                 // console.log("CAMERA: X:" + this.camera.x, "\nY:" + this.camera.y);
                 // console.log(this.players[this.network.client.peer.id]);

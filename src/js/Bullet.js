@@ -17,7 +17,7 @@ Bullet.prototype.update = function(dt, index) {
     //
 
     // if off screen, remove it
-    if (this.x < 0 || this.x > window.game.width || this.y < 0 || this.y > window.game.height)
+    if (this.x < 0 || this.x > window.game.level.width || this.y < 0 || this.y > window.game.level.height)
         window.game.entities.splice(index, 1);
 
 };
@@ -25,7 +25,7 @@ Bullet.prototype.update = function(dt, index) {
 Bullet.prototype.render = function(canvas, ctx){
 
     ctx.save(); // save current state
-    ctx.translate(this.x, this.y); // change origin
+    ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
     ctx.rotate(helpers.toRadians(this.direction - 45 )); // rotate
 
     // // linear gradient from start to end of line
