@@ -1,6 +1,6 @@
 function Level(){
-    this.width = 600;
-    this.height = 600;
+    this.width = 400;
+    this.height = 400;
 }
 
 module.exports = Level;
