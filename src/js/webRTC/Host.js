@@ -6,10 +6,11 @@ module.exports = function Host(){
 
     this.connect = function(peers){
         console.log("connect", peers);
+
         this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
 
         this.peer.on("open", function() {
-            
+
             // create the hosts player object if it doesnt already exists
             if (!(window.game.network.client.peer.id in window.game.players)) {
                 window.game.addPlayer({id: window.game.network.client.peer.id});
@@ -45,8 +46,8 @@ module.exports = function Host(){
 
                 conn.on("close", function() {
                     delete window.game.network.host.conns[conn.peer];
-                    window.game.network.host.broadcast({ event: "playerLeft", id: conn.peer});
-                    window.game.removePlayer({id: conn.peer});
+                    //window.game.network.host.broadcast({ event: "playerLeft", id: conn.peer});
+                    //window.game.removePlayer({id: conn.peer});
                 });
 
                 conn.on("error", function(err) {

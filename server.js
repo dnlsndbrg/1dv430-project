@@ -64,7 +64,7 @@ io.on("connection", (socket) => {
                 host: socket, // since this guy is the first here, make him/her the host
                 peers: []
             };
-            socket.emit("youAreHost", { peers: [] });
+            socket.emit("youAreHost", {peers: [] });
         } else {
             // tell the host to make a peer connection to this new player
             games[data.gameID].host.emit("playerJoined", { peerID: data.peerID });
@@ -97,8 +97,8 @@ io.on("connection", (socket) => {
             // remove him from the list of peers
             game.peers.splice(0,1);
             // send the new host the list of peers so he can setup connections
-            var test = game.peers.map((peer) => { return peer.peerID; });
-            game.host.emit("youAreHost", {peers: test});
+            var peers = game.peers.map((peer) => { return peer.peerID; });
+            game.host.emit("youAreHost", {peers: peers});
 
         } else {
             // find the peer that left and remove him from the peers list
@@ -108,6 +108,10 @@ io.on("connection", (socket) => {
                 }
             });
         }
+
+        // tell everyone that player left
+        console.log("PLAYER LEFT", socket.gameID, socket.peerID);
+        socket.broadcast.emit("playerLeft", {playerID: socket.peerID});
     });
 
 });

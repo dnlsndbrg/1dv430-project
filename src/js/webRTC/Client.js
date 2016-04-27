@@ -21,13 +21,14 @@ function Client(){
 
         // close out any old connections
         if(Object.keys(this.connections).length > 1) {
+
             for (var connPeer in this.connections){
                 if (connPeer !== conn.peer) {
                     this.connections[connPeer][0].close();
                     delete this.connections[connPeer];
                     // delete old hosts player object
-                    console.log("delete old player", connPeer);
-                    delete window.game.players[connPeer];
+                    //console.log("delete old player", connPeer);
+                    //delete window.game.players[connPeer];
                 }
             }
         }
@@ -40,10 +41,10 @@ function Client(){
                     window.game.addPlayer(data.playerData);
                     break;
 
-                    case "playerLeft":
-                        //window.game.addPlayer(data.playerData);
-                        window.game.removePlayer({id: data.id});
-                        break;
+                    // case "playerLeft":
+                    //     //window.game.addPlayer(data.playerData);
+                    //     window.game.removePlayer({id: data.id});
+                    //     break;
 
                 case "gameState":
                     data.gameState.players.forEach(function(player){

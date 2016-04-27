@@ -9,12 +9,25 @@ module.exports = function WebRTC(){
     this.socket.on("youAreHost", function(data) {
         console.log("im the host", data);
         window.game.network.host = new Host();
-        window.game.network.host.connect(data.peers);
+        window.game.network.host.connect(data.peers, data.previousHost);
     });
 
     this.socket.on("playerJoined", function(data) {
-        window.game.network.host.connect([data.peerID]);
+        window.game.network.host.connect([data.peerID], data.previousHost);
     });
+
+    this.socket.on("playerLeft", function(data) {
+        console.log("PLAYER LEFT", data);
+        window.game.removePlayer({id: data.playerID});
+    });
+    // this.socket.on("playerLeft", function(data) {
+    //     //window.game.network.host.broadcast({ event: "playerLeft", id: conn.peer});
+    //     //window.game.removePlayer({id: conn.peer});
+    // });
+
+    // this.socket.on("playerLeft", function(data) {
+    //     delete window.game.players[data.id];
+    // });
 
     //
     // this.peers = {};

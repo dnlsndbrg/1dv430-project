@@ -11,6 +11,7 @@ function Camera() {
 
     this.update = function() {
         if (!this.following) return;
+
         this.x = this.following.x - window.game.width / 2;
         this.y = this.following.y - window.game.height / 2;
     };
