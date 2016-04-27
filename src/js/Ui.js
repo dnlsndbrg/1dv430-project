@@ -22,9 +22,11 @@ module.exports = function Ui(game){
         window.game.ctx.fillStyle = "black";
         window.game.ctx.fillText("FPS:  " + window.game.fps, 5, 20);
         window.game.ctx.fillText("PING: " + window.game.network.ping, 5, 42);
-        window.game.ctx.fillText("PLAYER:  " + Math.floor(player.x) + ", " + Math.floor(player.y), 5, 64);
-        window.game.ctx.fillText("CAMERA: " + Math.floor(window.game.camera.x) + ", " + Math.floor(window.game.camera.y), 5, 86);
-        window.game.ctx.fillText("MOUSE: " + Math.floor(player.mouseX) + ", " + Math.floor(player.mouseY), 5, 108);
-        window.game.ctx.fillText("DIR: " + player.direction.toFixed(2), 5, 130);
+        window.game.ctx.fillText("CAMERA: " + Math.floor(window.game.camera.x) + ", " + Math.floor(window.game.camera.y), 5, 64);
+        if (player) {
+            window.game.ctx.fillText("PLAYER:  " + Math.floor(player.x) + ", " + Math.floor(player.y), 5, 86);
+            window.game.ctx.fillText("MOUSE: " + Math.floor(player.mouseX) + ", " + Math.floor(player.mouseY), 5, 108);
+            if(player) window.game.ctx.fillText("DIR: " + player.direction.toFixed(2), 5, 130);
+        }
     };
 };
