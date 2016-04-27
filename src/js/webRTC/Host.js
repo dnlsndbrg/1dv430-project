@@ -9,7 +9,7 @@ module.exports = function Host(){
         this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
 
         this.peer.on("open", function() {
-
+            
             // create the hosts player object if it doesnt already exists
             if (!(window.game.network.client.peer.id in window.game.players)) {
                 window.game.addPlayer({id: window.game.network.client.peer.id});

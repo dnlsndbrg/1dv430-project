@@ -1,8 +1,10 @@
-var helpers = require("./helpers");
+// var helpers = require("./helpers");
 var Mouse = require("./Mouse");
 var Keyboard = require("./Keyboard");
 var NetworkControls = require("./NetworkControls");
 var Bullet = require("./Bullet");
+var weapons = require("./data/weapons");
+var Weapon = require("./Weapon");
 
 function Player(playerData) {
     this.id = playerData.id;
@@ -28,6 +30,8 @@ function Player(playerData) {
 
     this.mouseX = this.x;
     this.mouseY = this.y;
+
+    this.weapon = new Weapon(this, weapons.AK);
 
     this.lastClientState = this.getClientState();
     this.lastFullState = this.getFullState();
@@ -58,8 +62,8 @@ Player.prototype.update = function(dt){
     }
     this.actions = [];
 
+    // Update movement
     var distance = this.speed * dt;
-
     if (this.kUp && this.kLeft) {
         distance = distance * 0.71;
         this.y -= distance;
@@ -104,6 +108,7 @@ Player.prototype.update = function(dt){
     if (this.y > window.game.level.height) this.y = window.game.level.height;
     if (this.y < 0) this.y = 0;
 
+    this.weapon.update(dt);
     this.turnTowards(this.mouseX, this.mouseY);
 };
 
@@ -122,7 +127,7 @@ Player.prototype.performAction = function(action){
             this.turnTowards(action.data.x, action.data.y);
             break;
         case "shoot":
-            return this.shoot(action);
+            return this.weapon.fire(action);
     }
 };
 

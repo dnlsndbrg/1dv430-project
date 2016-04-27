@@ -25,6 +25,9 @@ function Client(){
                 if (connPeer !== conn.peer) {
                     this.connections[connPeer][0].close();
                     delete this.connections[connPeer];
+                    // delete old hosts player object
+                    console.log("delete old player", connPeer);
+                    delete window.game.players[connPeer];
                 }
             }
         }

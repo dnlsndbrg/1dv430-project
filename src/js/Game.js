@@ -5,6 +5,7 @@ var Camera = require("./Camera");
 var Level = require("./Level");
 
 function Game() {
+
     this.started = false;
 
     this.width = 640;
