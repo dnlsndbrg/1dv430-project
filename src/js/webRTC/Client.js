@@ -60,7 +60,13 @@ function Client(){
                 case "ping": // host sent a ping, answer it
                    conn.send({ event: "pong", timestamp: data.timestamp });
                    data.pings.forEach(function(ping) {
-                       window.game.players[ping.id].ping = ping.ping;
+                       try {
+                           window.game.players[ping.id].ping = ping.ping;
+                       }
+                       catch(err) {
+                           console.log(err);
+                       }
+
                    });
                    window.game.network.ping = window.game.players[window.game.network.client.peer.id].ping;
                    window.game.ui.updateClientList(window.game.players);
@@ -110,7 +116,12 @@ Client.prototype.update = function()
 
         // for now, ignore my own changes
         if (change.id !== window.game.network.client.peer.id) {
-            window.game.players[change.id].networkUpdate(change);
+            try {
+                window.game.players[change.id].networkUpdate(change);
+            }catch (err) {
+
+            }
+
         }
     }
 
