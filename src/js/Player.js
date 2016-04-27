@@ -28,8 +28,10 @@ function Player(playerData) {
     this.kLeft = false;
     this.kRight = false;
 
+    // mouse
     this.mouseX = this.x;
     this.mouseY = this.y;
+    this.mouseLeft = false;
 
     this.weapon = new Weapon(this, weapons.AK);
 
@@ -109,6 +111,18 @@ Player.prototype.update = function(dt){
     if (this.y < 0) this.y = 0;
 
     this.weapon.update(dt);
+
+
+    if (this.mouseLeft) { // if firing
+        this.actions.push({ // add to the actions queue
+            action: "fire",
+            data: {
+                x: this.mouseX,
+                y: this.mouseY
+            }
+        });
+    }
+
     this.turnTowards(this.mouseX, this.mouseY);
 };
 
@@ -126,7 +140,7 @@ Player.prototype.performAction = function(action){
         case "turnTowards":
             this.turnTowards(action.data.x, action.data.y);
             break;
-        case "shoot":
+        case "fire":
             return this.weapon.fire(action);
     }
 };
@@ -186,15 +200,15 @@ Player.prototype.getClientState = function() {
     };
 };
 
-Player.prototype.shoot = function(action) {
-    console.log(this.id, "Shoot!", action.data.x, action.data.y);
-
-    window.game.entities.push(new Bullet({
-        x: this.x,
-        y: this.y,
-        direction: this.direction
-    }));
-    return action; // every shoot is valid right now
-};
+// Player.prototype.fire = function(action) {
+//     console.log(this.id, "fire!", action.data.x, action.data.y);
+//
+//     window.game.entities.push(new Bullet({
+//         x: this.x,
+//         y: this.y,
+//         direction: this.direction
+//     }));
+//     return action; // every shoot is valid right now
+// };
 
 module.exports = Player;

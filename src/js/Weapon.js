@@ -7,6 +7,7 @@ function Weapon(owner, data) {
     this.fireRate = data.fireRate;
     this.damage = data.damage;
     this.reloadTime = data.reloadTime;
+    this.bulletSpeed = data.bulletSpeed;
     this.sx = data.sx;
     this.sy = data.sy;
 
@@ -30,9 +31,10 @@ Weapon.prototype.fire = function(action) {
     window.game.entities.push(new Bullet({
         x: this.owner.x,
         y: this.owner.y,
-        direction: this.owner.direction
+        direction: this.owner.direction,
+        bulletSpeed: this.bulletSpeed,
     }));
-    return action; // every shoot is valid right now
+    return action;
 };
 
 module.exports = Weapon;
