@@ -22,9 +22,30 @@ Bullet.prototype.update = function(dt, index) {
     this.y = this.y + Math.sin(this.direction) * distance;
 
     // if off screen, remove it
-    if (this.x < 0 || this.x > window.game.level.width || this.y < 0 || this.y > window.game.level.height)
-        window.game.entities.splice(index, 1);
+    if (this.x < 0 || this.x > window.game.level.width || this.y < 0 || this.y > window.game.level.height) {
+        this.destroy(index);
+        return;
+    }
 
+    this.hitDetection(index);
+};
+
+Bullet.prototype.hitDetection = function(index) {
+    for (var key in window.game.players) {
+        var player = window.game.players[key];
+        var a = this.x - player.x;
+        var b = this.y - player.y;
+        var distance = Math.sqrt( a*a + b*b );
+
+        if (distance < player.radius) {
+            this.destroy(index);
+        }
+    }
+
+};
+
+Bullet.prototype.destroy = function(index) {
+    window.game.entities.splice(index, 1);
 };
 
 Bullet.prototype.render = function(canvas, ctx){
