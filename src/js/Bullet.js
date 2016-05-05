@@ -45,7 +45,7 @@ Bullet.prototype.hitDetection = function(index) {
 
         if (distance < player.radius) {
             // hit
-            player.takeDamage(this.damage);
+            player.takeDamage(this.damage, this.direction);
             this.destroy(index);
         }
     }

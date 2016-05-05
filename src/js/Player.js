@@ -6,6 +6,7 @@ var Bullet = require("./Bullet");
 var weapons = require("./data/weapons");
 var Weapon = require("./Weapon");
 var Animation = require("./Animation");
+var Entity = require("./Entity");
 
 function Player(playerData) {
     this.id = playerData.id;
@@ -159,7 +160,7 @@ Player.prototype.performAction = function(action){
         case "fire":
             return this.weapon.fire(action);
         case "die":
-            this.die();
+            this.die(action);
             break;
         case "respawn":
             return this.respawn(action);
@@ -200,18 +201,35 @@ Player.prototype.turnTowards = function(x,y) {
     this.direction = Math.atan2(yDiff, xDiff);// * (180 / Math.PI);
 };
 
-Player.prototype.takeDamage = function(damage) {
+Player.prototype.takeDamage = function(damage, direction) {
     this.hp -= damage;
     if (this.hp <= 0) {
         this.actions.push({
             action: "die",
+            data: {
+                direction: direction
+            }
         });
     }
 };
 
-Player.prototype.die = function() {
+Player.prototype.die = function(action) {
     this.alive = false;
-    console.log("player is dead!");
+
+    // create a corpse
+    var corpse = new Entity({
+        x: this.x + Math.cos(action.data.direction) * 10,
+        y: this.y + Math.sin(action.data.direction) * 10,
+        sx: 0,
+        sy: 120,
+        sw: 60,
+        sh: 60,
+        dw: 60,
+        dh: 60,
+        direction: action.data.direction
+    });
+
+    window.game.entities.push(corpse);
 };
 
 Player.prototype.respawn = function(action) {
