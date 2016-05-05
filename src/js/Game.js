@@ -110,6 +110,7 @@ function Game() {
             entity.render(this.canvas, this.ctx);
         }.bind(this));
 
+        this.ui.renderUI();
         this.ui.renderDebug();
         // render fps and ping
 
