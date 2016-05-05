@@ -33,6 +33,7 @@ Weapon.prototype.fire = function(action) {
         y: this.owner.y,
         direction: this.owner.direction,
         bulletSpeed: this.bulletSpeed,
+        damage: this.damage
     }));
     return action;
 };

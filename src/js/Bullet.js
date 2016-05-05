@@ -12,6 +12,7 @@ function Bullet(data) {
     this.length = 10; // trail length
     this.direction = data.direction;
     this.speed = data.bulletSpeed;
+    this.damage = data.damage;
 }
 
 Bullet.prototype.update = function(dt, index) {
@@ -39,6 +40,7 @@ Bullet.prototype.hitDetection = function(index) {
 
         if (distance < player.radius) {
             this.destroy(index);
+            console.log("player", player.id, "takes damage:", this.damage);
         }
     }
 

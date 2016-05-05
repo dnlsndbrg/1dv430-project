@@ -15,6 +15,7 @@ function Player(playerData) {
     this.direction = playerData.direction || Math.floor(Math.random() * 360) + 1;
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 100; //pixels per second
+    this.hp = playerData.hp || 100;
 
     this.sx = 0;
     this.sy = 0;
