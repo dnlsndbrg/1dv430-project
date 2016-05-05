@@ -25,8 +25,8 @@ function Game() {
     this.bgCanvas.height = this.height;
     this.bgCanvas.id ="asdasd";
 
-    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-    document.body.insertBefore(this.bgCanvas, document.body.childNodes[0]);
+    document.querySelector("#canvases").appendChild(this.bgCanvas);
+    document.querySelector("#canvases").appendChild(this.canvas);
 
     this.ctx = this.canvas.getContext("2d");
     this.bgCtx = this.bgCanvas.getContext("2d");
