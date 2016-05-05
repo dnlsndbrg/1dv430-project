@@ -1,0 +1,31 @@
+var Weapon = require("./Weapon");
+var weaponData = require("../data/weapons").shotgun;
+var Bullet = require(".././Bullet");
+
+class Shotgun extends Weapon{
+    constructor(owner) {
+        super(owner, weaponData);
+    }
+}
+
+Shotgun.prototype.fire = function(action) {
+    if (this.fireTimer < this.fireRate || this.reloading) return false;
+
+    this.fireTimer = 0;
+
+    console.log(this);
+    // shoot 4 bullets
+    for (var i = 0; i < this.bulletsPerShot; i += 1) {
+        window.game.entities.push(new Bullet({
+            x: this.owner.x,
+            y: this.owner.y,
+            direction: this.owner.direction + Math.random() * 0.25 - 0.125,
+            bulletSpeed: this.bulletSpeed,
+            damage: this.damage
+        }));
+    }
+
+    return action;
+};
+
+module.exports = Shotgun;

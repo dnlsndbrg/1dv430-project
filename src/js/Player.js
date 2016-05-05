@@ -2,10 +2,12 @@
 var Mouse = require("./Mouse");
 var Keyboard = require("./Keyboard");
 var NetworkControls = require("./NetworkControls");
-var Bullet = require("./Bullet");
-var weapons = require("./data/weapons");
-var Weapon = require("./Weapon");
-var Animation = require("./Animation");
+//var Bullet = require("./Bullet");
+//var weapons = require("./data/weapons");
+//var Weapon = require("./weapons/Weapon");
+var Shotgun = require("./weapons/Shotgun");
+var Ak47 = require("./weapons/Ak47");
+//var Animation = require("./Animation");
 var Entity = require("./Entity");
 
 function Player(playerData) {
@@ -39,7 +41,12 @@ function Player(playerData) {
     this.mouseY = this.y;
     this.mouseLeft = false;
 
-    this.weapon = new Weapon(this, weapons.AK);
+    //this.weapon = new Weapon(this, weapons.AK);
+    //
+    //this.weapon = new Shotgun(this);
+
+    this.weapons = [new Ak47(this), new Shotgun(this)];
+    this.selectedWeaponIndex = 0;
 
     this.lastClientState = this.getClientState();
     this.lastFullState = this.getFullState();
@@ -87,7 +94,9 @@ Player.prototype.update = function(dt){
     if (this.y > window.game.level.height) this.y = window.game.level.height;
     if (this.y < 0) this.y = 0;
 
-    this.weapon.update(dt);
+    // update current weapon;
+    this.weapons[this.selectedWeaponIndex].update(dt);
+
     //this.currentAnimation.update(dt);
 
     if (this.mouseLeft) { // if firing
@@ -160,7 +169,7 @@ Player.prototype.performAction = function(action){
             this.turnTowards(action.data.x, action.data.y);
             break;
         case "fire":
-            return this.weapon.fire(action);
+            return this.weapons[this.selectedWeaponIndex].fire(action);
         case "die":
             this.die(action);
             break;
@@ -175,7 +184,7 @@ Player.prototype.render = function(){
     this.ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
     this.ctx.rotate(this.direction); // rotate
 
-    this.ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
+    this.ctx.drawImage(window.game.spritesheet, this.weapons[this.selectedWeaponIndex].sx, this.weapons[this.selectedWeaponIndex].sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
     // ctx.drawImage(
     //     window.game.spritesheet, // image
     //     this.sx, // x on image

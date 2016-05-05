@@ -1,3 +1,6 @@
+var weapons = require("./data/weapons");
+var Weapon = require("./weapons/Weapon");
+
 module.exports = function Ui(game){
     this.clientList = document.querySelector("#players");
     this.game = game;
@@ -53,5 +56,18 @@ module.exports = function Ui(game){
                 }
             });
         }
+    });
+
+
+    document.querySelector("#akBtn").addEventListener("click", function() {
+        var player = window.game.players[window.game.network.client.peer.id];
+        player.selectedWeaponIndex = 0;
+    });
+
+    document.querySelector("#shotgunBtn").addEventListener("click", function() {
+        var player = window.game.players[window.game.network.client.peer.id];
+        player.selectedWeaponIndex = 1;
+        //player.weapon = new Weapon(player, weapons.shotgun);
+        //player.weapon = new Shotgun()
     });
 };
