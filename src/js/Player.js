@@ -5,6 +5,7 @@ var NetworkControls = require("./NetworkControls");
 var Bullet = require("./Bullet");
 var weapons = require("./data/weapons");
 var Weapon = require("./Weapon");
+var Animation = require("./Animation");
 
 function Player(playerData) {
     this.id = playerData.id;
@@ -41,6 +42,13 @@ function Player(playerData) {
     this.ping = "-";
     this.actions = []; // actions to be performed
     this.performedActions = []; // succesfully performed actions
+
+    // this.animations = {
+    //     "idle": new Animation({name: "idle", sx: 0, sy: 0, w: 60, h: 60, frames: 1, playOnce: false}),
+    //     "fire": new Animation({name: "fire", sx: 0, sy: 60, w: 60, h: 60, frames: 1, playOnce: true})
+    // };
+    //
+    // this.currentAnimation = this.animations.idle;
 
     //is this me or another player
     if (playerData.id === window.game.network.client.peer.id) {
@@ -111,7 +119,7 @@ Player.prototype.update = function(dt){
     if (this.y < 0) this.y = 0;
 
     this.weapon.update(dt);
-
+    //this.currentAnimation.update(dt);
 
     if (this.mouseLeft) { // if firing
         this.actions.push({ // add to the actions queue
@@ -149,10 +157,20 @@ Player.prototype.render = function(canvas, ctx){
     ctx.save(); // save current state
     ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
     ctx.rotate(this.direction); // rotate
+
     ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
+    // ctx.drawImage(
+    //     window.game.spritesheet, // image
+    //     this.sx, // x on image
+    //     this.currentAnimation.sy, // y on image
+    //     this.currentAnimation.w, // width
+    //     this.currentAnimation.h, // height
+    //     -(this.currentAnimation.w / 2), // center x
+    //     -(this.currentAnimation.h / 2), // center y
+    //     this.dw,
+    //     this.dh
+    // );
     ctx.restore(); // restore original states (no rotation etc)
-
-
     // ctx.save(); // save current state
     // ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
     // ctx.beginPath();
