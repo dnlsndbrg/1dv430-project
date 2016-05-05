@@ -16,6 +16,7 @@ function Player(playerData) {
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 100; //pixels per second
     this.hp = playerData.hp || 100;
+    this.alive = playerData.alive || true;
 
     this.sx = 0;
     this.sy = 0;
@@ -58,13 +59,13 @@ function Player(playerData) {
     } else {
         this.controls = new NetworkControls();
     }
-    //this.controls = (playerData.id === window.game.network.client.peer.id) ? : new NetworkControls();
 }
 
 Player.prototype.update = function(dt){
 
     // go through all the queued up actions and perform them
     for (var i = 0; i < this.actions.length; i += 1){
+
         var success = this.performAction(this.actions[i]);
         if (success) {
             this.performedActions.push(this.actions[i]);
@@ -73,6 +74,33 @@ Player.prototype.update = function(dt){
     }
     this.actions = [];
 
+    if (!this.alive) return;
+
+    this.move(dt);
+
+    //check if off screen
+    if (this.x > window.game.level.width) this.x = window.game.level.width;
+    if (this.x < 0) this.x = 0;
+    if (this.y > window.game.level.height) this.y = window.game.level.height;
+    if (this.y < 0) this.y = 0;
+
+    this.weapon.update(dt);
+    //this.currentAnimation.update(dt);
+
+    if (this.mouseLeft) { // if firing
+        this.actions.push({ // add to the actions queue
+            action: "fire",
+            data: {
+                x: this.mouseX,
+                y: this.mouseY
+            }
+        });
+    }
+
+    this.turnTowards(this.mouseX, this.mouseY);
+};
+
+Player.prototype.move = function(dt) {
     // Update movement
     var distance = this.speed * dt;
     if (this.kUp && this.kLeft) {
@@ -112,27 +140,6 @@ Player.prototype.update = function(dt){
         this.x += distance;
         this.mouseX += distance;
     }
-
-    //check if off screen
-    if (this.x > window.game.level.width) this.x = window.game.level.width;
-    if (this.x < 0) this.x = 0;
-    if (this.y > window.game.level.height) this.y = window.game.level.height;
-    if (this.y < 0) this.y = 0;
-
-    this.weapon.update(dt);
-    //this.currentAnimation.update(dt);
-
-    if (this.mouseLeft) { // if firing
-        this.actions.push({ // add to the actions queue
-            action: "fire",
-            data: {
-                x: this.mouseX,
-                y: this.mouseY
-            }
-        });
-    }
-
-    this.turnTowards(this.mouseX, this.mouseY);
 };
 
 Player.prototype.networkUpdate = function(update){
@@ -151,10 +158,16 @@ Player.prototype.performAction = function(action){
             break;
         case "fire":
             return this.weapon.fire(action);
+        case "die":
+            this.die();
+            break;
+        case "respawn":
+            return this.respawn(action);
     }
 };
 
 Player.prototype.render = function(canvas, ctx){
+    if(!this.alive) return;
     ctx.save(); // save current state
     ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
     ctx.rotate(this.direction); // rotate
@@ -187,11 +200,35 @@ Player.prototype.turnTowards = function(x,y) {
     this.direction = Math.atan2(yDiff, xDiff);// * (180 / Math.PI);
 };
 
+Player.prototype.takeDamage = function(damage) {
+    this.hp -= damage;
+    if (this.hp <= 0) {
+        this.actions.push({
+            action: "die",
+        });
+    }
+};
+
+Player.prototype.die = function() {
+    this.alive = false;
+    console.log("player is dead!");
+};
+
+Player.prototype.respawn = function(action) {
+    this.x = action.data.x;
+    this.y = action.data.y;
+    this.hp = 100;
+    this.alive = true;
+    return action;
+};
+
 Player.prototype.getFullState = function() {
     return {
         x: this.x,
         y: this.y,
         id: this.id,
+        hp: this.hp,
+        alive: this.alive,
         radius: this.radius,
         direction: this.direction,
         viewingAngle: this.viewingAngle,

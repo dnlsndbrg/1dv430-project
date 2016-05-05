@@ -32,15 +32,21 @@ Bullet.prototype.update = function(dt, index) {
 };
 
 Bullet.prototype.hitDetection = function(index) {
+    // test bullet against all players
     for (var key in window.game.players) {
+
         var player = window.game.players[key];
+
+        if (!player.alive) continue;
+
         var a = this.x - player.x;
         var b = this.y - player.y;
         var distance = Math.sqrt( a*a + b*b );
 
         if (distance < player.radius) {
+            // hit
+            player.takeDamage(this.damage);
             this.destroy(index);
-            console.log("player", player.id, "takes damage:", this.damage);
         }
     }
 

@@ -29,4 +29,22 @@ module.exports = function Ui(game){
             if(player) window.game.ctx.fillText("DIR: " + player.direction.toFixed(2), 5, 130);
         }
     };
+
+
+    document.querySelector("#respawnBtn").addEventListener("click", function() {
+        var player = window.game.players[window.game.network.client.peer.id];
+
+        if (!player.alive) {
+            var x = (Math.floor(Math.random() * (window.game.level.width - player.radius)) + player.radius / 2);
+            var y = (Math.floor(Math.random() * (window.game.level.height - player.radius)) + player.radius / 2);
+
+            player.actions.push({ // add to the actions queue
+                action: "respawn",
+                data: {
+                    x: x,
+                    y: y
+                }
+            });
+        }
+    });
 };
