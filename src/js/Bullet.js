@@ -13,6 +13,8 @@ function Bullet(data) {
     this.direction = data.direction;
     this.speed = data.bulletSpeed;
     this.damage = data.damage;
+
+    this.ctx = window.game.ctx;
 }
 
 Bullet.prototype.update = function(dt, index) {
@@ -56,22 +58,22 @@ Bullet.prototype.destroy = function(index) {
     window.game.entities.splice(index, 1);
 };
 
-Bullet.prototype.render = function(canvas, ctx){
+Bullet.prototype.render = function(){
 
-    ctx.save(); // save current state
-    ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
-    ctx.rotate(this.direction - 0.7853981634); // rotate
+    this.ctx.save(); // save current state
+    this.ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
+    this.ctx.rotate(this.direction - 0.7853981634); // rotate
 
     // // linear gradient from start to end of line
-    var grad= ctx.createLinearGradient(0, 0, 0, this.length);
+    var grad= this.ctx.createLinearGradient(0, 0, 0, this.length);
     grad.addColorStop(0, "rgba(255,165,0,0)");
     grad.addColorStop(1, "yellow");
-    ctx.strokeStyle = grad;
+    this.ctx.strokeStyle = grad;
 
-    ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(this.length, this.length);
-      ctx.stroke();
+    this.ctx.beginPath();
+      this.ctx.moveTo(0, 0);
+      this.ctx.lineTo(this.length, this.length);
+      this.ctx.stroke();
 
 
     // ctx.lineWidth = 1;
@@ -81,10 +83,10 @@ Bullet.prototype.render = function(canvas, ctx){
     // ctx.moveTo(0,0);
     // ctx.lineTo(0,this.length);
 
-    ctx.stroke();
+    this.ctx.stroke();
 
 
-    ctx.restore(); // restore original states (no rotation etc)
+    this.ctx.restore(); // restore original states (no rotation etc)
 
     //
     //

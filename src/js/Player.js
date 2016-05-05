@@ -26,6 +26,8 @@ function Player(playerData) {
     this.dw = 60;
     this.dh = 60;
 
+    this.ctx = window.game.ctx;
+
     // keys
     this.kUp = false;
     this.kDown = false;
@@ -167,13 +169,13 @@ Player.prototype.performAction = function(action){
     }
 };
 
-Player.prototype.render = function(canvas, ctx){
+Player.prototype.render = function(){
     if(!this.alive) return;
-    ctx.save(); // save current state
-    ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
-    ctx.rotate(this.direction); // rotate
+    this.ctx.save(); // save current state
+    this.ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
+    this.ctx.rotate(this.direction); // rotate
 
-    ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
+    this.ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
     // ctx.drawImage(
     //     window.game.spritesheet, // image
     //     this.sx, // x on image
@@ -185,7 +187,7 @@ Player.prototype.render = function(canvas, ctx){
     //     this.dw,
     //     this.dh
     // );
-    ctx.restore(); // restore original states (no rotation etc)
+    this.ctx.restore(); // restore original states (no rotation etc)
     // ctx.save(); // save current state
     // ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
     // ctx.beginPath();
@@ -226,7 +228,8 @@ Player.prototype.die = function(action) {
         sh: 60,
         dw: 60,
         dh: 60,
-        direction: action.data.direction
+        direction: action.data.direction,
+        ctx: window.game.bgCtx
     });
 
     window.game.entities.push(corpse);

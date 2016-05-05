@@ -19,9 +19,18 @@ function Game() {
     this.canvas = document.createElement("canvas");
     this.canvas.width = this.width;
     this.canvas.height = this.height;
-    //document.body.appendChild(this.canvas);
+
+    this.bgCanvas = document.createElement("canvas");
+    this.bgCanvas.width = this.width;
+    this.bgCanvas.height = this.height;
+    this.bgCanvas.id ="asdasd";
+
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    document.body.insertBefore(this.bgCanvas, document.body.childNodes[0]);
+
     this.ctx = this.canvas.getContext("2d");
+    this.bgCtx = this.bgCanvas.getContext("2d");
+
     this.ctx.font = "16px serif";
 
     this.gameID = window.location.pathname.split("/")[2];
@@ -87,28 +96,18 @@ function Game() {
     this.render = function(){
         // clear screen
         this.ctx.clearRect(0, 0, this.width, this.height);
+        this.bgCtx.clearRect(0, 0, this.width, this.height);
 
-        // draw test grid
-        // var spacing = 10;
-        // for (var y = 0; y <= this.height; y += spacing) {
-        //     for(var x = 0; x <= this.width; x += spacing) {
-        //         this.ctx.beginPath();
-        //         this.ctx.moveTo(x - this.camera.x, y - this.camera.y);
-        //         this.ctx.lineTo(this.width, y - this.camera.y);
-        //         this.ctx.stroke();
-        //     }
-        // }
-        //
-        this.ctx.beginPath();
-        this.ctx.rect(0 - this.camera.x, 0 - this.camera.y, this.level.width, this.level.height);
-
-        this.ctx.fillStyle = "gray";
-        this.ctx.fill();
+        // draw test background
+        this.bgCtx.beginPath();
+        this.bgCtx.rect(0 - this.camera.x, 0 - this.camera.y, this.level.width, this.level.height);
+        this.bgCtx.fillStyle = "gray";
+        this.bgCtx.fill();
 
         // render all entities
         this.entities.forEach(function(entity) {
-            entity.render(this.canvas, this.ctx);
-        }.bind(this));
+            entity.render();
+        });
 
         this.ui.renderUI();
         this.ui.renderDebug();

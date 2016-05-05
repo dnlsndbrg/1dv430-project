@@ -8,20 +8,21 @@ function Entity(data) {
     this.dw = data.dw;
     this.dh = data.dh;
     this.direction = data.direction;
+    this.ctx = data.ctx;
 }
 
 Entity.prototype.update = function(dt) {
 
 };
 
-Entity.prototype.render = function(canvas, ctx) {
-    ctx.save(); // save current state
-    ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
-    ctx.rotate(this.direction); // rotate
+Entity.prototype.render = function() {
+    this.ctx.save(); // save current state
+    this.ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
+    this.ctx.rotate(this.direction); // rotate
 
-    ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
+    this.ctx.drawImage(window.game.spritesheet, this.sx, this.sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
 
-    ctx.restore(); // restore original states (no rotation etc)
+    this.ctx.restore(); // restore original states (no rotation etc)
 };
 
 Entity.prototype.getFullState = function() {

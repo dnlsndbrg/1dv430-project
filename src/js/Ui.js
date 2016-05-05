@@ -32,7 +32,6 @@ module.exports = function Ui(game){
 
     this.renderUI  = function() {
         var player = window.game.players[window.game.network.client.peer.id];
-
         if (!player) return;
         window.game.ctx.fillStyle = "black";
         window.game.ctx.fillText(player.hp, 5, window.game.canvas.height - 20);
