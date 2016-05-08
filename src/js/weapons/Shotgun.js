@@ -12,7 +12,7 @@ Shotgun.prototype.fire = function(action) {
 
     if (this.fireTimer < this.fireRate || this.reloading || this.bullets < 1) return false;
 
-    this.bullets -= this.bulletsPerShot;
+    this.bullets -= 1;
     this.fireTimer = 0;
 
     var directions = [];
