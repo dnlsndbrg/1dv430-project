@@ -37,23 +37,38 @@ module.exports = function Ui(game){
         var player = window.game.players[window.game.network.client.peer.id];
         if (!player) return;
 
-        // draw bullet
-        window.game.ctx.drawImage(window.game.spritesheet, 14, 219, 6, 21, 105, window.game.canvas.height - 35, 6, 21);
+
+        //gui bg color
+        window.game.ctx.beginPath();
+        window.game.ctx.rect(0, window.game.canvas.height - 35, 140, 35);
+        window.game.ctx.fillStyle = "rgba(0,0,0,0.35)";
+        window.game.ctx.fill();
+
+        // Create gradient
+        var grd= window.game.ctx.createLinearGradient(140,0,190,0);
+        grd.addColorStop(0,"rgba(0,0,0,0.35)");
+        grd.addColorStop(1,"rgba(0,0,0,0)");
+        window.game.ctx.fillStyle=grd;
+        window.game.ctx.fillRect(140, window.game.canvas.height - 35,50,35);
+
+
+
+        var weapon =  player.weapons[player.selectedWeaponIndex];
+        // draw weapon icon
+        window.game.ctx.drawImage(window.game.spritesheet, weapon.iconSx, weapon.iconSy, weapon.iconW, weapon.iconH, 90, window.game.canvas.height - 33, weapon.iconW, weapon.iconH);
         // draw magazine count'
-        var magazineSize = player.weapons[player.selectedWeaponIndex].magazineSize;
-        var bullets = player.weapons[player.selectedWeaponIndex].bullets;
         window.game.ctx.fillStyle = "rgba(0,0,0,0.25)";
-        window.game.ctx.fillText(bullets + "/" + magazineSize, 120, window.game.canvas.height - 15);
+        window.game.ctx.fillText(weapon.bullets, 122, window.game.canvas.height - 9);
         window.game.ctx.fillStyle = "white";
-        window.game.ctx.fillText(bullets + "/" + magazineSize, 120, window.game.canvas.height - 17);
+        window.game.ctx.fillText(weapon.bullets,  122, window.game.canvas.height - 10);
 
         // draw heart
-        window.game.ctx.drawImage(window.game.spritesheet, 0, 228, 13, 12, 10, window.game.canvas.height - 30, 13, 12);
+        window.game.ctx.drawImage(window.game.spritesheet, 0, 228, 13, 12, 10, window.game.canvas.height - 23, 13, 12);
         // draw HP
         window.game.ctx.fillStyle = "rgba(0,0,0,0.25)";
-        window.game.ctx.fillText(player.hp, 30, window.game.canvas.height - 15);
+        window.game.ctx.fillText(player.hp, 30, window.game.canvas.height - 9);
         window.game.ctx.fillStyle = "white";
-        window.game.ctx.fillText(player.hp, 30, window.game.canvas.height - 17);
+        window.game.ctx.fillText(player.hp, 30, window.game.canvas.height - 10);
     };
 
 

@@ -100,13 +100,13 @@ function Game() {
         //bg color
         this.bgCtx.beginPath();
         this.bgCtx.rect(0, 0, this.canvas.width, this.canvas.height);
-        this.bgCtx.fillStyle = "#cbae57";
+        this.bgCtx.fillStyle = "#5b5850";
         this.bgCtx.fill();
 
         // draw test background
         this.bgCtx.beginPath();
         this.bgCtx.rect(0 - this.camera.x, 0 - this.camera.y, this.level.width, this.level.height);
-        this.bgCtx.fillStyle = "#d4c494";
+        this.bgCtx.fillStyle = "#85827d";
         this.bgCtx.fill();
 
         // render all entities

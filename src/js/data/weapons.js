@@ -8,7 +8,11 @@ var Ak47 = {
     "reloadTime": 2, // s
     "bulletSpeed": 1700, // pixels per second
     "sx": 0, // spritesheet x position
-    "sy": 0 // spritesheet y position
+    "sy": 0, // spritesheet y position
+    "iconSx": 21,
+    "iconSy": 210,
+    "iconW": 30,
+    "iconH": 30
 };
 
 var shotgun = {
@@ -22,6 +26,10 @@ var shotgun = {
     "bulletSpeed": 2500, // pixels per second
     "sx": 0, // spritesheet x position
     "sy": 60, // spritesheet y position
+    "iconSx": 51,
+    "iconSy": 210,
+    "iconW": 30,
+    "iconH": 30
 };
 
 module.exports = {

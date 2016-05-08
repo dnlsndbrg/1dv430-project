@@ -15,6 +15,11 @@ class Weapon{
         this.sx = data.sx;
         this.sy = data.sy;
 
+        this.iconSx = data.iconSx;
+        this.iconSy = data.iconSy;
+        this.iconW = data.iconW;
+        this.iconH = data.iconH;
+
         this.fireTimer = this.fireRate;
 
         this.reloading = false;
