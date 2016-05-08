@@ -36,8 +36,16 @@ module.exports = function Ui(game){
     this.renderUI  = function() {
         var player = window.game.players[window.game.network.client.peer.id];
         if (!player) return;
-        window.game.ctx.fillStyle = "black";
-        window.game.ctx.fillText(player.hp, 5, window.game.canvas.height - 20);
+
+        // draw bullet
+        window.game.ctx.drawImage(window.game.spritesheet, 14, 219, 6, 21, 90, window.game.canvas.height - 34, 6, 21);
+        // draw heart
+        window.game.ctx.drawImage(window.game.spritesheet, 0, 228, 13, 12, 10, window.game.canvas.height - 30, 13, 12);
+        // draw HP
+        window.game.ctx.fillStyle = "rgba(0,0,0,0.25)";
+        window.game.ctx.fillText(player.hp, 30, window.game.canvas.height - 15);
+        window.game.ctx.fillStyle = "white";
+        window.game.ctx.fillText(player.hp, 30, window.game.canvas.height - 17);
     };
 
 

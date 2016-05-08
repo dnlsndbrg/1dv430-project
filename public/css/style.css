@@ -3,6 +3,7 @@ html {
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;          /* Likely future */
+    font-family: 'Open Sans', sans-serif;
 }
 
 canvas {

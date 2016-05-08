@@ -23,7 +23,6 @@ function Game() {
     this.bgCanvas = document.createElement("canvas");
     this.bgCanvas.width = this.width;
     this.bgCanvas.height = this.height;
-    this.bgCanvas.id ="asdasd";
 
     document.querySelector("#canvases").appendChild(this.bgCanvas);
     document.querySelector("#canvases").appendChild(this.canvas);
@@ -31,7 +30,7 @@ function Game() {
     this.ctx = this.canvas.getContext("2d");
     this.bgCtx = this.bgCanvas.getContext("2d");
 
-    this.ctx.font = "16px serif";
+    this.ctx.font = "24px Open Sans";
 
     this.gameID = window.location.pathname.split("/")[2];
 
@@ -98,10 +97,16 @@ function Game() {
         this.ctx.clearRect(0, 0, this.width, this.height);
         this.bgCtx.clearRect(0, 0, this.width, this.height);
 
+        //bg color
+        this.bgCtx.beginPath();
+        this.bgCtx.rect(0, 0, this.canvas.width, this.canvas.height);
+        this.bgCtx.fillStyle = "#cbae57";
+        this.bgCtx.fill();
+
         // draw test background
         this.bgCtx.beginPath();
         this.bgCtx.rect(0 - this.camera.x, 0 - this.camera.y, this.level.width, this.level.height);
-        this.bgCtx.fillStyle = "gray";
+        this.bgCtx.fillStyle = "#d4c494";
         this.bgCtx.fill();
 
         // render all entities

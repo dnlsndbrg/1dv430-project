@@ -66,7 +66,7 @@ Bullet.prototype.render = function(){
 
     // // linear gradient from start to end of line
     var grad= this.ctx.createLinearGradient(0, 0, 0, this.length);
-    grad.addColorStop(0, "rgba(255,165,0,0)");
+    grad.addColorStop(0, "rgba(255,165,0,0.4)");
     grad.addColorStop(1, "yellow");
     this.ctx.strokeStyle = grad;
 
@@ -84,6 +84,9 @@ Bullet.prototype.render = function(){
     // ctx.lineTo(0,this.length);
 
     this.ctx.stroke();
+
+    this.ctx.fillStyle = "white";
+    this.ctx.fillRect(this.length, this.length, 1, 1 );
 
 
     this.ctx.restore(); // restore original states (no rotation etc)
