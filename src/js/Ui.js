@@ -61,12 +61,27 @@ module.exports = function Ui(game){
 
     document.querySelector("#akBtn").addEventListener("click", function() {
         var player = window.game.players[window.game.network.client.peer.id];
-        player.selectedWeaponIndex = 0;
+
+        player.actions.push({
+            action: "changeWeapon",
+            data: {
+                selectedWeaponIndex: 0,
+            }
+        });
+
+        //player.selectedWeaponIndex = 0;
     });
 
     document.querySelector("#shotgunBtn").addEventListener("click", function() {
         var player = window.game.players[window.game.network.client.peer.id];
-        player.selectedWeaponIndex = 1;
+        //player.selectedWeaponIndex = 1;
+
+        player.actions.push({
+            action: "changeWeapon",
+            data: {
+                selectedWeaponIndex: 1,
+            }
+        });
         //player.weapon = new Weapon(player, weapons.shotgun);
         //player.weapon = new Shotgun()
     });

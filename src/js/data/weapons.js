@@ -17,7 +17,7 @@ var shotgun = {
     "bulletsPerShot": 4, // 4 shotgun slugs per shot
     "damage": 10, // hp
     "reloadTime": 2, // s
-    "bulletSpeed": 2500, // pixels per second
+    "bulletSpeed": 25, // pixels per second
     "sx": 0, // spritesheet x position
     "sy": 60, // spritesheet y position
 };

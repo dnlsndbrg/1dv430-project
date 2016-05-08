@@ -13,17 +13,32 @@ Shotgun.prototype.fire = function(action) {
 
     this.fireTimer = 0;
 
-    console.log(this);
+    var directions = [];
+    var direction;
+
     // shoot 4 bullets
     for (var i = 0; i < this.bulletsPerShot; i += 1) {
+
+        if (!action.data.directions) {
+            // randomize directions myself
+            direction = this.owner.direction + Math.random() * 0.25 - 0.125;
+            directions.push(direction);
+        } else {
+            direction = action.data.directions[i];
+        }
+
         window.game.entities.push(new Bullet({
             x: this.owner.x,
             y: this.owner.y,
-            direction: this.owner.direction + Math.random() * 0.25 - 0.125,
+            direction: direction,
             bulletSpeed: this.bulletSpeed,
             damage: this.damage
         }));
     }
+
+    console.log("FIRE", action, directions);
+    action.data.directions = directions;
+
 
     return action;
 };

@@ -175,6 +175,8 @@ Player.prototype.performAction = function(action){
             break;
         case "respawn":
             return this.respawn(action);
+        case "changeWeapon":
+            return this.changeWeapon(action);
     }
 };
 
@@ -252,6 +254,11 @@ Player.prototype.respawn = function(action) {
     return action;
 };
 
+Player.prototype.changeWeapon = function(action) {
+    this.selectedWeaponIndex = action.data.selectedWeaponIndex;
+    return action;
+};
+
 Player.prototype.getFullState = function() {
     return {
         x: this.x,
@@ -268,7 +275,8 @@ Player.prototype.getFullState = function() {
         kLeft: this.kLeft,
         kRight: this.kRight,
         mouseX: this.mouseX,
-        mouseY: this.mouseY
+        mouseY: this.mouseY,
+        selectedWeaponIndex: this.selectedWeaponIndex
     };
 };
 
