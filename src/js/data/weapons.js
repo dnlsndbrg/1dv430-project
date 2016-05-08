@@ -1,6 +1,7 @@
 var Ak47 = {
     "name": "AK",
-    "magazine": 30, // bullets
+    "magazineSize": 30, // bullets
+    "bullets": 30,
     "fireRate": 0.1, // shots per second
     "bulletsPerShot": 1, // shoot 1 bullet at a time
     "damage": 10, // hp
@@ -12,7 +13,8 @@ var Ak47 = {
 
 var shotgun = {
     "name": "shotgun",
-    "magazine": 4, // bullets
+    "magazineSize": 12, // bullets
+    "bullets": 12,
     "fireRate": 0.5, // shots per second
     "bulletsPerShot": 4, // 4 shotgun slugs per shot
     "damage": 10, // hp

@@ -5,7 +5,8 @@ class Weapon{
         console.log(owner, "DATA",data);
         this.owner = owner;
         this.name = data.name;
-        this.magazine = data.magazine;
+        this.magazineSize = data.magazineSize;
+        this.bullets = data.bullets;
         this.fireRate = data.fireRate;
         this.damage = data.damage;
         this.reloadTime = data.reloadTime;
@@ -28,9 +29,11 @@ Weapon.prototype.update = function(dt) {
 Weapon.prototype.fire = function(action) {
     //console.log(this.owner.id, "FIRE!", action.data.x, action.data.y);
 
-    if (this.fireTimer < this.fireRate || this.reloading) return false;
+    if (this.fireTimer < this.fireRate || this.reloading || this.bullets < 1) return false;
 
+    this.bullets -= this.bulletsPerShot;
     this.fireTimer = 0;
+
     window.game.entities.push(new Bullet({
         x: this.owner.x,
         y: this.owner.y,
