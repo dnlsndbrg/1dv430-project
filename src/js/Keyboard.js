@@ -2,19 +2,38 @@ function Keyboard(player){
     this.player = player;
     //this.lastState = _.clone(player.keys);
     this.keyDownHandler = function(e){
+        console.log(e.keyCode);
         switch(e.keyCode) {
             case 87: // W
                 if (player.kUp !== true)  player.kUp= true;
                 break;
             case 83: // S
-            if (player.kDown !== true)  player.kDown = true;
-            break;
+                if (player.kDown !== true)  player.kDown = true;
+                break;
             case 65: // A
-            if (player.kLeft !== true)  player.kLeft = true;
-            break;
+                if (player.kLeft !== true)  player.kLeft = true;
+                break;
             case 68: // A
-            if (player.kRight !== true)  player.kRight = true;
-            break;
+                if (player.kRight !== true)  player.kRight = true;
+                break;
+            case 49: // 1
+                if (player.selectedWeaponIndex === 0) return;
+                player.actions.push({
+                    action: "changeWeapon",
+                    data: {
+                        selectedWeaponIndex: 0,
+                    }
+                });
+                break;
+            case 50: // 2
+                if (player.selectedWeaponIndex === 1) return;
+                player.actions.push({
+                    action: "changeWeapon",
+                    data: {
+                        selectedWeaponIndex: 1,
+                    }
+                });
+                break;
         }
     };
 
