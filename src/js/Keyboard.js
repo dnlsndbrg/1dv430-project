@@ -34,6 +34,13 @@ function Keyboard(player){
                     }
                 });
                 break;
+            case 82: // R
+                if (player.alive) {
+                    player.actions.push({ // add to the actions queue
+                        action: "reload",
+                    });
+                }
+                break;
         }
     };
 

@@ -29,11 +29,18 @@ class Weapon{
 
 Weapon.prototype.update = function(dt) {
     if (this.fireTimer < this.fireRate) this.fireTimer += dt;
+
+    if (this.reloading) {
+        this.reloadTimer += dt;
+        if (this.reloadTimer > this.reloadTime){
+            this.bullets = this.magazineSize;
+            this.reloading = false;
+            this.reloadTimer = 0;
+        }
+    }
 };
 
 Weapon.prototype.fire = function(action) {
-    //console.log(this.owner.id, "FIRE!", action.data.x, action.data.y);
-
     if (this.fireTimer < this.fireRate || this.reloading || this.bullets < 1) return false;
 
     this.bullets -= this.bulletsPerShot;
@@ -46,6 +53,13 @@ Weapon.prototype.fire = function(action) {
         bulletSpeed: this.bulletSpeed,
         damage: this.damage
     }));
+    return action;
+};
+
+Weapon.prototype.reload = function(action) {
+    this.reloading = true;
+    this.reloadTimer = 0;
+
     return action;
 };
 

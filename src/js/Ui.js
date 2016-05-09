@@ -55,10 +55,15 @@ module.exports = function Ui(game){
         // draw weapon icon
         window.game.ctx.drawImage(window.game.spritesheet, weapon.iconSx, weapon.iconSy, weapon.iconW, weapon.iconH, 90, window.game.canvas.height - 33, weapon.iconW, weapon.iconH);
         // draw magazine count'
-        window.game.ctx.fillStyle = "rgba(0,0,0,0.25)";
-        window.game.ctx.fillText(weapon.bullets, 122, window.game.canvas.height - 9);
-        window.game.ctx.fillStyle = "#e7d29e";
-        window.game.ctx.fillText(weapon.bullets,  122, window.game.canvas.height - 10);
+        if (weapon.reloading) {
+            window.game.ctx.drawImage(window.game.spritesheet, 85, 214, 21, 22, 125, window.game.canvas.height - 30, 21, 22);
+        } else {
+            window.game.ctx.fillStyle = "rgba(0,0,0,0.25)";
+            window.game.ctx.fillText(weapon.bullets, 122, window.game.canvas.height - 9);
+            window.game.ctx.fillStyle = "#e7d29e";
+            window.game.ctx.fillText(weapon.bullets,  122, window.game.canvas.height - 10);
+        }
+
 
         // draw heart
         window.game.ctx.drawImage(window.game.spritesheet, 0, 228, 13, 12, 10, window.game.canvas.height - 23, 13, 12);
@@ -85,5 +90,27 @@ module.exports = function Ui(game){
                 }
             });
         }
+    });
+
+    document.querySelector("#reloadBtn").addEventListener("click", function() {
+        var player = window.game.players[window.game.network.client.peer.id];
+
+        if (player.alive) {
+            player.actions.push({ // add to the actions queue
+                action: "reload",
+            });
+        }
+        // if (!player.alive) {
+        //     var x = (Math.floor(Math.random() * (window.game.level.width - player.radius)) + player.radius / 2);
+        //     var y = (Math.floor(Math.random() * (window.game.level.height - player.radius)) + player.radius / 2);
+        //
+        //     player.actions.push({ // add to the actions queue
+        //         action: "respawn",
+        //         data: {
+        //             x: x,
+        //             y: y
+        //         }
+        //     });
+        // }
     });
 };

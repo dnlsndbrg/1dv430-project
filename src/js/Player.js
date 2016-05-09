@@ -177,7 +177,8 @@ Player.prototype.performAction = function(action){
             return this.respawn(action);
         case "changeWeapon":
             return this.changeWeapon(action);
-    }
+        case "reload":
+    }       return this.weapons[this.selectedWeaponIndex].reload(action);
 };
 
 Player.prototype.render = function(){
@@ -228,6 +229,8 @@ Player.prototype.takeDamage = function(damage, direction) {
 
 Player.prototype.die = function(action) {
     this.alive = false;
+    this.weapons[this.selectedWeaponIndex].reloading = false;
+    this.weapons[this.selectedWeaponIndex].reloadTimer = 0;
 
     // create a corpse
     var corpse = new Entity({
@@ -255,6 +258,8 @@ Player.prototype.respawn = function(action) {
 };
 
 Player.prototype.changeWeapon = function(action) {
+    this.weapons[this.selectedWeaponIndex].reloading = false;
+    this.weapons[this.selectedWeaponIndex].reloadTimer = 0;
     this.selectedWeaponIndex = action.data.selectedWeaponIndex;
     return action;
 };
