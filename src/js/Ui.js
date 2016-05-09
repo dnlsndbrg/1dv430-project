@@ -11,10 +11,6 @@ module.exports = function Ui(game){
         for (var id in players){
             var li = document.createElement("li");
             var content = document.createTextNode(id + " " + players[id].ping);
-
-            if (id === myID) {
-                li.classList.add("me");
-            }
             li.appendChild(content);
             this.clientList.appendChild(li);
         }
@@ -61,7 +57,7 @@ module.exports = function Ui(game){
         // draw magazine count'
         window.game.ctx.fillStyle = "rgba(0,0,0,0.25)";
         window.game.ctx.fillText(weapon.bullets, 122, window.game.canvas.height - 9);
-        window.game.ctx.fillStyle = "white";
+        window.game.ctx.fillStyle = "#e7d29e";
         window.game.ctx.fillText(weapon.bullets,  122, window.game.canvas.height - 10);
 
         // draw heart
@@ -69,7 +65,7 @@ module.exports = function Ui(game){
         // draw HP
         window.game.ctx.fillStyle = "rgba(0,0,0,0.25)";
         window.game.ctx.fillText(player.hp, 30, window.game.canvas.height - 9);
-        window.game.ctx.fillStyle = "white";
+        window.game.ctx.fillStyle = "#e7d29e";
         window.game.ctx.fillText(player.hp, 30, window.game.canvas.height - 10);
     };
 
