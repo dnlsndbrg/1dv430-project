@@ -11,10 +11,15 @@ function Game() {
     this.width = 640;
     this.height = 480;
 
-    this.level = new Level();
+
 
     this.spritesheet = new Image();
     this.spritesheet.src = "../img/spritesheet.png";
+
+    this.tilesheet = new Image();
+    this.tilesheet.src = "../img/tiles.png";
+
+    this.level = new Level(this.tilesheet);
 
     this.canvas = document.createElement("canvas");
     this.canvas.width = this.width;
@@ -42,11 +47,11 @@ function Game() {
 
     this.camera = new Camera();
 
-
     var last = 0; // time variable
     var dt; //delta time
 
     this.start = function(){
+        
         this.loop();
     };
 
@@ -108,6 +113,8 @@ function Game() {
         this.bgCtx.rect(0 - this.camera.x, 0 - this.camera.y, this.level.width, this.level.height);
         this.bgCtx.fillStyle = "#85827d";
         this.bgCtx.fill();
+
+        this.level.render(this.bgCtx);
 
         // render all entities
         this.entities.forEach(function(entity) {

@@ -41,6 +41,10 @@ function Player(playerData) {
     this.mouseY = this.y;
     this.mouseLeft = false;
 
+    // position on level
+    this.tileRow = 0;
+    this.tileCol = 0;
+
     //this.weapon = new Weapon(this, weapons.AK);
     //
     //this.weapon = new Shotgun(this);
@@ -86,7 +90,12 @@ Player.prototype.update = function(dt){
 
     if (!this.alive) return;
 
+
+    this.tileRow = Math.floor(this.y / window.game.level.tileSize);
+    this.tileCol = Math.floor(this.x / window.game.level.tileSize);
+
     this.move(dt);
+
 
     //check if off screen
     if (this.x > window.game.level.width) this.x = window.game.level.width;
@@ -113,6 +122,10 @@ Player.prototype.update = function(dt){
 };
 
 Player.prototype.move = function(dt) {
+
+    var oldX = this.x;
+    var oldY = this.y;
+
     // Update movement
     var distance = this.speed * dt;
     if (this.kUp && this.kLeft) {
@@ -152,6 +165,29 @@ Player.prototype.move = function(dt) {
         this.x += distance;
         this.mouseX += distance;
     }
+};
+
+// Collision check against surrounding tiles
+Player.prototype.collisionCheck = function() {
+    var startingRow = this.tileRow - 1;
+    if (startingRow < 0) startingRow  = 0;
+    var endRow = this.tileRow +1;
+    if (endRow > window.game.level.rowTileCount) endRow = window.game.level.rowTileCount;
+    var startingCol = this.tileCol -1;
+    if (startingCol < 0) startingCol = 0;
+    var endCol = this.tileCol +1;
+    if (endCol > window.game.level.colTileCount) endCol = window.game.level.colTileCount;
+
+    for (var row = startingRow; row < endRow; row += 1) {
+        for (var col = startingCol; col < endCol; col += 1) {
+            if (window.game.level.level.tiles[row][col] === 0) continue; // every tile other than 0 are non walkable
+            // collision
+            if (this.tileRow === row && this.tileCol === col) {
+                return false;
+            }
+        }
+    }
+    return true;
 };
 
 Player.prototype.networkUpdate = function(update){
