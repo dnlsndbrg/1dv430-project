@@ -9,6 +9,7 @@ var Shotgun = require("./weapons/Shotgun");
 var Ak47 = require("./weapons/Ak47");
 //var Animation = require("./Animation");
 var Entity = require("./Entity");
+var Emitter = require("./particle/Emitter");
 
 function Player(playerData) {
     this.id = playerData.id;
@@ -261,6 +262,14 @@ Player.prototype.takeDamage = function(damage, direction) {
             }
         });
     }
+
+    window.game.entities.push(new Emitter({
+        type: "Blood",
+        lifeTime: 0.3,
+        emitSpeed: 0.05,
+        x: this.x,
+        y: this.y
+    }));
 };
 
 Player.prototype.die = function(action) {

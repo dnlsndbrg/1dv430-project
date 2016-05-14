@@ -1,5 +1,7 @@
-var weapons = require("./data/weapons");
-var Weapon = require("./weapons/Weapon");
+// var weapons = require("./data/weapons");
+// var Weapon = require("./weapons/Weapon");
+//
+var Emitter = require("./Particle/Emitter");
 
 module.exports = function Ui(game){
     this.clientList = document.querySelector("#players");
@@ -113,4 +115,16 @@ module.exports = function Ui(game){
         //     });
         // }
     });
+
+
+        document.querySelector("#emitterBtn").addEventListener("click", function() {
+            var player = window.game.players[window.game.network.client.peer.id];
+            window.game.entities.push(new Emitter({
+                type: "Blood",
+                lifeTime: 0.3,
+                emitSpeed: 0.05,
+                x: player.x,
+                y: player.y
+            }));
+        });
 };
