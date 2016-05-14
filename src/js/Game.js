@@ -51,7 +51,7 @@ function Game() {
     var dt; //delta time
 
     this.start = function(){
-        
+
         this.loop();
     };
 
@@ -109,10 +109,10 @@ function Game() {
         this.bgCtx.fill();
 
         // draw test background
-        this.bgCtx.beginPath();
-        this.bgCtx.rect(0 - this.camera.x, 0 - this.camera.y, this.level.width, this.level.height);
-        this.bgCtx.fillStyle = "#85827d";
-        this.bgCtx.fill();
+        // this.bgCtx.beginPath();
+        // this.bgCtx.rect(0 - this.camera.x, 0 - this.camera.y, this.level.width, this.level.height);
+        // this.bgCtx.fillStyle = "#85827d";
+        // this.bgCtx.fill();
 
         this.level.render(this.bgCtx);
 

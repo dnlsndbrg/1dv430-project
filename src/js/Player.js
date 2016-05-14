@@ -91,8 +91,8 @@ Player.prototype.update = function(dt){
     if (!this.alive) return;
 
 
-    this.tileRow = Math.floor(this.y / window.game.level.tileSize);
-    this.tileCol = Math.floor(this.x / window.game.level.tileSize);
+    // this.tileRow = Math.floor(this.y / window.game.level.tileSize);
+    // this.tileCol = Math.floor(this.x / window.game.level.tileSize);
 
     this.move(dt);
 
@@ -123,8 +123,8 @@ Player.prototype.update = function(dt){
 
 Player.prototype.move = function(dt) {
 
-    var oldX = this.x;
-    var oldY = this.y;
+    // var oldX = this.x;
+    // var oldY = this.y;
 
     // Update movement
     var distance = this.speed * dt;
@@ -167,28 +167,28 @@ Player.prototype.move = function(dt) {
     }
 };
 
-// Collision check against surrounding tiles
-Player.prototype.collisionCheck = function() {
-    var startingRow = this.tileRow - 1;
-    if (startingRow < 0) startingRow  = 0;
-    var endRow = this.tileRow +1;
-    if (endRow > window.game.level.rowTileCount) endRow = window.game.level.rowTileCount;
-    var startingCol = this.tileCol -1;
-    if (startingCol < 0) startingCol = 0;
-    var endCol = this.tileCol +1;
-    if (endCol > window.game.level.colTileCount) endCol = window.game.level.colTileCount;
-
-    for (var row = startingRow; row < endRow; row += 1) {
-        for (var col = startingCol; col < endCol; col += 1) {
-            if (window.game.level.level.tiles[row][col] === 0) continue; // every tile other than 0 are non walkable
-            // collision
-            if (this.tileRow === row && this.tileCol === col) {
-                return false;
-            }
-        }
-    }
-    return true;
-};
+// // Collision check against surrounding tiles
+// Player.prototype.collisionCheck = function() {
+//     var startingRow = this.tileRow - 1;
+//     if (startingRow < 0) startingRow  = 0;
+//     var endRow = this.tileRow +1;
+//     if (endRow > window.game.level.rowTileCount) endRow = window.game.level.rowTileCount;
+//     var startingCol = this.tileCol -1;
+//     if (startingCol < 0) startingCol = 0;
+//     var endCol = this.tileCol +1;
+//     if (endCol > window.game.level.colTileCount) endCol = window.game.level.colTileCount;
+//
+//     for (var row = startingRow; row < endRow; row += 1) {
+//         for (var col = startingCol; col < endCol; col += 1) {
+//             if (window.game.level.level.tiles[row][col] === 0) continue; // every tile other than 0 are non walkable
+//             // collision
+//             if (this.tileRow === row && this.tileCol === col) {
+//                 return false;
+//             }
+//         }
+//     }
+//     return true;
+// };
 
 Player.prototype.networkUpdate = function(update){
     delete update.id;
