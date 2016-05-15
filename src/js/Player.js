@@ -10,6 +10,7 @@ var Ak47 = require("./weapons/Ak47");
 //var Animation = require("./Animation");
 var Entity = require("./Entity");
 var Emitter = require("./particle/Emitter");
+var weaponCreator = require("./weapons/weaponCreator");
 
 function Player(playerData) {
     this.id = playerData.id;
@@ -46,12 +47,19 @@ function Player(playerData) {
     this.tileRow = 0;
     this.tileCol = 0;
 
-    //this.weapon = new Weapon(this, weapons.AK);
-    //
-    //this.weapon = new Shotgun(this);
+    this.weapons = [];
+    // recreate weapons if the player has any else create new weapons
+    if (playerData.weaponState) {
+        for (var i = 0; i < playerData.weaponState.length; i+= 1) {
+            this.weapons.push(weaponCreator(this, playerData.weaponState[i]));
+        }
+    }else {
+        this.weapons = [new Ak47(this), new Shotgun(this)];
+    }
 
-    this.weapons = [new Ak47(this), new Shotgun(this)];
-    this.selectedWeaponIndex = 0;
+    //this.weapons = [new Ak47(this), new Shotgun(this)];
+
+    this.selectedWeaponIndex = playerData.selectedWeaponIndex || 0;
 
     this.lastClientState = this.getClientState();
     this.lastFullState = this.getFullState();
@@ -225,25 +233,8 @@ Player.prototype.render = function(){
     this.ctx.rotate(this.direction); // rotate
 
     this.ctx.drawImage(window.game.spritesheet, this.weapons[this.selectedWeaponIndex].sx, this.weapons[this.selectedWeaponIndex].sy, this.sw, this.sh, -(this.sw / 2), -(this.sh / 2), this.dw, this.dh);
-    // ctx.drawImage(
-    //     window.game.spritesheet, // image
-    //     this.sx, // x on image
-    //     this.currentAnimation.sy, // y on image
-    //     this.currentAnimation.w, // width
-    //     this.currentAnimation.h, // height
-    //     -(this.currentAnimation.w / 2), // center x
-    //     -(this.currentAnimation.h / 2), // center y
-    //     this.dw,
-    //     this.dh
-    // );
     this.ctx.restore(); // restore original states (no rotation etc)
-    // ctx.save(); // save current state
-    // ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
-    // ctx.beginPath();
-    // ctx.rect(-2, -2, 4, 4);
-    // ctx.fillStyle = "red";
-    // ctx.fill();
-    //  ctx.restore(); // restore original states (no rotation etc)
+
 };
 
 Player.prototype.turnTowards = function(x,y) {
@@ -281,7 +272,7 @@ Player.prototype.die = function(action) {
     var corpse = new Entity({
         x: this.x + Math.cos(action.data.direction) * 10,
         y: this.y + Math.sin(action.data.direction) * 10,
-        sx: 0,
+        sx: 60 +( Math.floor(Math.random() * 3) * 60),
         sy: 120,
         sw: 60,
         sh: 60,
@@ -326,7 +317,8 @@ Player.prototype.getFullState = function() {
         kRight: this.kRight,
         mouseX: this.mouseX,
         mouseY: this.mouseY,
-        selectedWeaponIndex: this.selectedWeaponIndex
+        selectedWeaponIndex: this.selectedWeaponIndex,
+        weaponState: this.getWeaponState()
     };
 };
 
@@ -344,15 +336,14 @@ Player.prototype.getClientState = function() {
     };
 };
 
-// Player.prototype.fire = function(action) {
-//     console.log(this.id, "fire!", action.data.x, action.data.y);
-//
-//     window.game.entities.push(new Bullet({
-//         x: this.x,
-//         y: this.y,
-//         direction: this.direction
-//     }));
-//     return action; // every shoot is valid right now
-// };
+// get the state of each weapon
+Player.prototype.getWeaponState = function() {
+    var state = [];
+    for (var i = 0; i < this.weapons.length; i += 1) {
+        state.push(this.weapons[i].getState());
+    }
+    return state;
+};
+
 
 module.exports = Player;

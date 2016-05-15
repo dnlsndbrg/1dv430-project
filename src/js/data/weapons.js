@@ -1,5 +1,5 @@
 var Ak47 = {
-    "name": "AK",
+    "name": "Ak47",
     "magazineSize": 30, // bullets
     "bullets": 30,
     "fireRate": 0.1, // shots per second

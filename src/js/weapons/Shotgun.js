@@ -3,7 +3,8 @@ var weaponData = require("../data/weapons").shotgun;
 var Bullet = require(".././Bullet");
 
 class Shotgun extends Weapon{
-    constructor(owner) {
+    constructor(owner, existingWeaponData) {
+        weaponData = existingWeaponData || weaponData;
         super(owner, weaponData);
     }
 }

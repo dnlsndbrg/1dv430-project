@@ -2,7 +2,7 @@ var Bullet = require(".././Bullet");
 
 class Weapon{
     constructor(owner, data) {
-        console.log(owner, "DATA",data);
+        console.log("create weapon", owner, data);
         this.owner = owner;
         this.name = data.name;
         this.magazineSize = data.magazineSize;
@@ -22,8 +22,8 @@ class Weapon{
 
         this.fireTimer = this.fireRate;
 
-        this.reloading = false;
-        this.reloadTimer = 0;
+        this.reloading = data.reloading || false;
+        this.reloadTimer = data.reloadTimer || 0;
     }
 }
 
@@ -63,4 +63,13 @@ Weapon.prototype.reload = function(action) {
     return action;
 };
 
+Weapon.prototype.getState = function() {
+    return {
+        name: this.name,
+        bullets: this.bullets,
+        fireTimer: this.fireRate,
+        reloading: this.reloading,
+        reloadTimer: this.reloadTimer
+    };
+};
 module.exports = Weapon;
