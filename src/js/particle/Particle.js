@@ -1,6 +1,7 @@
+var Entity = require(".././Entity");
+
 class Particle {
     constructor(data) {
-
         this.ctx = window.game.ctx;
         this.color = data.color;
         this.size = data.size;
@@ -28,10 +29,12 @@ Particle.prototype.render = function() {
     this.ctx.restore(); // restore original states (no rotation etc)
 };
 
-
-
 Particle.prototype.destroy = function(index) {
     this.emitter.particles.splice(index, 1);
+};
+
+Particle.prototype.getFullState = function() {
+    return {};
 };
 
 module.exports = Particle;

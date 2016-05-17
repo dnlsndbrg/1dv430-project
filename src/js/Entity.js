@@ -1,14 +1,16 @@
-function Entity(data) {
-    this.x = data.x;
-    this.y = data.y;
-    this.sx = data.sx;
-    this.sy = data.sy;
-    this.sw = data.sw;
-    this.sh = data.sh;
-    this.dw = data.dw;
-    this.dh = data.dh;
-    this.direction = data.direction;
-    this.ctx = data.ctx;
+class Entity {
+    constructor(data) {
+        this.x = data.x;
+        this.y = data.y;
+        this.sx = data.sx;
+        this.sy = data.sy;
+        this.sw = data.sw;
+        this.sh = data.sh;
+        this.dw = data.dw;
+        this.dh = data.dh;
+        this.direction = data.direction;
+        this.ctx = data.ctx;
+    }
 }
 
 Entity.prototype.update = function(dt) {

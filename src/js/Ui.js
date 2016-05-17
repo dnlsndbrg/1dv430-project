@@ -120,9 +120,9 @@ module.exports = function Ui(game){
         document.querySelector("#emitterBtn").addEventListener("click", function() {
             var player = window.game.players[window.game.network.client.peer.id];
             window.game.entities.push(new Emitter({
-                type: "Blood",
-                lifeTime: 0.3,
-                emitSpeed: 0.05,
+                type: "Blood2",
+                emitCount: 10,
+                emitSpeed: null,
                 x: player.x,
                 y: player.y
             }));

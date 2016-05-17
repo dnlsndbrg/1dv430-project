@@ -255,9 +255,9 @@ Player.prototype.takeDamage = function(damage, direction) {
     }
 
     window.game.entities.push(new Emitter({
-        type: "Blood",
-        lifeTime: 0.3,
-        emitSpeed: 0.05,
+        type: "Blood2",
+        emitCount: 10,
+        emitSpeed: null, // null means instant
         x: this.x,
         y: this.y
     }));
@@ -268,21 +268,31 @@ Player.prototype.die = function(action) {
     this.weapons[this.selectedWeaponIndex].reloading = false;
     this.weapons[this.selectedWeaponIndex].reloadTimer = 0;
 
-    // create a corpse
-    var corpse = new Entity({
-        x: this.x + Math.cos(action.data.direction) * 10,
-        y: this.y + Math.sin(action.data.direction) * 10,
-        sx: 60 +( Math.floor(Math.random() * 3) * 60),
-        sy: 120,
-        sw: 60,
-        sh: 60,
-        dw: 60,
-        dh: 60,
-        direction: action.data.direction,
-        ctx: window.game.bgCtx
-    });
+    // // create a corpse
+    // var corpse = new Entity({
+    //     x: this.x + Math.cos(action.data.direction) * 10,
+    //     y: this.y + Math.sin(action.data.direction) * 10,
+    //     sx: 60 +( Math.floor(Math.random() * 3) * 60),
+    //     sy: 120,
+    //     sw: 60,
+    //     sh: 60,
+    //     dw: 60,
+    //     dh: 60,
+    //     direction: action.data.direction,
+    //     ctx: window.game.bgCtx
+    // });
+    //window.game.entities.push(corpse);
 
-    window.game.entities.push(corpse);
+    window.game.entities.push(new Emitter({
+        type: "Blood2",
+        emitCount: 30,
+        emitSpeed: null, // null means instant
+        x: this.x,
+        y: this.y
+    }));
+
+
+
 };
 
 Player.prototype.respawn = function(action) {
