@@ -30,6 +30,7 @@ module.exports = function Ui(game){
             window.game.ctx.fillText("MOUSE: " + Math.floor(player.mouseX) + ", " + Math.floor(player.mouseY), 5, 76);
             if(player) window.game.ctx.fillText("DIR: " + player.direction.toFixed(2), 5, 90);
         }
+        window.game.ctx.fillText("PARTICLES: " + window.game.particles.length, 5, 104);
         window.game.ctx.font = "24px Open Sans";
     };
 

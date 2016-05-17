@@ -21,8 +21,8 @@ Emitter.prototype.emit = function() {
         y: this.y,
         emitter: this
     };
-    if (this.type === "Blood") window.game.entities.push(new Blood(data));
-    if (this.type === "Blood2") window.game.entities.push(new Blood2(data));
+    if (this.type === "Blood") window.game.particles.push(new Blood(data));
+    if (this.type === "Blood2") window.game.particles.push(new Blood2(data));
 };
 
 Emitter.prototype.update = function(dt, index) {
@@ -71,7 +71,7 @@ Emitter.prototype.update = function(dt, index) {
         this.emit();
         this.emitTimer = 0;
     }
-}
+};
 
 Emitter.prototype.render = function() {
 

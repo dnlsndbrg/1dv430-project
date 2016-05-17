@@ -12,7 +12,6 @@ function Game() {
     this.height = 480;
 
 
-
     this.spritesheet = new Image();
     this.spritesheet.src = "../img/spritesheet.png";
 
@@ -43,7 +42,10 @@ function Game() {
     this.network = new Network();
 
     this.entities = []; // game entities
+    this.particles = [];
     this.players = {};
+
+    this.maxParticles = 1000; // number of particles allowed on screen before they start to be removed
 
     this.camera = new Camera();
 
@@ -82,13 +84,26 @@ function Game() {
      * Update
      */
     this.update = function(dt){
+        var dts = dt / 1000;
         // calculate fps
         this.fps = Math.round(1000 / dt);
 
         // Update entities
         this.entities.forEach(function(entity, index) {
-            entity.update(dt / 1000, index); //deltatime in seconds
+            entity.update(dts, index); //deltatime in seconds
         });
+
+        // cap number of particles
+        if (this.particles.length > this.maxParticles) {
+            this.particles = this.particles.slice(this.particles.length - this.maxParticles, this.particles.length);
+        }
+
+
+        // Update particles
+        for (var i = 0; i < this.particles.length; i += 1) {
+            this.particles[i].update(dts, i);
+        }
+
         this.camera.update();
         // Update camera
         //this.camera.update();
@@ -120,6 +135,11 @@ function Game() {
         this.entities.forEach(function(entity) {
             entity.render();
         });
+
+        // Render particles
+        for (var i = 0; i < this.particles.length; i += 1) {
+            this.particles[i].render();
+        }
 
         this.ui.renderUI();
         this.ui.renderDebug();

@@ -1,4 +1,4 @@
-var Entity = require(".././Entity");
+//var Entity = require(".././Entity");
 
 class Particle {
     constructor(data) {
