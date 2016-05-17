@@ -189,8 +189,8 @@ Game.prototype.getGameState = function() {
         //     console.log("entity:", entity);
         //     return JSON.stringify(entity);
         // }),
-        entities: this.entities.map(function(entity) {
-            return entity.getFullState();        }),
+        //entities: this.entities.map(function(entity) {
+        //    return entity.getFullState();        }),
         //players: Object.keys(this.players).map(function(key){ return JSON.stringify(window.game.players[key]); })
         players: this.getPlayersState()
     };

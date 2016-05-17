@@ -25,6 +25,14 @@ module.exports = function Host(){
                 });
             },2000);
 
+            // send full game state once in a while
+            setInterval(function(){
+                window.game.network.host.broadcast({
+                    event: "gameStateUpdate",
+                    gameState: window.game.getGameState()
+                });
+            },1000);
+
             peers.forEach(function(peerID) {
                 //connect with each remote peer
                 var conn =  window.game.network.host.peer.connect(peerID);
@@ -51,7 +59,7 @@ module.exports = function Host(){
                 });
 
                 conn.on("error", function(err) {
-                    console.log("ERROR EVENT", err);
+                    // console.log("ERROR EVENT", err);
                 });
 
                 conn.on("data", function(data) {
@@ -124,6 +132,7 @@ module.exports = function Host(){
         }
 
         if (changes.length > 0){
+            // send changes
             this.broadcast({
                 event: "changes",
                 changes: changes

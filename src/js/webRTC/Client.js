@@ -52,6 +52,13 @@ function Client(){
                     });
                     break;
 
+                case "gameStateUpdate":
+                        console.log("receiving full state", data);
+                        data.gameState.players.forEach(function(player) {
+                            window.game.players[player.id].updateState(player);
+                        });
+                    break;
+
                 case "changes": // changes and actions received from host
                     window.game.network.client.changes = window.game.network.client.changes.concat(data.changes);
                     //window.game.network.client.actions = window.game.network.client.actions.concat(data.actions);

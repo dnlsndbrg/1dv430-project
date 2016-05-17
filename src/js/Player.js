@@ -305,7 +305,7 @@ Player.prototype.respawn = function(action) {
     for (var i = 0; i < this.weapons.length; i += 1) {
         this.weapons[i].fillMagazine();
     }
-    
+
     return action;
 };
 
@@ -349,6 +349,26 @@ Player.prototype.getClientState = function() {
         mouseX: this.mouseX,
         mouseY: this.mouseY
     };
+};
+
+Player.prototype.updateState = function(newState) {
+    this.x = newState.x;
+    this.y = newState.y;
+    //id: this.id = id;
+    this.hp = newState.hp;
+    this.alive = newState.alive;
+    this.radius = newState.radius;
+    this.direction = newState.direction;
+    this.viewingAngle = newState.viewingAngle;
+    this.speed = newState.speed;
+    this.kUp = newState.kUp;
+    this.kDown = newState.kDown;
+    this.kLeft = newState.kLeft;
+    this.kRight = newState.kRight;
+    this.mouseX = newState.mouseX;
+    this.mouseY = newState.mouseY;
+    this.selectedWeaponIndex = newState.selectedWeaponIndex;
+    //weaponState: this.getWeaponState()
 };
 
 // get the state of each weapon
