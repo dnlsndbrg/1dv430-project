@@ -35,7 +35,8 @@ function Keyboard(player){
                 });
                 break;
             case 82: // R
-                if (player.alive) {
+                // reload only if player is alive and weapon magazine isnt full
+                if (player.alive && player.weapons[player.selectedWeaponIndex].bullets < player.weapons[player.selectedWeaponIndex].magazineSize) {
                     player.actions.push({ // add to the actions queue
                         action: "reload",
                     });
