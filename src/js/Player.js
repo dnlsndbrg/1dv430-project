@@ -216,8 +216,8 @@ Player.prototype.performAction = function(action){
         case "fire":
             return this.weapons[this.selectedWeaponIndex].fire(action);
         case "die":
-            this.die(action);
-            break;
+            return this.die(action);
+            //break;
         case "respawn":
             return this.respawn(action);
         case "changeWeapon":
@@ -263,10 +263,10 @@ Player.prototype.takeDamage = function(damage, direction) {
     }));
 };
 
-Player.prototype.die = function(action) {
+Player.prototype.die = function() {
     this.alive = false;
-    this.weapons[this.selectedWeaponIndex].reloading = false;
-    this.weapons[this.selectedWeaponIndex].reloadTimer = 0;
+    this.weapons[this.selectedWeaponIndex].stopReload();
+
 
     // // create a corpse
     // var corpse = new Entity({
@@ -300,12 +300,17 @@ Player.prototype.respawn = function(action) {
     this.y = action.data.y;
     this.hp = 100;
     this.alive = true;
+
+    // refill all weapons
+    for (var i = 0; i < this.weapons.length; i += 1) {
+        this.weapons[i].fillMagazine();
+    }
+    
     return action;
 };
 
 Player.prototype.changeWeapon = function(action) {
-    this.weapons[this.selectedWeaponIndex].reloading = false;
-    this.weapons[this.selectedWeaponIndex].reloadTimer = 0;
+    this.weapons[this.selectedWeaponIndex].stopReload();
     this.selectedWeaponIndex = action.data.selectedWeaponIndex;
     return action;
 };

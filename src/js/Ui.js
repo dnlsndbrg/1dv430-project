@@ -97,7 +97,6 @@ module.exports = function Ui(game){
 
     document.querySelector("#reloadBtn").addEventListener("click", function() {
         var player = window.game.players[window.game.network.client.peer.id];
-
         if (player.alive) {
             player.actions.push({ // add to the actions queue
                 action: "reload",
