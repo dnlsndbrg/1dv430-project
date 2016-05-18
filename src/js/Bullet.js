@@ -1,4 +1,5 @@
 var helpers = require("./helpers");
+var Emitter = require("./particle/Emitter");
 
 function Bullet(data) {
     // create the bullet 5 pixels to the right and 30 pixels forward. so it aligns with the gun barrel
@@ -21,15 +22,36 @@ Bullet.prototype.update = function(dt, index) {
 
     var distance = this.speed * dt;
     //
-    this.x = this.x + Math.cos(this.direction) * distance;
-    this.y = this.y + Math.sin(this.direction) * distance;
+    var x = this.x + Math.cos(this.direction) * distance;
+    var y = this.y + Math.sin(this.direction) * distance;
 
-    // if off screen, remove it
-    if (this.x < 0 || this.x > window.game.level.width || this.y < 0 || this.y > window.game.level.height) {
+    // collision detection against tiles and outside of map
+    var collision = helpers.collisionCheck({x: x, y: y});
+    if (!collision) {
+        this.x = x;
+        this.y = y;
+    } else {
+
+        // add richocet particle effect
+        window.game.entities.push(new Emitter({
+            type: "Ricochet",
+            emitCount: 1,
+            emitSpeed: null, // null means instant
+            x: this.x,
+            y: this.y
+        }));
         this.destroy(index);
         return;
     }
+    //
+    // // if off screen, remove it
+    // if (this.x < 0 || this.x > window.game.level.width || this.y < 0 || this.y > window.game.level.height) {
+    //     this.destroy(index);
+    //     return;
+    // }
+    //
 
+    // hit check against players
     this.hitDetection(index);
 };
 

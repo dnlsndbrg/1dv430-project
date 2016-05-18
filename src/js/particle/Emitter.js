@@ -1,6 +1,7 @@
 //var Particle = require("./Particle");
 var Blood = require("./Blood");
 var Blood2 = require("./Blood2");
+var Ricochet = require("./Ricochet");
 
 function Emitter(data) {
     this.x = data.x;
@@ -21,8 +22,10 @@ Emitter.prototype.emit = function() {
         y: this.y,
         emitter: this
     };
+
     if (this.type === "Blood") window.game.particles.push(new Blood(data));
-    if (this.type === "Blood2") window.game.particles.push(new Blood2(data));
+    else if (this.type === "Blood2") window.game.particles.push(new Blood2(data));
+    else if (this.type === "Ricochet") window.game.particles.push(new Ricochet(data));
 };
 
 Emitter.prototype.update = function(dt, index) {

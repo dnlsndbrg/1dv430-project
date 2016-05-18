@@ -263,6 +263,7 @@ Player.prototype.takeDamage = function(damage, direction) {
         });
     }
 
+    // add blood splash emitter
     window.game.entities.push(new Emitter({
         type: "Blood2",
         emitCount: 10,
