@@ -25,13 +25,15 @@ Bullet.prototype.update = function(dt, index) {
     var x = this.x + Math.cos(this.direction) * distance;
     var y = this.y + Math.sin(this.direction) * distance;
 
+    // hit check against players
+    this.hitDetection(index);
+
     // collision detection against tiles and outside of map
     var collision = helpers.collisionCheck({x: x, y: y});
     if (!collision) {
         this.x = x;
         this.y = y;
     } else {
-
         // add richocet particle effect
         window.game.entities.push(new Emitter({
             type: "Ricochet",
@@ -41,7 +43,6 @@ Bullet.prototype.update = function(dt, index) {
             y: this.y
         }));
         this.destroy(index);
-        return;
     }
     //
     // // if off screen, remove it
@@ -51,8 +52,7 @@ Bullet.prototype.update = function(dt, index) {
     // }
     //
 
-    // hit check against players
-    this.hitDetection(index);
+
 };
 
 Bullet.prototype.hitDetection = function(index) {

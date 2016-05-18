@@ -3,14 +3,8 @@ var helpers = require("../helpers");
 
 class Ricochet extends Particle {
     constructor(data) {
-        console.log("!!!!!!!!!!!!!!!!");
-        //var rnd = Math.floor(Math.random() * 50);
-        // var r = 150;
-        // var g = 50;
-        // var b = 50;
 
         data.color = "#4d4d4d";
-        //data.lifeTime = 0.3;
         data.size = 1;
 
         super(data);
@@ -31,7 +25,7 @@ Ricochet.prototype.update = function(dt, index) {
         this.y = this.y + Math.sin(this.direction) * distance;
         this.distanceMoved += distance;
 
-        //if (this.distanceMoved >= this.moveDistance) this.ctx = window.game.bgCtx; // move to background ctx
+        if (this.distanceMoved >= this.moveDistance) this.ctx = window.game.bgCtx; // move to background ctx
     }
 
 };
