@@ -2,6 +2,7 @@
 // var Weapon = require("./weapons/Weapon");
 //
 var Emitter = require("./Particle/Emitter");
+var helpers = require("./helpers");
 
 module.exports = function Ui(game){
     this.clientList = document.querySelector("#players");
@@ -82,15 +83,21 @@ module.exports = function Ui(game){
         var player = window.game.players[window.game.network.client.peer.id];
 
         if (!player.alive) {
-            var x = (Math.floor(Math.random() * (window.game.level.width - player.radius)) + player.radius / 2);
-            var y = (Math.floor(Math.random() * (window.game.level.height - player.radius)) + player.radius / 2);
+
+            // var spawnLocationFound = false;
+            // var x;
+            // var y;
+            // while (!spawnLocationFound) {
+            //     x = (Math.floor(Math.random() * (window.game.level.width - player.radius)) + player.radius / 2);
+            //     y = (Math.floor(Math.random() * (window.game.level.height - player.radius)) + player.radius / 2);
+            //
+            //     if (helpers.collisionCheck({x: x, y: y})) spawnLocationFound = true;
+            // }
+
 
             player.actions.push({ // add to the actions queue
                 action: "respawn",
-                data: {
-                    x: x,
-                    y: y
-                }
+                data: helpers.findSpawnLocation()
             });
         }
     });

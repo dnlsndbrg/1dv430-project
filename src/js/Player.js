@@ -1,4 +1,4 @@
-// var helpers = require("./helpers");
+var helpers = require("./helpers");
 var Mouse = require("./Mouse");
 var Keyboard = require("./Keyboard");
 var NetworkControls = require("./NetworkControls");
@@ -15,8 +15,18 @@ var weaponCreator = require("./weapons/weaponCreator");
 function Player(playerData) {
     this.id = playerData.id;
     this.radius = playerData.radius || 20; // circle radius
-    this.x = playerData.x || (Math.floor(Math.random() * (window.game.level.width - this.radius)) + this.radius / 2);
-    this.y = playerData.y || (Math.floor(Math.random() * (window.game.level.height - this.radius)) + this.radius / 2);
+
+    if (!playerData.x || !playerData.y) {
+        var spawnLocation = helpers.findSpawnLocation();
+        this.x = spawnLocation.x;
+        this.y = spawnLocation.y;
+    } else {
+        this.x = playerData.x;
+        this.y = playerData.y;
+    }
+    // this.x = playerData.x || (Math.floor(Math.random() * (window.game.level.width - this.radius)) + this.radius / 2);
+    // this.y = playerData.y || (Math.floor(Math.random() * (window.game.level.height - this.radius)) + this.radius / 2);
+
     this.direction = playerData.direction || Math.floor(Math.random() * 360) + 1;
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 100; //pixels per second
@@ -100,17 +110,12 @@ Player.prototype.update = function(dt){
     if (!this.alive) return;
 
 
-    // this.tileRow = Math.floor(this.y / window.game.level.tileSize);
-    // this.tileCol = Math.floor(this.x / window.game.level.tileSize);
-
     this.move(dt);
-
-
     //check if off screen
-    if (this.x > window.game.level.width) this.x = window.game.level.width;
-    if (this.x < 0) this.x = 0;
-    if (this.y > window.game.level.height) this.y = window.game.level.height;
-    if (this.y < 0) this.y = 0;
+    // if (this.x > window.game.level.width) this.x = window.game.level.width;
+    // if (this.x < 0) this.x = 0;
+    // if (this.y > window.game.level.height) this.y = window.game.level.height;
+    // if (this.y < 0) this.y = 0;
 
     // update current weapon;
     this.weapons[this.selectedWeaponIndex].update(dt);
@@ -132,47 +137,51 @@ Player.prototype.update = function(dt){
 
 Player.prototype.move = function(dt) {
 
-    // var oldX = this.x;
-    // var oldY = this.y;
-
     // Update movement
     var distance = this.speed * dt;
+    var moveX;
+    var moveY;
+
     if (this.kUp && this.kLeft) {
         distance = distance * 0.71;
-        this.y -= distance;
-        this.mouseY -= distance;
-        this.x -= distance;
-        this.mouseX -= distance;
+        moveX = -distance;
+        moveY = -distance;
     } else if (this.kUp && this.kRight) {
         distance = distance * 0.71;
-        this.y -= distance;
-        this.mouseY -= distance;
-        this.x += distance;
-        this.mouseX += distance;
+        moveX = distance;
+        moveY = -distance;
     } else if (this.kDown && this.kLeft) {
         distance = distance * 0.71;
-        this.y += distance;
-        this.mouseY += distance;
-        this.x -= distance;
-        this.mouseX -= distance;
+        moveX = -distance;
+        moveY = distance;
     } else if (this.kDown && this.kRight) {
         distance = distance * 0.71;
-        this.y += distance;
-        this.mouseY += distance;
-        this.x += distance;
-        this.mouseX += distance;
+        moveX = distance;
+        moveY = distance;
     } else if (this.kUp) {
-        this.y -= distance;
-        this.mouseY -= distance;
+        moveY = -distance;
     } else if (this.kDown) {
-        this.y += distance;
-        this.mouseY += distance;
+        moveY = distance;
     } else if (this.kLeft) {
-        this.x -= distance;
-        this.mouseX -= distance;
+        moveX = -distance;
     } else if (this.kRight) {
-        this.x += distance;
-        this.mouseX += distance;
+        moveX = distance;
+    }
+
+    var collision;
+    if (moveX) {
+        collision = helpers.collisionCheck({x: this.x + moveX, y: this.y});
+        if (!collision) {
+            this.x += moveX;
+            this.mouseX += moveX;
+        }
+    }
+    if (moveY) {
+        collision = helpers.collisionCheck({x: this.x, y: this.y + moveY});
+        if (!collision) {
+            this.y += moveY;
+            this.mouseY += moveY;
+        }
     }
 };
 
