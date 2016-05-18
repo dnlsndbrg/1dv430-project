@@ -12,12 +12,13 @@ module.exports = function WebRTC(){
 
     this.socket.on("youAreHost", function(data) {
         console.log("im the host", data);
-        window.game.network.host = new Host(data.ID);
-        window.game.network.host.connect(data.peers, data.previousHost);
+        window.game.network.host = new Host();
+        window.game.network.host.connect({hostID: data.hostID, peers: data.peers});
     });
 
     this.socket.on("playerJoined", function(data) {
-        window.game.network.host.connect([data.peerID], data.previousHost);
+        console.log("player joined", data);
+        window.game.network.host.connect({hostID: data.hostID, peers:[data.peerID]});
     });
 
     this.socket.on("playerLeft", function(data) {

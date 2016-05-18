@@ -76,10 +76,10 @@ io.on("connection", (socket) => {
                 host: socket, // since this guy is the first here, make him/her the host
                 peers: []
             };
-            socket.emit("youAreHost", {ID: shortid.generate(), peers: [] });
+            socket.emit("youAreHost", {hostID: shortid.generate(), peers: [] });
         } else {
             // tell the host to make a peer connection to this new player
-            games[data.gameID].host.emit("playerJoined", { peerID: data.peerID });
+            games[data.gameID].host.emit("playerJoined", {hostID: shortid.generate(), peerID: data.peerID });
             // add the new player to the peers list
             games[data.gameID].peers.push(socket);
         }

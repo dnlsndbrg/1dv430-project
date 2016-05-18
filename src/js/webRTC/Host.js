@@ -1,12 +1,12 @@
-module.exports = function Host(ID){
+module.exports = function Host(){
     this.conns = {};
     this.actions = {}; // here we will store all the actions received from clients
     this.lastPlayersState = [];
     this.diff = null;
 
-    this.connect = function(peers){
+    this.connect = function(data){
         //this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
-        this.peer = new Peer(ID, {host: window.location.hostname, port: window.location.port, path: "/peer"});
+        this.peer = new Peer(data.hostID, {host: window.location.hostname, port: window.location.port, path: "/peer"});
 
         this.peer.on("open", function() {
 
@@ -32,7 +32,7 @@ module.exports = function Host(ID){
                 });
             },1000);
 
-            peers.forEach(function(peerID) {
+            data.peers.forEach(function(peerID) {
                 //connect with each remote peer
                 var conn =  window.game.network.host.peer.connect(peerID);
                 console.log("hostID:", window.game.network.host.peer.id, " connect with", peerID);
