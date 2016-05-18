@@ -1,8 +1,9 @@
 "use strict";
 // var Player = require("./../Player");
 
-function Client(){
-    this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
+function Client(ID){
+    //this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
+    this.peer = new Peer(ID, {host: "localhost", port: window.location.port, path: "/peer"});
 
     // Stress test
     this.testsReceived = 0;
@@ -14,6 +15,8 @@ function Client(){
         // ive got my peerID and gameID, lets send it to the server to join the host
         window.game.network.socket.emit("join", {peerID: id, gameID: window.game.gameID});
         console.log("my client peerID is ", id);
+
+        if (!window.game.started) window.game.start();
     });
 
     this.peer.on("connection", function(conn) {
@@ -53,7 +56,6 @@ function Client(){
                     break;
 
                 case "gameStateUpdate":
-                        console.log("receiving full state", data);
                         data.gameState.players.forEach(function(player) {
                             window.game.players[player.id].updateState(player);
                         });

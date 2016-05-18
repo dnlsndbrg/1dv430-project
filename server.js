@@ -6,15 +6,22 @@
 "use strict";
 
 let
-    path        = require("path"),
-    exphbs      = require("express-handlebars"),
-    http        = require("http"),
-    io          = require("socket.io"),
-    express     = require("express");
+    path                = require("path"),
+    exphbs              = require("express-handlebars"),
+    http                = require("http"),
+    io                  = require("socket.io"),
+    express             = require("express"),
+    shortid             = require("shortid"),
+    ExpressPeerServer   = require("peer").ExpressPeerServer;
 
 let app     = express(),
     port    = process.env.PORT || 8000;
 var games = {};
+
+// peerServer options
+var options = {
+    debug: true
+};
 
 // Launch Application ----------------------------------------------------------
 
@@ -37,7 +44,9 @@ app.set("view engine", "hbs");
 
 
 // Routes ----------------------------------------------------------------------
-//
+
+app.use("/peer", ExpressPeerServer(server, options));
+
 app.get("/play/:gameID", (req, res) => { //TODO: verify input
     res.render("game");
 });
@@ -50,6 +59,9 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
     console.log("socket connection");
+
+    // send the new player its ID
+    socket.emit("ID", { ID: shortid.generate() });
 
     socket.on("join", (data) => { //TODO: validate data
         // a client wants to join the game data.gameID
@@ -64,7 +76,7 @@ io.on("connection", (socket) => {
                 host: socket, // since this guy is the first here, make him/her the host
                 peers: []
             };
-            socket.emit("youAreHost", {peers: [] });
+            socket.emit("youAreHost", {ID: shortid.generate(), peers: [] });
         } else {
             // tell the host to make a peer connection to this new player
             games[data.gameID].host.emit("playerJoined", { peerID: data.peerID });

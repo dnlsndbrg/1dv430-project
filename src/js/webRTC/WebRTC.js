@@ -4,11 +4,15 @@ var Host = require("./Host");
 module.exports = function WebRTC(){
     this.ping = "-";
     this.socket = io();
-    this.client = new Client();
+
+    // receiving my client ID
+    this.socket.on("ID", function(data) {
+        window.game.network.client = new Client(data.ID);
+    });
 
     this.socket.on("youAreHost", function(data) {
         console.log("im the host", data);
-        window.game.network.host = new Host();
+        window.game.network.host = new Host(data.ID);
         window.game.network.host.connect(data.peers, data.previousHost);
     });
 

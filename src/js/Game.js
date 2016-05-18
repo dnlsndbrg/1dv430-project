@@ -53,7 +53,7 @@ function Game() {
     var dt; //delta time
 
     this.start = function(){
-
+        this.started = true;
         this.loop();
     };
 

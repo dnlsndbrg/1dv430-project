@@ -1,13 +1,12 @@
-module.exports = function Host(){
+module.exports = function Host(ID){
     this.conns = {};
     this.actions = {}; // here we will store all the actions received from clients
     this.lastPlayersState = [];
     this.diff = null;
 
     this.connect = function(peers){
-        console.log("connect", peers);
-
-        this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
+        //this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
+        this.peer = new Peer(ID, {host: "localhost", port: window.location.port, path: "/peer"});
 
         this.peer.on("open", function() {
 
