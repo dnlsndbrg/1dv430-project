@@ -3,7 +3,7 @@
 
 function Client(ID){
     //this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
-    this.peer = new Peer(ID, {host: "localhost", port: window.location.port, path: "/peer"});
+    this.peer = new Peer(ID, {host: window.location.hostname, port: window.location.port, path: "/peer"});
 
     // Stress test
     this.testsReceived = 0;

@@ -6,7 +6,7 @@ module.exports = function Host(ID){
 
     this.connect = function(peers){
         //this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
-        this.peer = new Peer(ID, {host: "localhost", port: window.location.port, path: "/peer"});
+        this.peer = new Peer(ID, {host: window.location.hostname, port: window.location.port, path: "/peer"});
 
         this.peer.on("open", function() {
 
