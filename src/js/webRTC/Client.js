@@ -57,7 +57,8 @@ function Client(ID){
 
                 case "gameStateUpdate":
                         data.gameState.players.forEach(function(player) {
-                            window.game.players[player.id].updateState(player);
+                            if (player.id !== window.game.network.client.peer.id) // ignore my own state for now
+                                window.game.players[player.id].updateState(player);
                         });
                     break;
 
@@ -81,7 +82,7 @@ function Client(ID){
                    window.game.ui.updateClientList(window.game.players);
                    break;
 
-               case "pong": // we've received a pong from the host, calucate pingtime
+               case "pong": // we've received a pong from the host, calculate pingtime
                    var ping = Date.now() - data.timestamp;
                    window.game.network.ping = ping;
                    break;
