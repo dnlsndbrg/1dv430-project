@@ -47,6 +47,8 @@ Weapon.prototype.fire = function(action) {
     window.game.entities.push(new Bullet({
         x: this.owner.x,
         y: this.owner.y,
+        targetX: this.owner.mouseX,
+        targetY: this.owner.mouseY,
         direction: this.owner.direction,
         bulletSpeed: this.bulletSpeed,
         damage: this.damage

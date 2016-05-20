@@ -2,6 +2,8 @@ var helpers = require("./helpers");
 var Emitter = require("./particle/Emitter");
 
 function Bullet(data) {
+
+
     // create the bullet 5 pixels to the right and 30 pixels forward. so it aligns with the gun barrel
     this.x = data.x + Math.cos(data.direction + 1.5707963268) * 5;
     this.y = data.y + Math.sin(data.direction + 1.5707963268) * 5;
@@ -10,10 +12,19 @@ function Bullet(data) {
     this.y = this.y + Math.sin(data.direction) * 30;
     //this.x = data.x;
     //this.y = data.y;
+
+    var xDiff = data.targetX - this.x;
+    var yDiff = data.targetY - this.y;
+    this.direction = Math.atan2(yDiff, xDiff);
+
     this.length = 10; // trail length
-    this.direction = data.direction;
+    //this.direction = data.direction;
     this.speed = data.bulletSpeed;
     this.damage = data.damage;
+
+
+    console.log(data, this.direction);
+
 
     this.ctx = window.game.ctx;
 }

@@ -36,8 +36,11 @@ canvas {
     position: absolute;
     left: 0;
     top: 0;
-    cursor: url(../img/cursor.png), crosshair;
+    cursor: url(../img/cursor.png) 9 9, auto;
 }
+
+
+
 
 #menu {
     position: relative;
