@@ -2,7 +2,7 @@ var Ak47 = {
     "name": "Ak47",
     "magazineSize": 30, // bullets
     "bullets": 30,
-    "fireRate": 1, // shots per second
+    "fireRate": 0.1, // shots per second
     "bulletsPerShot": 1, // shoot 1 bullet at a time
     "damage": 10, // hp
     "reloadTime": 2, // s

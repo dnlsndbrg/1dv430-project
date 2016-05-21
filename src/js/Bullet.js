@@ -1,5 +1,7 @@
 var helpers = require("./helpers");
-var Emitter = require("./particle/Emitter");
+//var Emitter = require("./particle/Emitter");
+var collisionDetection = require("./util/collisionDetection");
+var BulletHole = require("./particle/BulletHole");
 
 function Bullet(data) {
 
@@ -10,20 +12,22 @@ function Bullet(data) {
 
     this.x = this.x + Math.cos(data.direction) * 30;
     this.y = this.y + Math.sin(data.direction) * 30;
+
+    this.originX = this.x; // remember the starting position
+    this.originY = this.y;
+
     //this.x = data.x;
     //this.y = data.y;
-
-    var xDiff = data.targetX - this.x;
-    var yDiff = data.targetY - this.y;
-    this.direction = Math.atan2(yDiff, xDiff);
+    //
+    // var xDiff = data.targetX - this.x;
+    // var yDiff = data.targetY - this.y;
+    // this.direction = Math.atan2(yDiff, xDiff);
 
     this.length = 10; // trail length
-    //this.direction = data.direction;
+    this.direction = data.direction;
     this.speed = data.bulletSpeed;
     this.damage = data.damage;
 
-
-    console.log(data, this.direction);
 
 
     this.ctx = window.game.ctx;
@@ -46,13 +50,24 @@ Bullet.prototype.update = function(dt, index) {
         this.y = y;
     } else {
         // add richocet particle effect
-        window.game.entities.push(new Emitter({
-            type: "Ricochet",
-            emitCount: 1,
-            emitSpeed: null, // null means instant
-            x: this.x,
-            y: this.y
-        }));
+        // window.game.entities.push(new Emitter({
+        //     type: "Ricochet",
+        //     emitCount: 1,
+        //     emitSpeed: null, // null means instant
+        //     x: this.x,
+        //     y: this.y
+        // }));
+
+        // find where the bullet trajectory intersected with the colliding rect
+
+        var line = {start: {x: this.originX, y: this.originY}, end: {x: x, y:y}}; // the line that goes from the bullet origin position to its current position
+        var rect = helpers.getRectFromPoint({x: x, y: y}); // rect of the colliding box
+        var pos = collisionDetection.lineRectIntersect(line, rect);
+
+        //console.log(pos);
+
+        window.game.particles.push(new BulletHole(pos));
+
         this.destroy(index);
     }
     //

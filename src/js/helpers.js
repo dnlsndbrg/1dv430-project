@@ -16,6 +16,18 @@ function collisionCheck(point) {
     return (window.game.level.level.tiles[tileRow][tileCol] > 0);
 }
 
+// takes a point and retuns tile xywh that is under that point
+function getRectFromPoint(point) {
+    var y = Math.floor(point.y / window.game.level.tileSize) * window.game.level.tileSize;
+    var x = Math.floor(point.x / window.game.level.tileSize) * window.game.level.tileSize;
+    return {x: x, y: y, w: window.game.level.tileSize, h: window.game.level.tileSize};
+}
+
+function getTile(x, y) {
+    if(x >= 0 && x < window.game.level.colTileCount && y >= 0 && y < window.game.level.rowTileCount)
+        return window.game.level.level.tiles[y][x];
+}
+
 // finds a random walkable tile on the map
 function findSpawnLocation() {
     var x;
@@ -34,5 +46,7 @@ module.exports = {
     toRadians: toRadians,
     toDegrees: toDegrees,
     collisionCheck: collisionCheck,
-    findSpawnLocation: findSpawnLocation
+    findSpawnLocation: findSpawnLocation,
+    getRectFromPoint: getRectFromPoint,
+    getTile: getTile
 };

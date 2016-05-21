@@ -1,4 +1,4 @@
-var Bullet = require(".././Bullet");
+var Bullet = require(".././Bullet2");
 
 class Weapon{
     constructor(owner, data) {
@@ -44,15 +44,14 @@ Weapon.prototype.fire = function(action) {
     this.bullets -= this.bulletsPerShot;
     this.fireTimer = 0;
 
-    window.game.entities.push(new Bullet({
+    var bullet = new Bullet({
         x: this.owner.x,
         y: this.owner.y,
         targetX: this.owner.mouseX,
         targetY: this.owner.mouseY,
         direction: this.owner.direction,
-        bulletSpeed: this.bulletSpeed,
         damage: this.damage
-    }));
+    });
     return action;
 };
 

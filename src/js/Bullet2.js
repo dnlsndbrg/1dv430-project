@@ -1,84 +1,103 @@
-var helpers = require("./helpers");
-var Emitter = require("./particle/Emitter");
+//var helpers = require("./helpers");
+//var Emitter = require("./particle/Emitter");
+var bresenham = require("./util/bresenham");
+var lineRectIntersect = require("./util/lineRectIntersect");
+var BulletHole = require("./particle/BulletHole");
 
+// instant bullet
 function Bullet(data) {
     // create the bullet 5 pixels to the right and 30 pixels forward. so it aligns with the gun barrel
-    this.x = data.x + Math.cos(data.direction + 1.5707963268) * 5;
-    this.y = data.y + Math.sin(data.direction + 1.5707963268) * 5;
+    var startX = data.x + Math.cos(data.direction + 1.5707963268) * 5;
+    var startY = data.y + Math.sin(data.direction + 1.5707963268) * 5;
 
-    this.x = this.x + Math.cos(data.direction) * 30;
-    this.y = this.y + Math.sin(data.direction) * 30;
-    //this.x = data.x;
-    //this.y = data.y;
-    this.length = 10; // trail length
-    this.direction = data.direction;
+    startX = startX + Math.cos(data.direction) * 30;
+    startY= startY + Math.sin(data.direction) * 30;
+
+    //this.direction = data.direction;
     //this.speed = data.bulletSpeed;
-    this.damage = data.damage;
+    //this.damage = data.damage;
+    //
+    var line = {
+        start: {x: startX, y: startY},
+        end: {x: data.targetX, y: data.targetY}
+    };
 
+    var intersect = null;
 
-    var cx = this.x; // Begin/current cell coords
-    var cy = this.y;
-    var ex = EndX; // End cell coords
-    var ey = EndY;
-
-    // Delta or direction
-    double dx = EndX-BeginX;
-    double dy = EndY-BeginY;
-
-    while (cx < ex && cy < ey)
-    {
-      // find intersection "time" in x dir
-      float t0 = (ceil(BeginX)-BeginX)/dx;
-      float t1 = (ceil(BeginY)-BeginY)/dy;
-
-      visit_cell(cx, cy);
-
-      if (t0 < t1) // cross x boundary first=?
-      {
-        ++cx;
-        BeginX += t0*dx;
-        BeginY += t0*dy;
-      }
-      else
-      {
-        ++cy;
-        BeginX += t1*dx;
-        BeginY += t1*dy;
-      }
+    var tileCollision = bresenham(startX, startY, data.targetX, data.targetY); // find colliding rectangles
+    if (tileCollision) {
+        intersect = lineRectIntersect(line, {x: tileCollision.x * 32, y: tileCollision.y * 32, w: 32, h: 32});
+        window.game.particles.push(new BulletHole(intersect));
     }
+
+
+
+
+
+
+    // var cx = this.x; // Begin/current cell coords
+    // var cy = this.y;
+    // var ex = EndX; // End cell coords
+    // var ey = EndY;
+    //
+    // // Delta or direction
+    // double dx = EndX-BeginX;
+    // double dy = EndY-BeginY;
+    //
+    // while (cx < ex && cy < ey)
+    // {
+    //   // find intersection "time" in x dir
+    //   float t0 = (ceil(BeginX)-BeginX)/dx;
+    //   float t1 = (ceil(BeginY)-BeginY)/dy;
+    //
+    //   visit_cell(cx, cy);
+    //
+    //   if (t0 < t1) // cross x boundary first=?
+    //   {
+    //     ++cx;
+    //     BeginX += t0*dx;
+    //     BeginY += t0*dy;
+    //   }
+    //   else
+    //   {
+    //     ++cy;
+    //     BeginX += t1*dx;
+    //     BeginY += t1*dy;
+    //   }
+    // }
 
 }
 
 Bullet.prototype.update = function(dt, index) {
 
 
-
-
-
-    var distance = this.speed * dt;
     //
-    var x = this.x + Math.cos(this.direction) * distance;
-    var y = this.y + Math.sin(this.direction) * distance;
-
-    // hit check against players
-    this.hitDetection(index);
-
-    // collision detection against tiles and outside of map
-    var collision = helpers.collisionCheck({x: x, y: y});
-    if (!collision) {
-        this.x = x;
-        this.y = y;
-    } else {
-        // add richocet particle effect
-        window.game.entities.push(new Emitter({
-            type: "Ricochet",
-            emitCount: 1,
-            emitSpeed: null, // null means instant
-            x: this.x,
-            y: this.y
-        }));
-        this.destroy(index);
-    }
+    //
+    //
+    // var distance = this.speed * dt;
+    // //
+    // var x = this.x + Math.cos(this.direction) * distance;
+    // var y = this.y + Math.sin(this.direction) * distance;
+    //
+    // // hit check against players
+    // this.hitDetection(index);
+    //
+    // // collision detection against tiles and outside of map
+    // var collision = helpers.collisionCheck({x: x, y: y});
+    // if (!collision) {
+    //     this.x = x;
+    //     this.y = y;
+    // } else {
+    //     // add richocet particle effect
+    //     window.game.entities.push(new Emitter({
+    //         type: "Ricochet",
+    //         emitCount: 1,
+    //         emitSpeed: null, // null means instant
+    //         x: this.x,
+    //         y: this.y
+    //     }));
+    //     this.destroy(index);
+    // }
     //
     // // if off screen, remove it
     // if (this.x < 0 || this.x > window.game.level.width || this.y < 0 || this.y > window.game.level.height) {

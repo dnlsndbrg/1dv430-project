@@ -30,7 +30,7 @@ Particle.prototype.render = function() {
 };
 
 Particle.prototype.destroy = function(index) {
-    this.emitter.particles.splice(index, 1);
+    window.game.particles.splice(index, 1);
 };
 
 Particle.prototype.getFullState = function() {
