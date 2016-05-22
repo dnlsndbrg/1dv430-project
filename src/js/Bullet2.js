@@ -1,8 +1,9 @@
-//var helpers = require("./helpers");
+var helpers = require("./helpers");
 //var Emitter = require("./particle/Emitter");
 var bresenham = require("./util/bresenham");
-var lineRectIntersect = require("./util/lineRectIntersect");
+//var lineRectIntersect = require("./util/lineRectIntersect");
 var BulletHole = require("./particle/BulletHole");
+var collisionDetection = require("./util/collisionDetection");
 
 // instant bullet
 function Bullet(data) {
@@ -12,6 +13,9 @@ function Bullet(data) {
 
     startX = startX + Math.cos(data.direction) * 30;
     startY= startY + Math.sin(data.direction) * 30;
+
+    // check that the bullet spawn location is inside the game
+    if (!helpers.isInsideGame(startX, startY)) return;
 
     //this.direction = data.direction;
     //this.speed = data.bulletSpeed;
@@ -28,7 +32,7 @@ function Bullet(data) {
     if (collision) {
         switch(collision.type) {
             case "tile":
-                intersect = lineRectIntersect(line, {x: collision.x * 32, y: collision.y * 32, w: 32, h: 32});
+                intersect = collisionDetection.lineRectIntersect2(line, {x: collision.x * 32, y: collision.y * 32, w: 32, h: 32});
                 window.game.particles.push(new BulletHole(intersect));
                 break;
             case "player":

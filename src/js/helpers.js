@@ -23,6 +23,7 @@ function getRectFromPoint(point) {
     return {x: x, y: y, w: window.game.level.tileSize, h: window.game.level.tileSize};
 }
 
+// returns tile
 function getTile(x, y) {
     if(x >= 0 && x < window.game.level.colTileCount && y >= 0 && y < window.game.level.rowTileCount)
         return window.game.level.level.tiles[y][x];
@@ -41,6 +42,11 @@ function findSpawnLocation() {
     return {x: x, y: y};
 }
 
+// checks that a xy point is inside the game world
+function isInsideGame(x, y) {
+    if (x >= 0 && x < window.game.level.width && y >= 0 && y < window.game.level.height) return true;
+}
+
 
 module.exports = {
     toRadians: toRadians,
@@ -48,5 +54,6 @@ module.exports = {
     collisionCheck: collisionCheck,
     findSpawnLocation: findSpawnLocation,
     getRectFromPoint: getRectFromPoint,
-    getTile: getTile
+    getTile: getTile,
+    isInsideGame: isInsideGame
 };
