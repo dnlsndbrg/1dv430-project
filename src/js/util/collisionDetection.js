@@ -38,6 +38,16 @@ function lineRectIntersect(line, rect) {
         return downIntersect;
 }
 
+function pointCircle(point, circle) {
+        var a = point.x - circle.x;
+        var b = point.y - circle.y;
+        var distance = Math.sqrt( a*a + b*b );
+        if (distance < circle.radius) { // point is inside circle
+            return true;
+        }
+}
+
 module.exports = {
-    lineRectIntersect: lineRectIntersect
+    lineRectIntersect: lineRectIntersect,
+    pointCircle: pointCircle
 };

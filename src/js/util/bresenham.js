@@ -1,5 +1,6 @@
 //var tiles = require("./level").tiles;
 var helpers = require("./../helpers.js");
+var collisionDetection = require("./collisionDetection");
 
 function bline(x0, y0, x1, y1) {
 
@@ -17,8 +18,22 @@ function bline(x0, y0, x1, y1) {
     var tileX = Math.floor(x0 / 32);
     var tileY = Math.floor(y0 / 32);
 
-    if (tileX > window.game.level.colTileCount || tileY > window.game.level.rowTileCount) return; // outside of map
-    if (helpers.getTile(tileX,tileY) === 1) return {x: tileX, y: tileY}; // collision!
+    // check if outside map
+    if (tileX > window.game.level.colTileCount || tileY > window.game.level.rowTileCount) return;
+
+    // hit check against players
+    for (var key in window.game.players) {
+        var player = window.game.players[key];
+        if (!player.alive) continue;
+        var hit = collisionDetection.pointCircle({x: x0, y: y0}, {x: player.x, y: player.y, radius: player.radius});
+        if (hit) {
+            return {type: "player", player: player};
+        }
+
+    }
+
+    // check against tiles
+    if (helpers.getTile(tileX,tileY) === 1) return {type: "tile", x: tileX, y: tileY};
   }
 }
 

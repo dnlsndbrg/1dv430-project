@@ -24,10 +24,18 @@ function Bullet(data) {
 
     var intersect = null;
 
-    var tileCollision = bresenham(startX, startY, data.targetX, data.targetY); // find colliding rectangles
-    if (tileCollision) {
-        intersect = lineRectIntersect(line, {x: tileCollision.x * 32, y: tileCollision.y * 32, w: 32, h: 32});
-        window.game.particles.push(new BulletHole(intersect));
+    var collision = bresenham(startX, startY, data.targetX, data.targetY); // find colliding rectangles
+    if (collision) {
+        switch(collision.type) {
+            case "tile":
+                intersect = lineRectIntersect(line, {x: collision.x * 32, y: collision.y * 32, w: 32, h: 32});
+                window.game.particles.push(new BulletHole(intersect));
+                break;
+            case "player":
+                collision.player.takeDamage(data.damage, data.direction);
+                break;
+        }
+
     }
 
 
