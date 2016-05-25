@@ -44,6 +44,8 @@ function findSpawnLocation() {
 
 // checks that a xy point is inside the game world
 function isInsideGame(x, y) {
+    // console.log("x:",x, "y:",y, "width:",window.game.level.width, "height:",window.game.level.height);
+    // console.log(x >= 0, x < window.game.level.width,  y >= 0, y < window.game.level.height);
     if (x >= 0 && x < window.game.level.width && y >= 0 && y < window.game.level.height) return true;
 }
 

@@ -19,7 +19,8 @@ function bline(x0, y0, x1, y1) {
     var tileY = Math.floor(y0 / 32);
 
     // check if outside map
-    if (tileX > window.game.level.colTileCount || tileY > window.game.level.rowTileCount) return;
+    if (!helpers.isInsideGame(x0, y0)) return;
+    //if (tileX > window.game.level.colTileCount || tileY > window.game.level.rowTileCount) return;
 
     // hit check against players
     for (var key in window.game.players) {
