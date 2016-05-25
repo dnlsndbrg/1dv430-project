@@ -8,9 +8,14 @@ var NetworkControls = require("./NetworkControls");
 var Shotgun = require("./weapons/Shotgun");
 var Ak47 = require("./weapons/Ak47");
 //var Animation = require("./Animation");
-var Entity = require("./Entity");
+//var Entity = require("./Entity");
 var Emitter = require("./particle/Emitter");
 var weaponCreator = require("./weapons/weaponCreator");
+var UiButton = require("./Button");
+var UiRect = require("./uiElements/Rectangle");
+var UiText = require("./uiElements/Text");
+
+
 
 function Player(playerData) {
     this.id = playerData.id;
@@ -274,6 +279,9 @@ Player.prototype.takeDamage = function(damage, direction) {
 };
 
 Player.prototype.die = function() {
+
+    if (!this.alive) return;
+
     this.alive = false;
     this.weapons[this.selectedWeaponIndex].stopReload();
 
@@ -301,8 +309,29 @@ Player.prototype.die = function() {
         y: this.y
     }));
 
+    if (this.id === window.game.network.client.peer.id) { // if its my player, show respawn button
+        // create respawn Button and dim the background
+        var bg = new UiRect(0,0,window.game.canvas.width, window.game.canvas.height, "rgba(0,0,0,0.8)");
+        var text = new UiText({text: "YOU HAVE DIED!", fontSize: 18, x: 250, y: window.game.canvas.height / 2 - 20});
+        var button = new UiButton({text: "RESPAWN", fontSize: 24, x: window.game.canvas.width / 2 - 63, y: window.game.canvas.height / 2, w: 130, h: 40, clickFunction: this.wantToRespawn, context: this});
+        window.game.uiElements.push(bg);
+        window.game.uiElements.push(text);
+        window.game.uiElements.push(button);
+    }
 
 
+};
+
+Player.prototype.wantToRespawn = function() {
+    if (!this.alive) {
+        this.actions.push({ // add to the actions queue
+            action: "respawn",
+            data: helpers.findSpawnLocation()
+        });
+
+        // clear ui of buttons
+        window.game.uiElements = [];
+    }
 };
 
 Player.prototype.respawn = function(action) {

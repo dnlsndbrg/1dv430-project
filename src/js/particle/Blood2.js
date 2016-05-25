@@ -12,6 +12,7 @@ class Blood2 extends Particle {
         //data.lifeTime = 0.3;
         data.size = 3;
         data.container = window.game.particles;
+        data.lifeTime = 10;
         super(data);
 
         this.direction = helpers.toRadians(Math.floor(Math.random() * 360) + 1);
@@ -32,6 +33,9 @@ Blood2.prototype.update = function(dt, index) {
 
         if (this.distanceMoved >= this.moveDistance) this.ctx = window.game.bgCtx; // move to background ctx
     }
+
+    this.lifeTime -= dt;
+    if (this.lifeTime < 0) this.destroy(index);
 
 };
 

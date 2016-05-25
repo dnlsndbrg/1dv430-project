@@ -1,7 +1,11 @@
+var collisionCheck = require("./util/collisionDetection") ;
+
 function Mouse(player){
     this.player = player;
 
     this.click = function(e){
+
+
         this.player.actions.push({ // add to the actions queue
             action: "shoot",
             data: {
@@ -20,6 +24,17 @@ function Mouse(player){
     this.mousedown = function(e) {
         switch(e.button) {
             case 0: // left mouse button
+
+                // check for clicks on ui elements
+                for (var i = 0; i < window.game.uiElements.length; i += 1) {
+                    var element = window.game.uiElements[i];
+                    if (!element.clickFunction) continue;
+                    if (collisionCheck.pointRect({x: e.offsetX, y: e.offsetY}, element.rect)) {
+                        element.clickFunction.bind(element.context)();
+                        return;
+                    }
+                }
+
                 if (player.mouseLeft !== true)  player.mouseLeft = true;
             break;
         }

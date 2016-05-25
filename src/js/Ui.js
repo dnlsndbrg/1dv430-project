@@ -68,7 +68,6 @@ module.exports = function Ui(game){
             window.game.ctx.fillText(weapon.bullets,  122, window.game.canvas.height - 10);
         }
 
-
         // draw heart
         window.game.ctx.drawImage(window.game.spritesheet, 0, 228, 13, 12, 10, window.game.canvas.height - 23, 13, 12);
         // draw HP
@@ -77,7 +76,6 @@ module.exports = function Ui(game){
         window.game.ctx.fillStyle = "#e7d29e";
         window.game.ctx.fillText(player.hp, 30, window.game.canvas.height - 10);
     };
-
 
     document.querySelector("#respawnBtn").addEventListener("click", function() {
         var player = window.game.players[window.game.network.client.peer.id];

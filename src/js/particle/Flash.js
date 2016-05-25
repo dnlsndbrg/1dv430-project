@@ -9,11 +9,11 @@ class Flash extends Particle {
         // var b = 50;
 
         data.color = "#ffe600";
-        //data.lifeTime = 0.3;
+        data.lifeTime = 0.05;
         data.container = window.game.particles;
         super(data);
 
-        this.lifeTime = 0.05;
+        //this.lifeTime = 0.05;
 
         //this.direction = helpers.toRadians(Math.floor(Math.random() * 360) + 1);
     }

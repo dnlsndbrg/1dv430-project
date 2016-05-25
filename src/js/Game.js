@@ -44,8 +44,9 @@ function Game() {
     this.entities = []; // game entities
     this.particles = [];
     this.players = {};
+    this.uiElements = []; // holds buttons etc
 
-    this.maxParticles = 1000; // number of particles allowed on screen before they start to be removed
+    this.maxParticles = 30; // number of particles allowed on screen before they start to be removed
 
     this.camera = new Camera();
 
@@ -70,6 +71,8 @@ function Game() {
         this.update(dt);
         this.render();
 
+
+
         // networking update
         if (this.network.host) {
             this.network.host.update(dt); // if im the host do host stuff
@@ -93,16 +96,18 @@ function Game() {
             entity.update(dts, index); //deltatime in seconds
         });
 
-        // cap number of particles
-        if (this.particles.length > this.maxParticles) {
-            this.particles = this.particles.slice(this.particles.length - this.maxParticles, this.particles.length);
-        }
-
+        // // cap number of particles
+        // if (this.particles.length > this.maxParticles) {
+        //     this.particles = this.particles.slice(this.particles.length - this.maxParticles, this.particles.length);
+        // }
 
         // Update particles
         for (var i = 0; i < this.particles.length; i += 1) {
             this.particles[i].update(dts, i);
         }
+
+
+
 
         this.camera.update();
         // Update camera
@@ -142,6 +147,13 @@ function Game() {
         }
 
         this.ui.renderUI();
+
+        // render buttons etc
+        for (i = 0; i < window.game.uiElements.length; i += 1) {
+            window.game.uiElements[i].render();
+        }
+
+
         this.ui.renderDebug();
         // render fps and ping
 

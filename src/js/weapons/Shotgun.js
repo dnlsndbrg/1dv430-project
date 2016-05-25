@@ -19,6 +19,9 @@ Shotgun.prototype.fire = function(action) {
     var directions = [];
     var direction;
 
+    //var targetLocations = [];
+    //var targetLocations;
+
     // shoot 4 bullets
     for (var i = 0; i < this.bulletsPerShot; i += 1) {
 
