@@ -57,8 +57,19 @@ function Client(ID){
 
                 case "gameStateUpdate":
                         data.gameState.players.forEach(function(player) {
-                            if (player.id !== window.game.network.client.peer.id) // ignore my own state for now
-                                window.game.players[player.id].updateState(player);
+                            if (player.id === window.game.network.client.peer.id) {
+                                // if its my own state, we ignore keystate and other properties
+                                player = {
+                                    x: player.x,
+                                    y: player.y,
+                                    id: player.id,
+                                    hp: player.hp,
+                                    alive: player.alive
+                                };
+
+                            }
+
+                            window.game.players[player.id].updateState(player);
                         });
                     break;
 

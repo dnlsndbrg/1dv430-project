@@ -362,22 +362,22 @@ Player.prototype.getClientState = function() {
 };
 
 Player.prototype.updateState = function(newState) {
-    this.x = newState.x;
-    this.y = newState.y;
+    this.x = newState.x || this.x;
+    this.y = newState.y || this.y;
     //id: this.id = id;
-    this.hp = newState.hp;
-    this.alive = newState.alive;
-    this.radius = newState.radius;
-    this.direction = newState.direction;
-    this.viewingAngle = newState.viewingAngle;
-    this.speed = newState.speed;
-    this.kUp = newState.kUp;
-    this.kDown = newState.kDown;
-    this.kLeft = newState.kLeft;
-    this.kRight = newState.kRight;
-    this.mouseX = newState.mouseX;
-    this.mouseY = newState.mouseY;
-    this.selectedWeaponIndex = newState.selectedWeaponIndex;
+    this.hp = newState.hp || this.hp;
+    this.alive = newState.alive || this.alive;
+    this.radius = newState.radius ||this.radius;
+    this.direction = newState.direction || this.direction;
+    this.viewingAngle = newState.viewingAngle || this.viewingAngle;
+    this.speed = newState.speed || this.speed;
+    this.kUp = newState.kUp || this.kUp;
+    this.kDown = newState.kDown || this.kDown;
+    this.kLeft = newState.kLeft || this.kLeft;
+    this.kRight = newState.kRight || this.kRight;
+    this.mouseX = newState.mouseX || this.mouseX;
+    this.mouseY = newState.mouseY || this.mouseY;
+    this.selectedWeaponIndex = newState.selectedWeaponIndex || this.selectedWeaponIndex;
     //weaponState: this.getWeaponState()
 };
 
