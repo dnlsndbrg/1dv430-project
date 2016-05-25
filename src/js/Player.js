@@ -366,19 +366,19 @@ Player.prototype.updateState = function(newState) {
     this.y = newState.y || this.y;
     //id: this.id = id;
     this.hp = newState.hp || this.hp;
-    this.alive = newState.alive || this.alive;
-    this.radius = newState.radius ||this.radius;
+    //this.alive = newState.alive;
+    this.alive = typeof newState.alive !== "undefined" ? newState.alive : this.alive;
+    this.radius = newState.radius || this.radius;
     this.direction = newState.direction || this.direction;
     this.viewingAngle = newState.viewingAngle || this.viewingAngle;
     this.speed = newState.speed || this.speed;
-    this.kUp = newState.kUp || this.kUp;
-    this.kDown = newState.kDown || this.kDown;
-    this.kLeft = newState.kLeft || this.kLeft;
-    this.kRight = newState.kRight || this.kRight;
-    this.mouseX = newState.mouseX || this.mouseX;
-    this.mouseY = newState.mouseY || this.mouseY;
+    this.kUp = typeof newState.kUp !== "undefined" ? newState.kUp : this.kUp;
+    this.kUp = typeof newState.kUp !== "undefined" ? newState.kUp : this.kUp;
+    this.kLeft = typeof newState.kLeft !== "undefined" ? newState.kLeft : this.kLeft;
+    this.kRight = typeof newState.kRight !== "undefined" ? newState.kRight : this.kRight;
+    this.mouseX = typeof newState.mouseX !== "undefined" ? newState.mouseX : this.mouseX;
+    this.mouseY = typeof newState.mouseY !== "undefined" ? newState.mouseY : this.mouseY;
     this.selectedWeaponIndex = newState.selectedWeaponIndex || this.selectedWeaponIndex;
-    //weaponState: this.getWeaponState()
 };
 
 // get the state of each weapon

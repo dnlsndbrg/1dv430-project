@@ -56,21 +56,22 @@ function Client(ID){
                     break;
 
                 case "gameStateUpdate":
-                        data.gameState.players.forEach(function(player) {
-                            if (player.id === window.game.network.client.peer.id) {
-                                // if its my own state, we ignore keystate and other properties
-                                player = {
-                                    x: player.x,
-                                    y: player.y,
-                                    id: player.id,
-                                    hp: player.hp,
-                                    alive: player.alive
-                                };
 
-                            }
+                    data.gameState.players.forEach(function(newState) {
+                        var player = window.game.players[newState.id];
 
-                            window.game.players[player.id].updateState(player);
-                        });
+                        if (player.id === window.game.network.client.peer.id) {
+                            // if its my own state, we ignore keystate and other properties
+                            newState = {
+                                x: player.x,
+                                y: player.y,
+                                hp: newState.hp,
+                                alive: newState.alive,
+                            };
+                        }
+
+                        player.updateState(newState);
+                    });
                     break;
 
                 case "changes": // changes and actions received from host
