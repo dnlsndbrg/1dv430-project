@@ -11,7 +11,7 @@ class BulletHole extends Particle {
         data.color = "rgb(66, 66, 66)";
         //data.lifeTime = 0.3;
         data.size = 2;
-
+        data.container = window.game.particles;
         super(data);
 
         this.lifeTime = 10;

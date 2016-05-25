@@ -10,6 +10,7 @@ class Particle {
         this.lifeTime = data.lifeTime;
         this.lifeTimer = 0;
         this.emitter = data.emitter;
+        this.container = data.container;
     }
 }
 
@@ -30,7 +31,7 @@ Particle.prototype.render = function() {
 };
 
 Particle.prototype.destroy = function(index) {
-    window.game.particles.splice(index, 1);
+    this.container.splice(index, 1);
 };
 
 Particle.prototype.getFullState = function() {

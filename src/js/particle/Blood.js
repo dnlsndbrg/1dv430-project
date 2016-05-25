@@ -11,7 +11,7 @@ class Blood extends Particle {
         data.color = "rgb(" + r + "," + g + "," + b + ")";
         data.lifeTime = 0.3;
         data.size = 3;
-
+        data.container = window.game.particles;
         super(data);
 
         this.direction = helpers.toRadians(Math.floor(Math.random() * 360) + 1);
