@@ -15,12 +15,11 @@ function bline(x0, y0, x1, y1) {
     if (e2 > -dx) { err -= dy; x0 += sx; }
     if (e2 < dy) { err += dx; y0 += sy; }
 
-    var tileX = Math.floor(x0 / 32);
-    var tileY = Math.floor(y0 / 32);
+
 
     // check if outside map
     if (!helpers.isInsideGame(x0, y0)) return;
-    //if (tileX > window.game.level.colTileCount || tileY > window.game.level.rowTileCount) return;
+
 
     // hit check against players
     for (var key in window.game.players) {
@@ -33,6 +32,8 @@ function bline(x0, y0, x1, y1) {
 
     }
 
+    var tileX = Math.floor(x0 / 32);
+    var tileY = Math.floor(y0 / 32);
     // check against tiles
     if (helpers.getTile(tileX,tileY) === 1) return {type: "tile", x: tileX, y: tileY};
   }

@@ -17,6 +17,11 @@ function Bullet(data) {
     // check that the bullet spawn location is inside the game
     if (!helpers.isInsideGame(startX, startY)) return;
 
+    // check if bullet starting location is inside a tile
+    var tileX = Math.floor(startX / 32);
+    var tileY = Math.floor(startY / 32);
+    if (helpers.getTile(tileX,tileY) === 1) return;
+
     //this.direction = data.direction;
     //this.speed = data.bulletSpeed;
     //this.damage = data.damage;
