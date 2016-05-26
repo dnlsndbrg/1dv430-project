@@ -18,7 +18,7 @@ function Game() {
     // };
 
     createjs.Sound.registerSound("./../audio/ak.wav", "ak");
-    createjs.Sound.registerSound("./../audio/shotgun-3.wav", "shotgun");
+    createjs.Sound.registerSound("./../audio/shotgun-4.mp3", "shotgun");
     createjs.Sound.registerSound("./../audio/empty.wav", "empty");
 
     this.spritesheet = new Image();
