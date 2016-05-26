@@ -5,7 +5,7 @@ var Ak47 = {
     "fireRate": 0.1, // shots per second
     "bulletsPerShot": 1, // shoot 1 bullet at a time
     "damage": 10, // hp
-    "reloadTime": 2, // s
+    "reloadTime": 1.6, // s
     "bulletSpeed": 1700, // pixels per second
     "sx": 0, // spritesheet x position
     "sy": 0, // spritesheet y position
@@ -13,7 +13,8 @@ var Ak47 = {
     "iconSy": 210,
     "iconW": 30,
     "iconH": 30,
-    "sound": "ak"
+    "sound": "ak",
+    "reloadSound": "ak-reload"
 };
 
 var shotgun = {
@@ -23,7 +24,7 @@ var shotgun = {
     "fireRate": 0.5, // shots per second
     "bulletsPerShot": 4, // 4 shotgun slugs per shot
     "damage": 10, // hp
-    "reloadTime": 2, // s
+    "reloadTime": 1.6, // s
     "bulletSpeed": 2500, // pixels per second
     "sx": 0, // spritesheet x position
     "sy": 60, // spritesheet y position
@@ -31,7 +32,8 @@ var shotgun = {
     "iconSy": 210,
     "iconW": 30,
     "iconH": 30,
-    "sound": "shotgun"
+    "sound": "shotgun",
+    "reloadSound": "shotgun-reload"
 };
 
 module.exports = {

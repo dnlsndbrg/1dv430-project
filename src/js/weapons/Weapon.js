@@ -20,7 +20,10 @@ class Weapon{
         this.iconH = data.iconH;
 
         this.sound = data.sound;
+        this.reloadSound = data.reloadSound;
+
         this.soundInstanceEmptyClip = null;
+        this.soundInstanceReload = createjs.Sound.createInstance(this.reloadSound);
 
         this.fireTimer = this.fireRate;
 
@@ -73,6 +76,8 @@ Weapon.prototype.fire = function(action) {
 };
 
 Weapon.prototype.reload = function(action) {
+    console.log("reload");
+    this.soundInstanceReload.play();
     this.reloading = true;
     this.reloadTimer = 0;
     return action;
@@ -83,6 +88,7 @@ Weapon.prototype.fillMagazine = function() {
 };
 
 Weapon.prototype.stopReload = function() {
+    this.soundInstanceReload.stop();
     this.reloading = false;
     this.reloadTimer = 0;
 };

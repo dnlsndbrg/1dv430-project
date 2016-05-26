@@ -2,7 +2,6 @@ function Keyboard(player){
     this.player = player;
     //this.lastState = _.clone(player.keys);
     this.keyDownHandler = function(e){
-        console.log(e.keyCode);
         switch(e.keyCode) {
             case 87: // W
                 if (player.kUp !== true)  player.kUp= true;

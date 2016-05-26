@@ -12,13 +12,11 @@ function Game() {
     this.width = 640;
     this.height = 480;
 
-    // this.sounds = {
-    //     "ak": new Sound(),
-    //     "shotgun": new Sound("shotgun.wav")
-    // };
-
+    // Load sounds
     createjs.Sound.registerSound("./../audio/ak.wav", "ak");
-    createjs.Sound.registerSound("./../audio/shotgun-10.ogg", "shotgun");
+    createjs.Sound.registerSound("./../audio/ak-reload.mp3", "ak-reload");
+    createjs.Sound.registerSound("./../audio/shotgun.ogg", "shotgun");
+    createjs.Sound.registerSound("./../audio/shotgun-reload.ogg", "shotgun-reload");
     createjs.Sound.registerSound("./../audio/empty.wav", "empty");
 
     this.spritesheet = new Image();
