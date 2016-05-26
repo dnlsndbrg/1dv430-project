@@ -18,6 +18,10 @@ function Game() {
     createjs.Sound.registerSound("./../audio/shotgun.ogg", "shotgun");
     createjs.Sound.registerSound("./../audio/shotgun-reload.ogg", "shotgun-reload");
     createjs.Sound.registerSound("./../audio/empty.wav", "empty");
+    createjs.Sound.registerSound("./../audio/hit1.wav", "hit1");
+    createjs.Sound.registerSound("./../audio/hit2.wav", "hit2");
+    createjs.Sound.registerSound("./../audio/death1.ogg", "death1");
+    createjs.Sound.registerSound("./../audio/death2.ogg", "death2");
 
     this.spritesheet = new Image();
     this.spritesheet.src = "../img/spritesheet.png";

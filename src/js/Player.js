@@ -268,6 +268,12 @@ Player.prototype.takeDamage = function(damage, direction) {
         });
     }
 
+    // play sounds
+    if (this.id === window.game.network.client.peer.id)
+        createjs.Sound.play("hit2");
+    else
+        createjs.Sound.play("hit1");
+
     // add blood splash emitter
     window.game.entities.push(new Emitter({
         type: "Blood2",
@@ -285,6 +291,12 @@ Player.prototype.die = function() {
     this.alive = false;
     this.weapons[this.selectedWeaponIndex].stopReload();
 
+
+    // play sounds
+    if (this.id === window.game.network.client.peer.id)
+        createjs.Sound.play("death1");
+    else
+        createjs.Sound.play("death2");
 
     // // create a corpse
     // var corpse = new Entity({
