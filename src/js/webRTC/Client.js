@@ -16,6 +16,8 @@ function Client(ID){
         window.game.network.socket.emit("join", {peerID: id, gameID: window.game.gameID});
         console.log("my client peerID is ", id);
 
+        window.game.myPlayerID = id;
+
         if (!window.game.started) window.game.start();
     });
 

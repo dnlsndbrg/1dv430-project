@@ -36,6 +36,21 @@ function Player(playerData) {
     this.viewingAngle = playerData.viewingAngle || 45;
     this.speed = playerData.speed || 100; //pixels per second
     this.hp = playerData.hp || 100;
+
+
+    Object.defineProperty(this, "alive",{
+             "get": function() { return this.__alive; },
+             "set": function(newValue) {
+                 if (newValue === false && this.alive !== false && window.game.myPlayerID === this.id) {
+                     // I just died. show death screen
+                     var bg = new UiRect(0,0,window.game.canvas.width, window.game.canvas.height, "rgba(0,0,0,0.8)");
+                     var text = new UiText({text: "YOU HAVE DIED!", fontSize: 18, x: 250, y: window.game.canvas.height / 2 - 20});
+                     var button = new UiButton({text: "RESPAWN", fontSize: 24, x: window.game.canvas.width / 2 - 63, y: window.game.canvas.height / 2, w: 130, h: 40, clickFunction: this.wantToRespawn, context: this});
+                     window.game.uiElements = [bg, text, button];
+                 }
+                 this.__alive = newValue; }
+    });
+
     this.alive = playerData.alive || true;
 
     this.sx = 0;
@@ -321,15 +336,10 @@ Player.prototype.die = function() {
         y: this.y
     }));
 
-    if (this.id === window.game.network.client.peer.id) { // if its my player, show respawn button
-        // create respawn Button and dim the background
-        var bg = new UiRect(0,0,window.game.canvas.width, window.game.canvas.height, "rgba(0,0,0,0.8)");
-        var text = new UiText({text: "YOU HAVE DIED!", fontSize: 18, x: 250, y: window.game.canvas.height / 2 - 20});
-        var button = new UiButton({text: "RESPAWN", fontSize: 24, x: window.game.canvas.width / 2 - 63, y: window.game.canvas.height / 2, w: 130, h: 40, clickFunction: this.wantToRespawn, context: this});
-        window.game.uiElements.push(bg);
-        window.game.uiElements.push(text);
-        window.game.uiElements.push(button);
-    }
+    // if (this.id === window.game.network.client.peer.id) { // if its my player, show respawn button
+    //     // create respawn Button and dim the background
+    //
+    // }
 
 
 };
