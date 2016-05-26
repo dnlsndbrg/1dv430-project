@@ -1,6 +1,6 @@
 var Weapon = require("./Weapon");
 var weaponData = require("../data/weapons").shotgun;
-var Bullet = require(".././Bullet2");
+var Bullet = require(".././Bullet");
 
 class Shotgun extends Weapon{
     constructor(owner, existingWeaponData) {
@@ -47,21 +47,10 @@ Shotgun.prototype.fire = function(action) {
         var bullet = new Bullet({
             x: this.owner.x,
             y: this.owner.y,
-            targetX: this.owner.mouseX,
-            targetY: this.owner.mouseY,
             direction:direction,
-            damage: this.damage
+            damage: this.damage,
+            speed: this.bulletSpeed
         });
-
-        // window.game.entities.push(new Bullet({
-        //     x: this.owner.x,
-        //     y: this.owner.y,
-        //     targetX: this.owner.mouseX,
-        //     targetY: this.owner.mouseY,
-        //     direction: direction,
-        //     bulletSpeed: this.bulletSpeed,
-        //     damage: this.damage
-        // }));
     }
 
     //console.log("FIRE", action, directions);

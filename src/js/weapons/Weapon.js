@@ -1,4 +1,4 @@
-var Bullet = require(".././Bullet2");
+var Bullet = require(".././Bullet");
 
 class Weapon{
     constructor(owner, data) {
@@ -67,10 +67,9 @@ Weapon.prototype.fire = function(action) {
     var bullet = new Bullet({
         x: this.owner.x,
         y: this.owner.y,
-        // targetX: this.owner.mouseX,
-        // targetY: this.owner.mouseY,
         direction: this.owner.direction,
-        damage: this.damage
+        damage: this.damage,
+        speed: this.bulletSpeed
     });
     return action;
 };

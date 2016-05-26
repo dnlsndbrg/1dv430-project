@@ -2,6 +2,7 @@ var helpers = require("./helpers");
 //var Emitter = require("./particle/Emitter");
 var collisionDetection = require("./util/collisionDetection");
 var BulletHole = require("./particle/BulletHole");
+var bresenham = require("./util/bresenham");
 
 function Bullet(data) {
 
@@ -16,6 +17,18 @@ function Bullet(data) {
     this.originX = this.x; // remember the starting position
     this.originY = this.y;
 
+
+    // check that the bullet spawn location is inside the game
+    if (!helpers.isInsideGame(this.x, this.y)) return;
+
+    // check if bullet starting location is inside a tile
+    var tileX = Math.floor(this.x / 32);
+    var tileY = Math.floor(this.y / 32);
+    if (helpers.getTile(tileX,tileY) === 1) return;
+
+    //var targetX = this.x + Math.cos(data.direction) * 10; // shoot straight ahead from the barrel
+    //var targetY = this.y + Math.sin(data.direction) * 10; // shoot straight ahead from the barrel
+
     //this.x = data.x;
     //this.y = data.y;
     //
@@ -25,58 +38,93 @@ function Bullet(data) {
 
     this.length = 10; // trail length
     this.direction = data.direction;
-    this.speed = data.bulletSpeed;
+    this.speed = data.speed;
     this.damage = data.damage;
 
-
-
     this.ctx = window.game.ctx;
+
+    window.game.entities.push(this);
 }
 
 Bullet.prototype.update = function(dt, index) {
 
     var distance = this.speed * dt;
     //
-    var x = this.x + Math.cos(this.direction) * distance;
-    var y = this.y + Math.sin(this.direction) * distance;
+    this.x = this.x + Math.cos(this.direction) * distance;
+    this.y = this.y + Math.sin(this.direction) * distance;
 
     // hit check against players
-    this.hitDetection(index);
+    //this.hitDetection(index);
 
-    // collision detection against tiles and outside of map
-    var collision = helpers.collisionCheck({x: x, y: y});
-    if (!collision) {
-        this.x = x;
-        this.y = y;
-    } else {
-        // add richocet particle effect
-        // window.game.entities.push(new Emitter({
-        //     type: "Ricochet",
-        //     emitCount: 1,
-        //     emitSpeed: null, // null means instant
-        //     x: this.x,
-        //     y: this.y
-        // }));
 
-        // find where the bullet trajectory intersected with the colliding rect
 
-        var line = {start: {x: this.originX, y: this.originY}, end: {x: x, y:y}}; // the line that goes from the bullet origin position to its current position
-        var rect = helpers.getRectFromPoint({x: x, y: y}); // rect of the colliding box
-        var pos = collisionDetection.lineRectIntersect(line, rect);
+    var line = {
+        start: {x: this.originX, y: this.originY},
+        end: {x: this.x, y: this.y}
+    };
 
-        //console.log(pos);
 
-        window.game.particles.push(new BulletHole(pos));
+    //console.log(line.start.x, line.start.y, line.end.x, line.end.y);
+    var intersect = null;
 
-        this.destroy(index);
+    var collision = bresenham(this.originX, this.originY, this.x, this.y, false); // find colliding rectangles
+
+
+    if (collision) {
+        switch(collision.type) {
+            case "tile":
+                intersect = collisionDetection.lineRectIntersect2(line, {x: collision.x * 32, y: collision.y * 32, w: 32, h: 32});
+                window.game.particles.push(new BulletHole(intersect));
+                this.destroy(index);
+                return;
+            case "player":
+                collision.player.takeDamage(this.damage, this.direction);
+                this.destroy(index);
+                return;
+            case "outside":
+                this.destroy(index);
+        }
     }
+
+    this.originX = this.x;
+    this.originY = this.y;
+
     //
-    // // if off screen, remove it
-    // if (this.x < 0 || this.x > window.game.level.width || this.y < 0 || this.y > window.game.level.height) {
+    //
+    // // collision detection against tiles and outside of map
+    // var collision = helpers.collisionCheck({x: x, y: y});
+    // if (!collision) {
+    //     this.x = x;
+    //     this.y = y;
+    // } else {
+    //     // add richocet particle effect
+    //     // window.game.entities.push(new Emitter({
+    //     //     type: "Ricochet",
+    //     //     emitCount: 1,
+    //     //     emitSpeed: null, // null means instant
+    //     //     x: this.x,
+    //     //     y: this.y
+    //     // }));
+    //
+    //     // find where the bullet trajectory intersected with the colliding rect
+    //
+    //     var line = {start: {x: this.originX, y: this.originY}, end: {x: x, y:y}}; // the line that goes from the bullet origin position to its current position
+    //     var rect = helpers.getRectFromPoint({x: x, y: y}); // rect of the colliding box
+    //     var pos = collisionDetection.lineRectIntersect(line, rect);
+    //
+    //     //console.log(pos);
+    //
+    //     window.game.particles.push(new BulletHole(pos));
+    //
     //     this.destroy(index);
-    //     return;
     // }
-    //
+    // //
+    // // // if off screen, remove it
+    // // if (this.x < 0 || this.x > window.game.level.width || this.y < 0 || this.y > window.game.level.height) {
+    // //     this.destroy(index);
+    // //     return;
+    // // }
+    // //
 
 
 };

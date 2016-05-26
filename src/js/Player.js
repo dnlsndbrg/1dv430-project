@@ -294,9 +294,9 @@ Player.prototype.die = function() {
 
     // play sounds
     if (this.id === window.game.network.client.peer.id)
-        createjs.Sound.play("death1");
-    else
         createjs.Sound.play("death2");
+    else
+        createjs.Sound.play("death1");
 
     // // create a corpse
     // var corpse = new Entity({
