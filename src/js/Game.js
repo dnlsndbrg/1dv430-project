@@ -165,7 +165,7 @@ function Game() {
         }
 
 
-        this.ui.renderDebug();
+        //this.ui.renderDebug();
         // render fps and ping
 
                 // console.log("------------------------");

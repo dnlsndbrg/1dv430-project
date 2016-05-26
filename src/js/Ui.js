@@ -77,59 +77,59 @@ module.exports = function Ui(game){
         window.game.ctx.fillText(player.hp, 30, window.game.canvas.height - 10);
     };
 
-    document.querySelector("#respawnBtn").addEventListener("click", function() {
-        var player = window.game.players[window.game.network.client.peer.id];
+    // document.querySelector("#respawnBtn").addEventListener("click", function() {
+    //     var player = window.game.players[window.game.network.client.peer.id];
+    //
+    //     if (!player.alive) {
+    //
+    //         // var spawnLocationFound = false;
+    //         // var x;
+    //         // var y;
+    //         // while (!spawnLocationFound) {
+    //         //     x = (Math.floor(Math.random() * (window.game.level.width - player.radius)) + player.radius / 2);
+    //         //     y = (Math.floor(Math.random() * (window.game.level.height - player.radius)) + player.radius / 2);
+    //         //
+    //         //     if (helpers.collisionCheck({x: x, y: y})) spawnLocationFound = true;
+    //         // }
+    //
+    //
+    //         player.actions.push({ // add to the actions queue
+    //             action: "respawn",
+    //             data: helpers.findSpawnLocation()
+    //         });
+    //     }
+    // });
 
-        if (!player.alive) {
-
-            // var spawnLocationFound = false;
-            // var x;
-            // var y;
-            // while (!spawnLocationFound) {
-            //     x = (Math.floor(Math.random() * (window.game.level.width - player.radius)) + player.radius / 2);
-            //     y = (Math.floor(Math.random() * (window.game.level.height - player.radius)) + player.radius / 2);
-            //
-            //     if (helpers.collisionCheck({x: x, y: y})) spawnLocationFound = true;
-            // }
-
-
-            player.actions.push({ // add to the actions queue
-                action: "respawn",
-                data: helpers.findSpawnLocation()
-            });
-        }
-    });
-
-    document.querySelector("#reloadBtn").addEventListener("click", function() {
-        var player = window.game.players[window.game.network.client.peer.id];
-        if (player.alive) {
-            player.actions.push({ // add to the actions queue
-                action: "reload",
-            });
-        }
-        // if (!player.alive) {
-        //     var x = (Math.floor(Math.random() * (window.game.level.width - player.radius)) + player.radius / 2);
-        //     var y = (Math.floor(Math.random() * (window.game.level.height - player.radius)) + player.radius / 2);
-        //
-        //     player.actions.push({ // add to the actions queue
-        //         action: "respawn",
-        //         data: {
-        //             x: x,
-        //             y: y
-        //         }
-        //     });
-        // }
-    });
-
-
-        document.querySelector("#emitterBtn").addEventListener("click", function() {
-            var player = window.game.players[window.game.network.client.peer.id];
-            window.game.entities.push(new Emitter({
-                type: "Blood2",
-                emitCount: 10,
-                emitSpeed: null,
-                x: player.x,
-                y: player.y
-            }));
-        });
+    // document.querySelector("#reloadBtn").addEventListener("click", function() {
+    //     var player = window.game.players[window.game.network.client.peer.id];
+    //     if (player.alive) {
+    //         player.actions.push({ // add to the actions queue
+    //             action: "reload",
+    //         });
+    //     }
+    //     // if (!player.alive) {
+    //     //     var x = (Math.floor(Math.random() * (window.game.level.width - player.radius)) + player.radius / 2);
+    //     //     var y = (Math.floor(Math.random() * (window.game.level.height - player.radius)) + player.radius / 2);
+    //     //
+    //     //     player.actions.push({ // add to the actions queue
+    //     //         action: "respawn",
+    //     //         data: {
+    //     //             x: x,
+    //     //             y: y
+    //     //         }
+    //     //     });
+    //     // }
+    // });
+    //
+    //
+    //     document.querySelector("#emitterBtn").addEventListener("click", function() {
+    //         var player = window.game.players[window.game.network.client.peer.id];
+    //         window.game.entities.push(new Emitter({
+    //             type: "Blood2",
+    //             emitCount: 10,
+    //             emitSpeed: null,
+    //             x: player.x,
+    //             y: player.y
+    //         }));
+    //     });
 };
