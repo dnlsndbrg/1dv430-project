@@ -11,6 +11,16 @@ class Shotgun extends Weapon{
 
 Shotgun.prototype.fire = function(action) {
 
+    // play empty clip sound if out of bullets
+    if ( this.bullets < 1 && !this.reloading) {
+        if (!this.soundInstanceEmptyClip) {
+            this.soundInstanceEmptyClip = createjs.Sound.play("empty");
+            this.soundInstanceEmptyClip.on("complete", function() {
+                this.soundInstanceEmptyClip = null;
+            }.bind(this));
+        }
+    }
+
     if (this.fireTimer < this.fireRate || this.reloading || this.bullets < 1) return false;
 
     this.bullets -= 1;
@@ -22,6 +32,7 @@ Shotgun.prototype.fire = function(action) {
     //var targetLocations = [];
     //var targetLocations;
 
+    createjs.Sound.play(this.sound);
     // shoot 4 bullets
     for (var i = 0; i < this.bulletsPerShot; i += 1) {
 

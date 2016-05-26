@@ -12,7 +12,8 @@ var Ak47 = {
     "iconSx": 21,
     "iconSy": 210,
     "iconW": 30,
-    "iconH": 30
+    "iconH": 30,
+    "sound": "ak"
 };
 
 var shotgun = {
@@ -29,7 +30,8 @@ var shotgun = {
     "iconSx": 51,
     "iconSy": 210,
     "iconW": 30,
-    "iconH": 30
+    "iconH": 30,
+    "sound": "shotgun"
 };
 
 module.exports = {

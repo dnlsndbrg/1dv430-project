@@ -21,6 +21,10 @@ function Bullet(data) {
     var smallFlashX = startX + Math.cos(data.direction) *  (Math.floor(Math.random() * 2) + 3);
     var smallFlashY= startY + Math.sin(data.direction) *  (Math.floor(Math.random() * 2) + 3);
     window.game.particles.push(new Flash({x: smallFlashX, y: smallFlashY, size: size, container: window.game.particles}));
+    size = Math.floor(Math.random() * 2) + 1;
+    smallFlashX = startX + Math.cos(data.direction) *  (Math.floor(Math.random() * 2) + 8);
+    smallFlashY= startY + Math.sin(data.direction) *  (Math.floor(Math.random() * 2) + 8);
+    window.game.particles.push(new Flash({x: smallFlashX, y: smallFlashY, size: size, container: window.game.particles}));
     size = Math.floor(Math.random() * 2) + 2;
     smallFlashX = startX + Math.cos(data.direction) *  (Math.floor(Math.random() * 2) + 5);
     smallFlashY= startY + Math.sin(data.direction) *  (Math.floor(Math.random() * 2) + 5);

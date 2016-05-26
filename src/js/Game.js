@@ -4,6 +4,7 @@ var Player = require("./Player");
 var Camera = require("./Camera");
 var Level = require("./Level");
 
+
 function Game() {
 
     this.started = false;
@@ -11,6 +12,14 @@ function Game() {
     this.width = 640;
     this.height = 480;
 
+    // this.sounds = {
+    //     "ak": new Sound(),
+    //     "shotgun": new Sound("shotgun.wav")
+    // };
+
+    createjs.Sound.registerSound("./../audio/ak.wav", "ak");
+    createjs.Sound.registerSound("./../audio/shotgun-3.wav", "shotgun");
+    createjs.Sound.registerSound("./../audio/empty.wav", "empty");
 
     this.spritesheet = new Image();
     this.spritesheet.src = "../img/spritesheet.png";

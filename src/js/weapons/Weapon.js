@@ -19,6 +19,9 @@ class Weapon{
         this.iconW = data.iconW;
         this.iconH = data.iconH;
 
+        this.sound = data.sound;
+        this.soundInstanceEmptyClip = null;
+
         this.fireTimer = this.fireRate;
 
         this.reloading = data.reloading || false;
@@ -39,11 +42,25 @@ Weapon.prototype.update = function(dt) {
 };
 
 Weapon.prototype.fire = function(action) {
+
+    // play empty clip sound if out of bullets
+    if ( this.bullets < 1 && !this.reloading) {
+        if (!this.soundInstanceEmptyClip) {
+            this.soundInstanceEmptyClip = createjs.Sound.play("empty");
+            this.soundInstanceEmptyClip.on("complete", function() {
+                this.soundInstanceEmptyClip = null;
+            }.bind(this));
+        }
+    }
+
     if (this.fireTimer < this.fireRate || this.reloading || this.bullets < 1) return false;
 
     this.bullets -= this.bulletsPerShot;
     this.fireTimer = 0;
 
+    createjs.Sound.play(this.sound);
+
+    //window.game.sounds[this.sound].play();
     var bullet = new Bullet({
         x: this.owner.x,
         y: this.owner.y,

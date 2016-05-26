@@ -34,6 +34,7 @@
     "esversion": 6,
     "globals": {
         "_": true,
-        "Peer": true
+        "Peer": true,
+        "createjs": true
      }
 }
