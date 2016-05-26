@@ -67,8 +67,8 @@ Weapon.prototype.fire = function(action) {
     var bullet = new Bullet({
         x: this.owner.x,
         y: this.owner.y,
-        targetX: this.owner.mouseX,
-        targetY: this.owner.mouseY,
+        // targetX: this.owner.mouseX,
+        // targetY: this.owner.mouseY,
         direction: this.owner.direction,
         damage: this.damage
     });
@@ -76,8 +76,8 @@ Weapon.prototype.fire = function(action) {
 };
 
 Weapon.prototype.reload = function(action) {
-    console.log("reload");
-    this.soundInstanceReload.play();
+    if (this.owner.id === window.game.network.client.peer.id) // if this is my player. play reload sound
+        this.soundInstanceReload.play();
     this.reloading = true;
     this.reloadTimer = 0;
     return action;
@@ -88,7 +88,8 @@ Weapon.prototype.fillMagazine = function() {
 };
 
 Weapon.prototype.stopReload = function() {
-    this.soundInstanceReload.stop();
+    if (this.owner.id === window.game.network.client.peer.id) // if this is my player. stop reload sound
+        this.soundInstanceReload.stop();
     this.reloading = false;
     this.reloadTimer = 0;
 };

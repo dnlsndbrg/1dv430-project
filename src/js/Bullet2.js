@@ -14,6 +14,9 @@ function Bullet(data) {
     startX = startX + Math.cos(data.direction) * 30;
     startY= startY + Math.sin(data.direction) * 30;
 
+    var targetX = startX + Math.cos(data.direction) * 10; // shoot straight ahead from the barrel
+    var targetY = startY + Math.sin(data.direction) * 10; // shoot straight ahead from the barrel
+
     // create muzzle flashes
     var size = Math.floor(Math.random() * 3) + 3;
     window.game.particles.push(new Flash({x: startX, y: startY, size: size, container: window.game.particles}));
@@ -52,12 +55,12 @@ function Bullet(data) {
     //
     var line = {
         start: {x: startX, y: startY},
-        end: {x: data.targetX, y: data.targetY}
+        end: {x: targetX, y: targetY}
     };
 
     var intersect = null;
 
-    var collision = bresenham(startX, startY, data.targetX, data.targetY); // find colliding rectangles
+    var collision = bresenham(startX, startY, targetX, targetY); // find colliding rectangles
     if (collision) {
         switch(collision.type) {
             case "tile":
