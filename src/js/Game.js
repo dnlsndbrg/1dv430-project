@@ -13,13 +13,13 @@ function Game() {
     this.height = 480;
 
     // Load sounds
-    createjs.Sound.registerSound("./../audio/ak.wav", "ak");
-    createjs.Sound.registerSound("./../audio/ak-reload.mp3", "ak-reload");
+    createjs.Sound.registerSound("./../audio/ak.ogg", "ak");
+    createjs.Sound.registerSound("./../audio/ak-reload.ogg", "ak-reload");
     createjs.Sound.registerSound("./../audio/shotgun.ogg", "shotgun");
     createjs.Sound.registerSound("./../audio/shotgun-reload.ogg", "shotgun-reload");
-    createjs.Sound.registerSound("./../audio/empty.wav", "empty");
-    createjs.Sound.registerSound("./../audio/hit1.wav", "hit1");
-    createjs.Sound.registerSound("./../audio/hit2.wav", "hit2");
+    createjs.Sound.registerSound("./../audio/empty.ogg", "empty");
+    createjs.Sound.registerSound("./../audio/hit1.ogg", "hit1");
+    createjs.Sound.registerSound("./../audio/hit2.ogg", "hit2");
     createjs.Sound.registerSound("./../audio/death1.ogg", "death1");
     createjs.Sound.registerSound("./../audio/death2.ogg", "death2");
 
