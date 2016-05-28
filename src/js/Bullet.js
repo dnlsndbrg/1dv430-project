@@ -3,6 +3,7 @@ var helpers = require("./helpers");
 var collisionDetection = require("./util/collisionDetection");
 var BulletHole = require("./particle/BulletHole");
 var bresenham = require("./util/bresenham");
+var Flash = require("./particle/Flash");
 
 function Bullet(data) {
 
@@ -16,6 +17,30 @@ function Bullet(data) {
 
     this.originX = this.x; // remember the starting position
     this.originY = this.y;
+
+    // create muzzle flashes
+    var size = Math.floor(Math.random() * 3) + 3;
+    window.game.particles.push(new Flash({x: this.x, y: this.y, size: size, container: window.game.particles}));
+    size = Math.floor(Math.random() * 2) + 2;
+    var smallFlashX = this.x + Math.cos(data.direction) *  (Math.floor(Math.random() * 2) + 3);
+    var smallFlashY= this.y + Math.sin(data.direction) *  (Math.floor(Math.random() * 2) + 3);
+    window.game.particles.push(new Flash({x: smallFlashX, y: smallFlashY, size: size, container: window.game.particles}));
+    size = Math.floor(Math.random() * 2) + 1;
+    smallFlashX = this.x + Math.cos(data.direction) *  (Math.floor(Math.random() * 2) + 8);
+    smallFlashY= this.y + Math.sin(data.direction) *  (Math.floor(Math.random() * 2) + 8);
+    window.game.particles.push(new Flash({x: smallFlashX, y: smallFlashY, size: size, container: window.game.particles}));
+    size = Math.floor(Math.random() * 2) + 2;
+    smallFlashX = this.x + Math.cos(data.direction) *  (Math.floor(Math.random() * 2) + 5);
+    smallFlashY= this.y + Math.sin(data.direction) *  (Math.floor(Math.random() * 2) + 5);
+    window.game.particles.push(new Flash({x: smallFlashX, y: smallFlashY, size: size, container: window.game.particles}));
+    size = Math.floor(Math.random() * 2) + 2;
+    smallFlashX = this.x + Math.cos(data.direction + 1.5707963268) *  (Math.floor(Math.random() * 2) + 3);
+    smallFlashY = this.y + Math.sin(data.direction + 1.5707963268) *  (Math.floor(Math.random() * 2) + 3);
+    window.game.particles.push(new Flash({x: smallFlashX, y: smallFlashY, size: size, container: window.game.particles}));
+    size = Math.floor(Math.random() * 2) + 2;
+    smallFlashX = this.x + Math.cos(data.direction + 1.5707963268) * - (Math.floor(Math.random() * 2) + 3);
+    smallFlashY = this.y + Math.sin(data.direction + 1.5707963268) * - (Math.floor(Math.random() * 2) + 3);
+    window.game.particles.push(new Flash({x: smallFlashX, y: smallFlashY, size: size, container: window.game.particles}));
 
 
     // check that the bullet spawn location is inside the game
