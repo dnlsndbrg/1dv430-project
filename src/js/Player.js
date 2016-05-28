@@ -47,6 +47,9 @@ function Player(playerData) {
                      var text = new UiText({text: "YOU HAVE DIED!", fontSize: 18, x: 250, y: window.game.canvas.height / 2 - 20});
                      var button = new UiButton({text: "RESPAWN", fontSize: 24, x: window.game.canvas.width / 2 - 63, y: window.game.canvas.height / 2, w: 130, h: 40, clickFunction: this.wantToRespawn, context: this});
                      window.game.uiElements = [bg, text, button];
+                 } else if ( newValue === true && !this.alive && window.game.myPlayerID === this.id) {
+                     // clear ui of buttons
+                     window.game.uiElements = [];
                  }
                  this.__alive = newValue; }
     });
@@ -350,9 +353,6 @@ Player.prototype.wantToRespawn = function() {
             action: "respawn",
             data: helpers.findSpawnLocation()
         });
-
-        // clear ui of buttons
-        window.game.uiElements = [];
     }
 };
 
