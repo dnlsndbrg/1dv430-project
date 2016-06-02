@@ -18,7 +18,6 @@ class Ricochet extends Particle {
 }
 
 Ricochet.prototype.update = function(dt, index) {
-
     if (this.distanceMoved < this.moveDistance) {
         var distance = this.speed * dt;
         this.x = this.x + Math.cos(this.direction) * distance;
@@ -27,18 +26,7 @@ Ricochet.prototype.update = function(dt, index) {
 
         if (this.distanceMoved >= this.moveDistance) this.ctx = window.game.bgCtx; // move to background ctx
     }
-
 };
-
-// BloodSplash.prototype.render = function() {
-//     this.ctx.save(); // save current state
-//     this.ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
-//     this.ctx.beginPath();
-//     this.ctx.arc(0 - this.size / 2, 0 - this.size / 2, this.size, 0, 2 * Math.PI, false);
-//     this.ctx.fillStyle = this.color;
-//     this.ctx.fill();
-//     this.ctx.restore(); // restore original states (no rotation etc)
-// };
 
 
 module.exports = Ricochet;

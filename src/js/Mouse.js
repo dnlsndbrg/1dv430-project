@@ -5,7 +5,6 @@ function Mouse(player){
 
     this.click = function(e){
 
-
         this.player.actions.push({ // add to the actions queue
             action: "shoot",
             data: {
@@ -13,7 +12,6 @@ function Mouse(player){
                 y: window.game.camera.y + e.offsetY
             }
         });
-        //window.game.network.client.actions.push(action); // tell the host of the action
     };
 
     this.mousemove = function(e) {
@@ -51,7 +49,6 @@ function Mouse(player){
     window.game.canvas.addEventListener("mousemove", this.mousemove.bind(this));
     window.game.canvas.addEventListener("mousedown", this.mousedown.bind(this));
     window.game.canvas.addEventListener("mouseup", this.mouseup.bind(this));
-    //window.game.canvas.addEventListener("click",this.click.bind(this));
 }
 
 

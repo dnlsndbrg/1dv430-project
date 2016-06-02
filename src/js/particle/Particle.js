@@ -1,5 +1,3 @@
-//var Entity = require(".././Entity");
-
 class Particle {
     constructor(data) {
         this.ctx = window.game.ctx;
@@ -14,17 +12,9 @@ class Particle {
     }
 }
 
-// Particle.prototype.update = function(dt, index) {
-//     this.lifeTimer += dt;
-//     if (this.lifeTimer > this.lifeTime) {
-//         this.destroy(index);
-//     }
-// };
-
 Particle.prototype.render = function() {
     this.ctx.save(); // save current state
     this.ctx.translate(this.x - window.game.camera.x, this.y - window.game.camera.y); // change origin
-    //this.ctx.rotate(this.direction); // rotate
     this.ctx.fillStyle = this.color;
     this.ctx.fillRect(-(this.size / 2), -(this.size / 2), this.size, this.size);
     this.ctx.restore(); // restore original states (no rotation etc)

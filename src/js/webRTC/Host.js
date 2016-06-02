@@ -77,22 +77,6 @@ module.exports = function Host(){
                             window.game.players[conn.peer].networkUpdate(data.updates); // TODO verify
                             //window.game.players[conn.peer].actions.push(data.actions); // TODO verify
                             break;
-                       //
-                    //    case "actions": // receiving actions from a player
-                    //        console.log("actions received from", conn.peer, data);
-                    //        window.game.players[conn.peer].actions.push(data);
-                    //        break;
-
-                    //    case "changes":
-                    //        console.log("Hey there has been changes!", data);
-                    //        window.game.players[conn.peer].change(data.changes);
-                    //        break;
-                       //
-                    //    case "keys": // receiving actions from a player
-                    //        console.log("keys received from", conn.peer, data.keys,  window.game.players[conn.peer]);
-                    //        window.game.players[conn.peer].keys = _.clone(data.keys); //TODO: verify input (check that it is the key object with true/false values)
-                    //        console.log(window.game.players[conn.peer].keys);
-                    //        break;
                     }
                 });
             });

@@ -1,5 +1,4 @@
 var level1 = require("./data/level1");
-//var Tile = require("./Tile");
 
 function Level(tilesheet){
     this.tilesheet = tilesheet;
@@ -10,9 +9,6 @@ function Level(tilesheet){
     this.colTileCount = this.level.tiles[0].length;
     this.rowTileCount = this.level.tiles.length;
     this.imageNumTiles = 384 / this.tileSize;  // The number of tiles per row in the tileset image
-
-    // generate Tiles
-
 
     this.render = function(ctx) {
 

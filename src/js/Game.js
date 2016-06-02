@@ -4,7 +4,6 @@ var Player = require("./Player");
 var Camera = require("./Camera");
 var Level = require("./Level");
 
-
 function Game() {
 
     this.started = false;
@@ -107,22 +106,12 @@ function Game() {
             entity.update(dts, index); //deltatime in seconds
         });
 
-        // // cap number of particles
-        // if (this.particles.length > this.maxParticles) {
-        //     this.particles = this.particles.slice(this.particles.length - this.maxParticles, this.particles.length);
-        // }
-
         // Update particles
         for (var i = 0; i < this.particles.length; i += 1) {
             this.particles[i].update(dts, i);
         }
-
-
-
-
         this.camera.update();
-        // Update camera
-        //this.camera.update();
+
     };
 
     /**
@@ -138,12 +127,6 @@ function Game() {
         this.bgCtx.rect(0, 0, this.canvas.width, this.canvas.height);
         this.bgCtx.fillStyle = "#5b5850";
         this.bgCtx.fill();
-
-        // draw test background
-        // this.bgCtx.beginPath();
-        // this.bgCtx.rect(0 - this.camera.x, 0 - this.camera.y, this.level.width, this.level.height);
-        // this.bgCtx.fillStyle = "#85827d";
-        // this.bgCtx.fill();
 
         this.level.render(this.bgCtx);
 
@@ -163,14 +146,6 @@ function Game() {
         for (i = 0; i < window.game.uiElements.length; i += 1) {
             window.game.uiElements[i].render();
         }
-
-
-        //this.ui.renderDebug();
-        // render fps and ping
-
-                // console.log("------------------------");
-                // console.log("CAMERA: X:" + this.camera.x, "\nY:" + this.camera.y);
-                // console.log(this.players[this.network.client.peer.id]);
     };
 }
 
@@ -208,13 +183,6 @@ Game.prototype.removePlayer = function(data) {
 
 Game.prototype.getGameState = function() {
     return {
-        // entities: this.entities.map(function(entity) {
-        //     console.log("entity:", entity);
-        //     return JSON.stringify(entity);
-        // }),
-        //entities: this.entities.map(function(entity) {
-        //    return entity.getFullState();        }),
-        //players: Object.keys(this.players).map(function(key){ return JSON.stringify(window.game.players[key]); })
         players: this.getPlayersState()
     };
 };

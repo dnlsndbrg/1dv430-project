@@ -10,13 +10,13 @@ var intersection = function() {
     };
     vector.add = function(v1,v2) {
         return {x: v1.x + v2.x, y: v1.y + v2.y};
-    }
+    };
     vector.sub = function(v1,v2) {
         return {x:v1.x - v2.x, y: v1.y - v2.y};
-    }
+    };
     vector.scalarMult = function(s, v) {
         return {x: s * v.x, y: s * v.y};
-    }
+    };
     vector.crossProduct = function(v1,v2) {
         return (v1.x * v2.y) - (v2.x * v1.y);
     };

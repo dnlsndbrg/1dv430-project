@@ -2,20 +2,13 @@ var helpers = require("./helpers");
 var Mouse = require("./Mouse");
 var Keyboard = require("./Keyboard");
 var NetworkControls = require("./NetworkControls");
-//var Bullet = require("./Bullet");
-//var weapons = require("./data/weapons");
-//var Weapon = require("./weapons/Weapon");
 var Shotgun = require("./weapons/Shotgun");
 var Ak47 = require("./weapons/Ak47");
-//var Animation = require("./Animation");
-//var Entity = require("./Entity");
 var Emitter = require("./particle/Emitter");
 var weaponCreator = require("./weapons/weaponCreator");
 var UiButton = require("./Button");
 var UiRect = require("./uiElements/Rectangle");
 var UiText = require("./uiElements/Text");
-
-
 
 function Player(playerData) {
     this.id = playerData.id;
@@ -29,8 +22,6 @@ function Player(playerData) {
         this.x = playerData.x;
         this.y = playerData.y;
     }
-    // this.x = playerData.x || (Math.floor(Math.random() * (window.game.level.width - this.radius)) + this.radius / 2);
-    // this.y = playerData.y || (Math.floor(Math.random() * (window.game.level.height - this.radius)) + this.radius / 2);
 
     this.direction = playerData.direction || Math.floor(Math.random() * 360) + 1;
     this.viewingAngle = playerData.viewingAngle || 45;
@@ -101,13 +92,6 @@ function Player(playerData) {
     this.actions = []; // actions to be performed
     this.performedActions = []; // succesfully performed actions
 
-    // this.animations = {
-    //     "idle": new Animation({name: "idle", sx: 0, sy: 0, w: 60, h: 60, frames: 1, playOnce: false}),
-    //     "fire": new Animation({name: "fire", sx: 0, sy: 60, w: 60, h: 60, frames: 1, playOnce: true})
-    // };
-    //
-    // this.currentAnimation = this.animations.idle;
-
     //is this me or another player
     if (playerData.id === window.game.network.client.peer.id) {
         this.controls = {mouse: new Mouse(this), keyboard: new Keyboard(this)};
@@ -132,18 +116,10 @@ Player.prototype.update = function(dt){
 
     if (!this.alive) return;
 
-
     this.move(dt);
-    //check if off screen
-    // if (this.x > window.game.level.width) this.x = window.game.level.width;
-    // if (this.x < 0) this.x = 0;
-    // if (this.y > window.game.level.height) this.y = window.game.level.height;
-    // if (this.y < 0) this.y = 0;
 
     // update current weapon;
     this.weapons[this.selectedWeaponIndex].update(dt);
-
-    //this.currentAnimation.update(dt);
 
     if (this.mouseLeft) { // if firing
         this.actions.push({ // add to the actions queue
@@ -207,29 +183,6 @@ Player.prototype.move = function(dt) {
         }
     }
 };
-
-// // Collision check against surrounding tiles
-// Player.prototype.collisionCheck = function() {
-//     var startingRow = this.tileRow - 1;
-//     if (startingRow < 0) startingRow  = 0;
-//     var endRow = this.tileRow +1;
-//     if (endRow > window.game.level.rowTileCount) endRow = window.game.level.rowTileCount;
-//     var startingCol = this.tileCol -1;
-//     if (startingCol < 0) startingCol = 0;
-//     var endCol = this.tileCol +1;
-//     if (endCol > window.game.level.colTileCount) endCol = window.game.level.colTileCount;
-//
-//     for (var row = startingRow; row < endRow; row += 1) {
-//         for (var col = startingCol; col < endCol; col += 1) {
-//             if (window.game.level.level.tiles[row][col] === 0) continue; // every tile other than 0 are non walkable
-//             // collision
-//             if (this.tileRow === row && this.tileCol === col) {
-//                 return false;
-//             }
-//         }
-//     }
-//     return true;
-// };
 
 Player.prototype.networkUpdate = function(update){
     delete update.id;
@@ -316,21 +269,6 @@ Player.prototype.die = function() {
     else
         createjs.Sound.play("death1");
 
-    // // create a corpse
-    // var corpse = new Entity({
-    //     x: this.x + Math.cos(action.data.direction) * 10,
-    //     y: this.y + Math.sin(action.data.direction) * 10,
-    //     sx: 60 +( Math.floor(Math.random() * 3) * 60),
-    //     sy: 120,
-    //     sw: 60,
-    //     sh: 60,
-    //     dw: 60,
-    //     dh: 60,
-    //     direction: action.data.direction,
-    //     ctx: window.game.bgCtx
-    // });
-    //window.game.entities.push(corpse);
-
     window.game.entities.push(new Emitter({
         type: "Blood2",
         emitCount: 30,
@@ -338,13 +276,6 @@ Player.prototype.die = function() {
         x: this.x,
         y: this.y
     }));
-
-    // if (this.id === window.game.network.client.peer.id) { // if its my player, show respawn button
-    //     // create respawn Button and dim the background
-    //
-    // }
-
-
 };
 
 Player.prototype.wantToRespawn = function() {

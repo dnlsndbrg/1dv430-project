@@ -1,10 +1,6 @@
 function Button(data) {
     this.text = data.text;
     this.fontSize = data.fontSize;
-    // this.x = data.x;
-    // this.y = data.y;
-    // this.w = data.w;
-    // this.h = data.h;
 
     this.rect = { x: data.x, y: data.y, w: data.w, h: data.h };
 

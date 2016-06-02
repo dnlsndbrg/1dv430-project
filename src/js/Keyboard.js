@@ -1,6 +1,5 @@
 function Keyboard(player){
     this.player = player;
-    //this.lastState = _.clone(player.keys);
     this.keyDownHandler = function(e){
         switch(e.keyCode) {
             case 87: // W
@@ -64,7 +63,5 @@ function Keyboard(player){
     document.addEventListener("keydown",this.keyDownHandler.bind(this), false);
     document.addEventListener("keyup",this.keyUpHandler.bind(this), false);
 }
-
-
 
 module.exports = Keyboard;

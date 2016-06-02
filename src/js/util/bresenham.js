@@ -1,4 +1,3 @@
-//var tiles = require("./level").tiles;
 var helpers = require("./../helpers.js");
 var collisionDetection = require("./collisionDetection");
 

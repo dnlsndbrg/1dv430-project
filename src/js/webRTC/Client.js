@@ -1,8 +1,6 @@
 "use strict";
-// var Player = require("./../Player");
 
 function Client(ID){
-    //this.peer = new Peer({key: "gpy5i4hjyjr4fgvi"});
     this.peer = new Peer(ID, {host: window.location.hostname, port: window.location.port, path: "/peer"});
 
     // Stress test
@@ -31,9 +29,6 @@ function Client(ID){
                 if (connPeer !== conn.peer) {
                     this.connections[connPeer][0].close();
                     delete this.connections[connPeer];
-                    // delete old hosts player object
-                    //console.log("delete old player", connPeer);
-                    //delete window.game.players[connPeer];
                 }
             }
         }
@@ -45,11 +40,6 @@ function Client(ID){
                 case "playerJoined":
                     window.game.addPlayer(data.playerData);
                     break;
-
-                    // case "playerLeft":
-                    //     //window.game.addPlayer(data.playerData);
-                    //     window.game.removePlayer({id: data.id});
-                    //     break;
 
                 case "gameState":
                     data.gameState.players.forEach(function(player){
@@ -151,104 +141,7 @@ Client.prototype.update = function()
 
     this.changes = [];
     player.performedActions = [];
-
-
-
-    // // check if my keystate has changed
-    // var myPlayer = window.game.players[this.peer.id];
-    // if (!myPlayer) return;
-    //
-    //  if (!_.isEqual(myPlayer.keys, myPlayer.controls.keyboard.lastState)) {
-    //     // send keystate to host
-    //     this.conn.send({
-    //         event: "keys",
-    //         keys: myPlayer.keys
-    //     });
-    //  }
-    // myPlayer.controls.keyboard.lastState = _.clone(myPlayer.keys);
-    //
-    //
-    // // get the difference since last time
-    //
-    // var currentPlayersState = [];
-    // var changes = [];
-    // var lastState = myPlayer.lastState;
-    // var newState = myPlayer.getState();
-    //
-    // // compare players new state with it's last state
-    // var change = _.omit(newState, function(v,k) { return lastState[k] === v; });
-    // if (!_.isEmpty(change)) {
-    //     // there's been changes
-    //     change.playerID = myPlayer.id;
-    //     changes.push(change);
-    // }
-    //
-    // myPlayer.lastState = newState;
-    // // if there are changes
-    // if (changes.length > 0){
-    //     this.conn.send({
-    //         event: "changes",
-    //         changes: changes
-    //     });
-    // }
-    //
-    // if (this.actions.length > 0) {
-    //     // send all performed actions to the host
-    //     this.conn.send({
-    //         event: "actions",
-    //         data: this.actions
-    //     });
-    //     this.actions = []; // clear actions queue
-    // }
-    //
-    // // update with changes received from host
-    // for (var i = 0; i < this.changes.length; i += 1) {
-    //     for (var j = 0; j < this.changes[i].length; j += 1)  {
-    //         change = this.changes[i][j];
-    //
-    //         // for now, ignore my own changes
-    //         if (change.playerID !== window.game.network.client.peer.id) window.game.players[change.playerID].change(change);
-    //     }
-    // }
-    //
-    // this.changes = [];
-
 };
 
-    //
-    // this.peer.on("connection", function(conn) {
-    //     // the host has started the connection
-    //     window.game.network.client.conn = conn;
-    //     console.log("connection from server", this.peer, conn);
-    //
-    //     //create the player
-    //     //window.game.player = window.game.addPlayer(conn.peer);
-    //
-    //
-    //     //Listen for data events from the host
-    //     conn.on("data", function(data) {
-    //         if (data.event === "ping"){ // host sent a ping, answer it
-    //             conn.send({ event: "pong", timestamp: data.timestamp });
-    //         }
-    //
-    //         if(data.event === "pong") { // we've received a pong from the host, calucate pingtime
-    //             var ping = Date.now() - data.timestamp;
-    //             window.game.network.ping = ping;
-    //         }
-    //     });
-    //
-    //
-    //
-    //
-    //
-    //     // ping test
-    //     window.game.network.client.pingInterval = setInterval(function(){
-    //         window.game.network.client.conn.send({
-    //             event: "ping",
-    //             timestamp: Date.now()
-    //         });
-    //     }, 2000);
-    //
-    // });
 
 module.exports = Client;

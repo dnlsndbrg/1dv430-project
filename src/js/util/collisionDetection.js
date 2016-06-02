@@ -1,10 +1,6 @@
 var intersection = require("./intersection");
 
 function lineRectIntersect(line, rect) {
-
-        //if (point is inside rect)
-        // intersect = point;
-
         // check left
         var left = {start:{x: rect.x, y: rect.y}, end:{x: rect.x, y: rect.y + rect.h}};
         var leftIntersect = intersection.intersect(line,left);
@@ -40,9 +36,6 @@ function lineRectIntersect(line, rect) {
 
 // find the point where a line intersects a rectangle. this function assumes the line and rect intersects
 function lineRectIntersect2(line, rect) {
-    //if (point is inside rect)
-    // intersect = point;
-
     // check left
     var leftLine = {start:{x: rect.x, y: rect.y}, end:{x: rect.x, y: rect.y + rect.h}};
     var intersectionPoint = intersection.intersect(line,leftLine);

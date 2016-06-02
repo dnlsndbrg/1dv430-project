@@ -1,4 +1,3 @@
-//var Particle = require("./Particle");
 var Blood = require("./Blood");
 var Blood2 = require("./Blood2");
 var Ricochet = require("./Ricochet");
@@ -29,12 +28,6 @@ Emitter.prototype.emit = function() {
 };
 
 Emitter.prototype.update = function(dt, index) {
-    // // update all particles
-    // for (var i = 0; i < this.particles.length; i += 1) {
-    //     this.particles[i].update(dt);
-    // }
-
-
     // SET EMITTER - this is an emitter that should emit a set number of particles
     if (this.emitCount) {
         if (this.emitSpeed) { // Emit at a interval
@@ -78,10 +71,6 @@ Emitter.prototype.update = function(dt, index) {
 
 Emitter.prototype.render = function() {
 
-    // // render all particles
-    // for (var i = 0; i < this.particles.length; i += 1) {
-    //     this.particles[i].render();
-    // }
 };
 
 Emitter.prototype.destroy = function(index) {

@@ -1,8 +1,6 @@
 function Camera() {
     this.x = 0;
     this.y = 0;
-    // this.width = ;
-    // this.height = window.game.height;
     this.following = null;
 
     this.follow = function(player){
